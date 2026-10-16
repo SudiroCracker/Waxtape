@@ -1,0 +1,243 @@
+{
+  "site": {
+    "name": "waxtape.",
+    "tagline": "Free cosmetic mods for Reskate."
+  },
+  "featured": {
+    "product": "straight-teeth",
+    "title": "THE RAW",
+    "image": "products/straight-teeth/04.jpg",
+    "text": null
+  },
+  "taxonomy": {
+    "apparel": {
+      "label": "Apparel",
+      "categories": {
+        "tops": {
+          "label": "Tops",
+          "types": [
+            "bra",
+            "coat",
+            "jacket",
+            "tshirt"
+          ]
+        },
+        "bottoms": {
+          "label": "Bottoms",
+          "types": [
+            "pants",
+            "shorts"
+          ]
+        },
+        "shoes": {
+          "label": "Shoes",
+          "types": []
+        }
+      }
+    },
+    "accessories": {
+      "label": "Accessories",
+      "categories": {
+        "eyewear": {
+          "label": "Eyewear",
+          "types": []
+        },
+        "hats": {
+          "label": "Hats",
+          "types": []
+        },
+        "socks": {
+          "label": "Socks",
+          "types": []
+        }
+      }
+    },
+    "board": {
+      "label": "Board",
+      "categories": {
+        "deck": {
+          "label": "Deck",
+          "types": []
+        },
+        "grip": {
+          "label": "Grip",
+          "types": []
+        },
+        "trucks": {
+          "label": "Trucks",
+          "types": []
+        },
+        "wheels": {
+          "label": "Wheels",
+          "types": []
+        },
+        "stickers": {
+          "label": "Stickers",
+          "types": []
+        }
+      }
+    }
+  },
+  "products": [
+    {
+      "id": "original-sin",
+      "name": "Original Sin",
+      "author": "Waxtape",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": [
+        "cream",
+        "boxy",
+        "engraving",
+        "baroque",
+        "monochrome",
+        "big-print"
+      ],
+      "description": "Boxy cream tee with a full-front black engraving print: a baroque ornament packed with cherubs, mermaids and grotesque masks. Fine art on the front, all the mess on the board.",
+      "version": "1.0.0",
+      "uploaded": "2026-10-16",
+      "updated": "2026-10-16",
+      "size": "2.8 MB",
+      "thumb": "products/original-sin/product.jpg",
+      "gallery": [
+        "01.jpg",
+        "02.jpg",
+        "03.jpg",
+        "04.jpg"
+      ],
+      "download": "products/original-sin/Wt_OriginalSin_Tshirt.zip",
+      "thunderstore": null,
+      "material": null
+    },
+    {
+      "id": "straight-teeth",
+      "name": "Straight Teeth",
+      "author": "Waxtape",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": [
+        "black",
+        "washed",
+        "photo-print",
+        "collage",
+        "grunge"
+      ],
+      "description": "Washed black tee with a 12-photo grid of crooked, chipped and gold-capped smiles. Straight teeth not included.",
+      "version": "1.0.0",
+      "uploaded": "2026-10-16",
+      "updated": "2026-10-16",
+      "size": "2.0 MB",
+      "thumb": "products/straight-teeth/product.jpg",
+      "gallery": [
+        "01.jpg",
+        "02.jpg",
+        "03.jpg",
+        "04.jpg"
+      ],
+      "download": "products/straight-teeth/Wt_StraightTeeth_Tshirt.zip",
+      "thunderstore": null,
+      "material": null
+    },
+    {
+      "id": "tsitra-longsleeve",
+      "name": "Tsitra Longsleeve",
+      "author": "Waxtape",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": [
+        "charcoal",
+        "cream",
+        "layered",
+        "longsleeve",
+        "mirrored-text",
+        "minimal"
+      ],
+      "description": "Faded charcoal tee layered over cream long sleeves, the classic double-sleeve skate fit. Small mirrored \"artist\" wordmark on the chest, so it reads right in the mirror.",
+      "version": "1.0.0",
+      "uploaded": "2026-10-16",
+      "updated": "2026-10-16",
+      "size": "1.9 MB",
+      "thumb": "products/tsitra-longsleeve/product.jpg",
+      "gallery": [
+        "01.jpg",
+        "02.jpg",
+        "03.jpg",
+        "04.jpg"
+      ],
+      "download": "products/tsitra-longsleeve/Wt_tsitra_Longsleeve.zip",
+      "thunderstore": null,
+      "material": null
+    },
+    {
+      "id": "cropped-hokki",
+      "name": "Cropped Hokki",
+      "author": "Waxtape",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": [
+        "off-white",
+        "cropped",
+        "y2k",
+        "chrome",
+        "character",
+        "small-print"
+      ],
+      "description": "Cropped off-white tee with a slim fit. A little chrome-green spiky creature takes a leak right on the chest. Y2K energy, zero manners.",
+      "version": "1.0.0",
+      "uploaded": "2026-10-16",
+      "updated": "2026-10-16",
+      "size": "2.1 MB",
+      "thumb": "products/cropped-hokki/product.jpg",
+      "gallery": [
+        "01.jpg",
+        "02.jpg",
+        "03.jpg",
+        "04.jpg"
+      ],
+      "download": "products/cropped-hokki/Wt_Cropped_Hokki.zip",
+      "thunderstore": null,
+      "material": null
+    },
+    {
+      "id": "edhardy-rose-shorts",
+      "name": "Rose Shorts",
+      "author": "Waxtape",
+      "collab": "Ed Hardy",
+      "group": "apparel",
+      "category": "bottoms",
+      "type": "shorts",
+      "tags": [
+        "denim",
+        "dirty-wash",
+        "baggy",
+        "jorts",
+        "tattoo",
+        "roses",
+        "2000s"
+      ],
+      "description": "Waxtape × Ed Hardy. Baggy dirty-wash denim shorts with a carpenter-style knee panel and hand-painted tattoo roses climbing the left leg. Small wt logo on the pocket.",
+      "version": "1.0.0",
+      "uploaded": "2026-10-16",
+      "updated": "2026-10-16",
+      "size": "4.3 MB",
+      "thumb": "products/edhardy-rose-shorts/product.jpg",
+      "gallery": [
+        "01.jpg",
+        "02.jpg",
+        "03.jpg",
+        "04.jpg"
+      ],
+      "download": "products/edhardy-rose-shorts/Wt_EdHardy_Rose_Shorts.zip",
+      "thunderstore": null,
+      "material": null
+    }
+  ]
+}

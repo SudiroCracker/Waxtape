@@ -1,0 +1,36 @@
+/* Waxtape tokens — same names and values as the Waxtape design system (tokens.json). */
+
+@font-face { font-family: Drowner; src: url("/fonts/Drowner-Free.woff") format("woff"); font-weight: 400; font-display: swap; }
+@font-face { font-family: Satoshi; src: url("/fonts/Satoshi-Regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+@font-face { font-family: Satoshi; src: url("/fonts/Satoshi-Medium.woff") format("woff"); font-weight: 500; font-display: swap; }
+@font-face { font-family: Satoshi; src: url("/fonts/Satoshi-Bold.woff") format("woff"); font-weight: 700; font-display: swap; }
+@font-face { font-family: Satoshi; src: url("/fonts/Satoshi-Black.woff") format("woff"); font-weight: 900; font-display: swap; }
+
+:root {
+  /* color */
+  --bg: #ece6d8;        /* basic solid background */
+  --noise: #e2d9cf;     /* noise map, 25% */
+  --panel: #c4baa5;     /* solid over background */
+  --announce: #d92e2e;  /* important news stickers */
+  --white: #ffffff;     /* image background */
+  --ink: #212122;       /* texts */
+  --ink-soft: #454545;  /* help and small print */
+  --focus: var(--announce);
+
+  /* type */
+  --font-display: Drowner, "Arial Black", Impact, sans-serif;
+  --font-sans: Satoshi, "Helvetica Neue", Arial, sans-serif;
+  --track: -0.06em;     /* every text in the guide: -6% */
+
+  /* space */
+  --space-1: 8px;
+  --space-2: 20px;
+  --space-3: 24px;
+  --space-4: 48px;
+
+  /* shadow (hard, no blur) */
+  --shadow-hit: 4px 4px 0 #d92e2e;
+  --shadow-card: 6px 6px 0 #212122;
+
+  color-scheme: light;
+}

@@ -1,0 +1,11 @@
+{
+  "name": "waxtape",
+  "private": true,
+  "type": "module",
+  "description": "waxtape. — free cosmetic mods for Reskate",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --serve"
+  },
+  "engines": { "node": ">=18" }
+}
