@@ -15,18 +15,11 @@ a { color: inherit; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* ---------- Wall: the tiled background behind everything (placeholder for the photo) ---------- */
+/* ---------- Wall: the tiled wall photo behind everything (already blurred in the file) ---------- */
 .wall { position: relative; isolation: isolate; min-height: 100vh; overflow-x: clip; }
 .wall::before {
-  content: ""; position: fixed; inset: -12px; z-index: -1;
-  background-color: #f1eee6;
-  background-image:
-    radial-gradient(ellipse at 92% 40%, rgba(176, 120, 70, .28), transparent 38%),
-    radial-gradient(ellipse at 6% 85%, rgba(150, 120, 90, .22), transparent 35%),
-    linear-gradient(#cfc8ba 3px, transparent 3px),
-    linear-gradient(90deg, #cfc8ba 3px, transparent 3px);
-  background-size: auto, auto, 112px 112px, 112px 112px;
-  filter: blur(3.55px);
+  content: ""; position: fixed; inset: 0; z-index: -1;
+  background: #efe9dc url("/img/wall.jpg") center top / cover no-repeat;
 }
 
 /* noise map on cream surfaces */
@@ -44,7 +37,7 @@ a { color: inherit; }
 .site-header__logo { flex: none; width: 196px; display: block; padding-bottom: 6px; }
 .site-header__logo img { width: 100%; height: auto; }
 .nav { flex: 1; min-width: 0; max-width: 1061px; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
-.nav__links { flex: 1; min-width: 0; max-width: 913px; display: flex; justify-content: space-between; gap: 4px 16px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0 0 7px; }
+.nav__links { flex: 1; min-width: 0; display: flex; justify-content: space-between; gap: 4px 16px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0 0 7px; }
 .nav__link {
   position: relative; isolation: isolate; display: inline-block; padding: 0 6px 4px;
   font-family: var(--font-display); font-size: 40px; line-height: 1; letter-spacing: var(--track); text-transform: lowercase;
