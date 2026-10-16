@@ -23,8 +23,20 @@ export function homePage(catalog) {
   return layout({ current: "home", body, site });
 }
 
+// Similar mods: shared tags count most, then same type and category. Fills up with the newest.
+function relatedTo(p, products, n = 4) {
+  const score = (o) =>
+    o.tags.filter((t) => p.tags.includes(t)).length * 2 + (o.type === p.type) + (o.category === p.category) + (o.collab && o.collab === p.collab ? 2 : 0);
+  return products
+    .filter((o) => o.id !== p.id)
+    .map((o) => ({ o, s: score(o) }))
+    .sort((a, b) => b.s - a.s || byNewest(a.o, b.o))
+    .slice(0, n)
+    .map((x) => x.o);
+}
+
 export function productPageHtml(p, catalog) {
-  const body = `<div class="sheet noise">${productPage(p, catalog.taxonomy)}</div>`;
+  const body = `<div class="sheet noise">${productPage(p, catalog.taxonomy, relatedTo(p, catalog.products))}</div>`;
   return layout({ title: p.name.toLowerCase(), description: p.description, current: p.group, body, site: catalog.site });
 }
 

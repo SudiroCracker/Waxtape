@@ -1,8 +1,9 @@
 import { esc, each } from "./html.mjs";
 import { downloadBar } from "./download.mjs";
+import { productCard } from "./product-card.mjs";
 
 // Product page: gallery (thumbs + main image + category line) and the info column.
-export function productPage(p, taxonomy) {
+export function productPage(p, taxonomy, related = []) {
   const group = taxonomy[p.group];
   const category = group?.categories[p.category];
   const images = [p.thumb, ...p.galleryFound];
@@ -43,6 +44,10 @@ export function productPage(p, taxonomy) {
       <dt>updated</dt><dd>${esc(p.updated)}</dd>
       <dt>by</dt><dd>${esc(p.author)}${p.collab ? ` × ${esc(p.collab)}` : ""}</dd>
     </dl>
+    ${related.length ? `<section class="related" aria-labelledby="related-title">
+      <h2 class="label" id="related-title">MORE LIKE THIS</h2>
+      <div class="grid grid--related">${related.map(productCard).join("")}</div>
+    </section>` : ""}
   </section>
 </div>
 <script>
