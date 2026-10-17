@@ -7,7 +7,7 @@ export function productCard(p) {
   const file = p.download.split("/").pop();
   const hit = p.zipReady
     ? `<a class="card__hit" href="/${esc(p.download)}" download="${esc(file)}" aria-label="Download ${esc(p.name)}, .zip, ${esc(p.size)}"><span>download</span><small>.zip · ${esc(p.size)}</small></a>`
-    : `<span class="card__hit" aria-hidden="true"><span>soon</span><small>zip coming</small></span>`;
+    : `<a class="card__hit" href="/products/${esc(p.id)}/" tabindex="-1" aria-hidden="true"><span>download</span><small>.zip</small></a>`;
   return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}">
   <a class="card__link" href="/products/${esc(p.id)}/">
     <span class="card__media"><img src="/${esc(p.thumb)}" alt="" width="206" height="258" loading="lazy"></span>

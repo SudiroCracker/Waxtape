@@ -31,8 +31,8 @@ ${header(current)}
 <main id="main">
 ${body}
 </main>
-</div>
 ${footer()}
+</div>
 </body>
 </html>
 `;

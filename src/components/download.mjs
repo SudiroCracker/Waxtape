@@ -13,6 +13,6 @@ export function downloadBar(p) {
 
 // The ">>>DOWNLOAD NOW" text call.
 export function downloadGo(p) {
-  if (!p.zipReady) return `<span class="go" aria-disabled="true">SOON</span>`;
+  if (!p.zipReady) return `<a class="go" href="/products/${esc(p.id)}/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>DOWNLOAD NOW</a>`;
   return `<a class="go" href="${href(p)}" download="${fileName(p)}"><b>&gt;</b><b>&gt;</b><b>&gt;</b>DOWNLOAD NOW<span class="sr-only">: ${esc(p.name)}, ${esc(p.size)}</span></a>`;
 }
