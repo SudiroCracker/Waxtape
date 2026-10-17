@@ -38,7 +38,7 @@ export function homePage(catalog) {
   const body = `<div class="sheet noise">
   <div class="home">
     <section class="home__new" aria-labelledby="new-title">
-      <h2 class="label" id="new-title">NEW<em>!!!</em></h2>
+      <h2 class="label" id="new-title">FRESH OFF THE TRUCK</h2>
       ${productGrid(newest)}
     </section>
     <div class="home__feature">${featurePanel({ product, title: featured.title, image: featured.imageFound || product.thumb, text: featured.text })}</div>
