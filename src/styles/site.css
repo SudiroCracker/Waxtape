@@ -261,3 +261,9 @@ a { color: inherit; }
 .path code { flex: 1; min-width: 0; padding: 14px 16px; font-size: 16px; overflow-x: auto; white-space: nowrap; color: var(--white); }
 .path__copy { flex: none; border: 0; border-left: 1px solid var(--ink-soft); background: var(--ink); color: var(--white); padding: 0 16px; font: 900 13px/1 var(--font-sans); letter-spacing: .04em; cursor: pointer; }
 .path__copy:hover { background: var(--white); color: var(--ink); }
+
+/* ---------- Feature call: >>>DOWNLOAD NOW in an ink pill ---------- */
+.feature__foot .go { background: var(--ink); color: var(--white); padding: 8px 14px 9px; transition: transform 90ms steps(2), box-shadow 90ms steps(2); }
+.feature__foot .go:hover, .feature__foot .go:focus-visible { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--bg); }
+.feature__foot .go:hover b, .feature__foot .go:focus-visible b { color: var(--white); }
+.feature__foot .go:active { transform: translate(1px, 1px); box-shadow: none; }
