@@ -25,7 +25,7 @@ build.mjs               ← genera la web en dist/
 - `/all/`, con el buscador de nombres y tags.
 - Las páginas about, guide, ezine y 404.
 
-Si falta una imagen o un .zip, la web no se rompe: el botón muestra "soon" y el build te lo avisa.
+Si falta una imagen o un .zip, la web no se rompe: el botón muestra "soon" y el build te lo avisa. Si `catalog.json` tiene un error, el build se para y te explica qué arreglar, y la web publicada no cambia.
 
 ## Ver la web en tu ordenador
 
@@ -38,17 +38,9 @@ npm run build     # solo genera dist/
 
 ## Añadir una prenda
 
-1. Crea la carpeta `public/products/<id>/`. El `<id>` va en minúsculas y con guiones, por ejemplo `skull-hoodie`.
-2. Dentro pon `product.jpg` (la miniatura, 800 × 1000), `01.jpg` a `04.jpg` (las fotos de modelo) y el `.zip` del mod.
-3. Añade una entrada en `products` de `catalog.json`. Puedes copiar una existente y cambiar:
-   - `id`, `name`, `description` y `tags`.
-   - `group`, `category` y `type`. Deben existir en `taxonomy`: por ejemplo `apparel` › `tops` › `tshirt`.
-   - `size`, que es el peso del .zip tal como quieres que se lea ("2.8 MB").
-   - `thumb` y `download`, con las rutas dentro de `public/`.
-   - `collab`, solo si es una colaboración ("Ed Hardy"). Si no, `null`.
-4. Guarda y sube los cambios a GitHub. Cloudflare publica la web nueva en un par de minutos.
+Toda la guía paso a paso, hecha desde la web de GitHub y sin instalar nada, está en **[GUIA.md](GUIA.md)**.
 
-**Producto destacado (THE RAW):** se cambia en `featured` dentro de `catalog.json`. `image` es la foto cuadrada (1:1). Mientras no exista ese archivo, se usa la miniatura del producto.
+En resumen, cada prenda es una carpeta `public/products/<id>/` con `product.jpg`, `01–04.jpg` y el `.zip`, más una entrada en `catalog.json`. El peso del .zip, las rutas de las imágenes y el nombre del .zip se leen solos de la carpeta.
 
 ## Publicar en Cloudflare Pages (gratis)
 

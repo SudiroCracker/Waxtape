@@ -13,19 +13,64 @@ const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const PUBLIC = path.join(ROOT, "public");
 const DIST = path.join(ROOT, "dist");
 
-const catalog = JSON.parse(fs.readFileSync(path.join(ROOT, "catalog.json"), "utf8"));
+// Read the catalog. A typo in catalog.json stops the build with a clear message.
+let catalog;
+try {
+  catalog = JSON.parse(fs.readFileSync(path.join(ROOT, "catalog.json"), "utf8"));
+} catch (err) {
+  console.error("\ncatalog.json has a mistake, so the site was not built:\n  " + err.message);
+  console.error("Usual causes: a missing comma between two products, a comma after the last one, or a missing quote.\n");
+  process.exit(1);
+}
 const exists = (rel) => fs.existsSync(path.join(PUBLIC, rel));
 const warnings = [];
+const errors = [];
+const IMG = /\.(jpe?g|png|webp)$/i;
 
-// Work out which files are really there, so missing ones never show as broken.
+const formatSize = (bytes) => (bytes >= 1024 * 1024 ? (bytes / 1024 / 1024).toFixed(1) + " MB" : Math.max(1, Math.round(bytes / 1024)) + " KB");
+
+// Fill in everything that can be read from the product folder, so a catalog entry stays short:
+//   thumb    → products/<id>/product.jpg (or .png/.webp)
+//   gallery  → the 01–04 images found in the folder
+//   download → the .zip in the folder
+//   size     → measured from that .zip
 for (const p of catalog.products) {
-  if (!exists(p.thumb)) warnings.push(`${p.id}: missing thumbnail public/${p.thumb}`);
-  const folder = path.posix.dirname(p.thumb);
-  p.galleryFound = (p.gallery || []).map((f) => `${folder}/${f}`).filter(exists);
-  const missing = (p.gallery || []).length - p.galleryFound.length;
-  if (missing) warnings.push(`${p.id}: ${missing} gallery image(s) not in public/${folder}/`);
+  const folder = `products/${p.id}`;
+  const files = fs.existsSync(path.join(PUBLIC, folder)) ? fs.readdirSync(path.join(PUBLIC, folder)) : [];
+  if (!files.length) errors.push(`${p.id}: there is no folder public/${folder}/`);
+
+  if (!p.thumb) p.thumb = `${folder}/` + (files.find((f) => /^product\.(jpe?g|png|webp)$/i.test(f)) || "product.jpg");
+  if (!exists(p.thumb)) warnings.push(`${p.id}: no product.jpg in public/${folder}/`);
+
+  const listed = (p.gallery || []).map((f) => `${path.posix.dirname(p.thumb)}/${f}`).filter(exists);
+  const found = files.filter((f) => IMG.test(f) && /^0?[1-9]\./.test(f)).sort().map((f) => `${folder}/${f}`);
+  p.galleryFound = listed.length ? listed : found;
+  if (!p.galleryFound.length) warnings.push(`${p.id}: no 01–04 images yet`);
+
+  if (!p.download) {
+    const zip = files.find((f) => f.toLowerCase().endsWith(".zip"));
+    p.download = `${folder}/${zip || p.id + ".zip"}`;
+  }
   p.zipReady = exists(p.download);
-  if (!p.zipReady) warnings.push(`${p.id}: missing zip public/${p.download} (download shows "soon")`);
+  if (p.zipReady) p.size = formatSize(fs.statSync(path.join(PUBLIC, p.download)).size);
+  else warnings.push(`${p.id}: no .zip in public/${folder}/ (download shows "soon")`);
+  p.size = p.size || "—";
+
+  for (const key of ["name", "group", "category", "type", "description", "uploaded"]) if (!p[key]) errors.push(`${p.id}: "${key}" is empty`);
+  const group = catalog.taxonomy[p.group];
+  if (p.group && !group) errors.push(`${p.id}: group "${p.group}" is not in the taxonomy (use ${Object.keys(catalog.taxonomy).join(", ")})`);
+  else if (group && !group.categories[p.category]) errors.push(`${p.id}: category "${p.category}" is not in ${p.group} (use ${Object.keys(group.categories).join(", ")})`);
+  p.tags = p.tags || [];
+  p.author = p.author || "Waxtape";
+  p.version = p.version || "1.0.0";
+  p.updated = p.updated || p.uploaded;
+  p.collab = p.collab || null;
+}
+const ids = catalog.products.map((p) => p.id);
+for (const id of ids.filter((id, i) => ids.indexOf(id) !== i)) errors.push(`two products use the id "${id}"`);
+if (errors.length) {
+  console.error("\nThe site was not built. Fix these in catalog.json:\n  " + errors.join("\n  ") + "\n");
+  process.exit(1);
 }
 if (catalog.featured?.image && exists(catalog.featured.image)) catalog.featured.imageFound = catalog.featured.image;
 else warnings.push(`featured: no public/${catalog.featured?.image}, using the product thumbnail`);
