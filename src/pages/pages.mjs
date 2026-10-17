@@ -115,8 +115,8 @@ const PAGES = {
   <p class="prose__lead">Installing a Waxtape mod in Reskate is straightforward. No installers, no extra tools: every piece ships as a single .zip, ready to drop into the game.</p>
   <ol class="steps">
     <li><h2>Download</h2><p>Open the piece you want and press <strong>download</strong>. The .zip saves straight to your computer.</p></li>
-    <li><h2>Extract</h2><p>Right-click the .zip and choose <em>Extract all</em>, or use your archive tool of choice. Keep the extracted folder exactly as it comes: do not rename or reorganise its contents.</p></li>
-    <li><h2>Paste into Mods</h2><p>Paste the extracted folder into the Mods directory of your Reskate installation:</p>
+    <li><h2>Extract</h2><p>Right-click the .zip and choose <em>Extract all</em>, or use your archive tool of choice. Keep the mod folder exactly as it comes: do not rename or reorganise its contents.</p></li>
+    <li><h2>Paste into Mods</h2><p>Inside you will find a folder named after the piece (for example <code>Wt_EdHardy_Rose_Shorts</code>) next to a README, a manifest and an icon. Paste that folder into the Mods directory of your Reskate installation:</p>
       <div class="path"><code id="mods-path">${PATH}</code><button class="path__copy" type="button" data-copy="mods-path">COPY</button></div>
       <p class="prose__note">The number in the path is the game version. If yours differs, use the folder that matches your installation.</p></li>
     <li><h2>Skate</h2><p>Launch Reskate. The piece is now part of your wardrobe.</p></li>
