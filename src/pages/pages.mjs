@@ -44,10 +44,33 @@ const shuffleScript = `<script>
   })();
 </script>`;
 
+// THE RAW: one of the `featured.pool` (2) most recent mods, picked at random on every load,
+// with one of its 01–04 shots. Ties on the upload date go to whoever is higher in catalog.json.
+function featuredPool(products, n) {
+  return products
+    .map((p, i) => ({ p, i }))
+    .sort((a, b) => (b.p.uploaded || "").localeCompare(a.p.uploaded || "") || a.i - b.i)
+    .slice(0, n)
+    .map((x) => x.p);
+}
+const featureScript = `<script>
+  (() => {
+    const panels = [...document.querySelectorAll("[data-feature]")];
+    const pick = panels[Math.floor(Math.random() * panels.length)];
+    panels.forEach((el) => (el.hidden = el !== pick));
+    const img = pick.querySelector("[data-images]");
+    const shots = img.dataset.images.split(" ");
+    img.src = shots[Math.floor(Math.random() * shots.length)];
+  })();
+</script>`;
+
 export function homePage(catalog) {
   const { site, featured, products } = catalog;
   const all = [...products].sort(byNewest);
-  const product = products.find((p) => p.id === featured.product) || all[0];
+  const pool = featuredPool(products, featured.pool || 2);
+  const panels = pool
+    .map((p, i) => featurePanel({ product: p, title: featured.title, images: p.galleryFound.length ? p.galleryFound : [p.thumb], text: null, sticker: featured.stickerFound, hidden: i > 0 }))
+    .join("\n");
   const shown = Math.min(all.length, HOME_MAX);
   const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p) : productCard(p).replace('<article class="card"', '<article class="card" hidden')));
   for (let i = shown % 4; i && i < 4; i++) cards.push(soonCard());
@@ -57,7 +80,7 @@ export function homePage(catalog) {
       <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
       <div class="grid">${cards.join("")}</div>
     </section>
-    <div class="home__feature">${featurePanel({ product, title: featured.title, image: featured.imageFound || product.thumb, text: featured.text, sticker: featured.stickerFound, focus: featured.focus })}</div>
+    <div class="home__feature">${panels}${featureScript}</div>
   </div>
 </div>
 ${shuffleScript}`;

@@ -72,8 +72,6 @@ if (errors.length) {
   console.error("\nThe site was not built. Fix these in catalog.json:\n  " + errors.join("\n  ") + "\n");
   process.exit(1);
 }
-if (catalog.featured?.image && exists(catalog.featured.image)) catalog.featured.imageFound = catalog.featured.image;
-else warnings.push(`featured: no public/${catalog.featured?.image}, using the product thumbnail`);
 // The animated logo over THE RAW: drop public/img/sticker.gif (or .webp/.png) and it replaces the red logo.
 // sticker.webp (animated, lighter) is served first when both exist; sticker.gif is the fallback.
 catalog.featured.stickerFound = ["webp", "gif", "png"].map((x) => `img/sticker.${x}`).filter((f) => exists(f));

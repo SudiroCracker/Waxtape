@@ -102,7 +102,7 @@ a { color: inherit; }
 .card__link:active .card__media { transform: translate(2px, 2px); box-shadow: none; }
 .card__link:focus-visible { outline: none; }
 .card__link:focus-visible .card__media { outline: 3px solid var(--focus); outline-offset: 3px; }
-.card[hidden] { display: none; }
+.card[hidden], .feature[hidden] { display: none; }
 
 .card--soon { pointer-events: none; }
 .card--soon .card__media { background: transparent; border: 2px dashed var(--panel); display: grid; place-items: center; }

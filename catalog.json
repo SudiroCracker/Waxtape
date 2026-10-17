@@ -4,11 +4,8 @@
     "tagline": "Free cosmetic mods for Reskate."
   },
   "featured": {
-    "product": "altar-piece",
     "title": "THE RAW",
-    "image": "products/altar-piece/01.jpg",
-    "focus": "50% 10%",
-    "text": null
+    "pool": 2
   },
   "taxonomy": {
     "apparel": {

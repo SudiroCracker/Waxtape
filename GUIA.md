@@ -102,18 +102,14 @@ Mientras haya un error, la web publicada sigue siendo la anterior, así que nunc
 
 ## Otras tareas habituales
 
-- **Cambiar el producto destacado (THE RAW):** en `catalog.json`, dentro de `"featured"`:
-  - `product` es el id de la prenda.
-  - `title` es el título ("THE RAW").
-  - `image` es la foto cuadrada 1:1, por ejemplo `"products/straight-teeth/04.jpg"`.
-  - `text` es un texto propio. Si lo dejas en `null`, usa la descripción de la prenda.
+- **El destacado (THE RAW) se elige solo:** en cada visita sale al azar una de las **2 prendas más recientes** (por fecha `uploaded`; si empatan, la que está más arriba en `catalog.json`), con una de sus fotos 01–04 recortada en cuadrado. Al hacer clic lleva a la página de esa prenda. No hay que tocar nada al subir prendas nuevas. En `"featured"` solo quedan `title` (el titular, "THE RAW") y `pool` (cuántas prendas recientes entran en el sorteo, ahora 2).
 - **Actualizar un mod:** sube el nuevo .zip a su carpeta. Si cambia de nombre, borra el viejo. Después sube `version` y `updated` en su ficha.
 - **Quitar una prenda:** borra su bloque `{ … }` de `catalog.json`, junto con la coma que lo separa, y después su carpeta.
 - **El fondo de azulejos** es `public/img/wall.jpg`. Sustitúyelo por otro con el mismo nombre.
 
 ## Cómo funciona la descarga en un clic
 
-Cada .zip vive dentro de la propia web, en `public/products/<id>/`. Los botones "download" y ">>>DOWNLOAD NOW" son enlaces normales a ese archivo con el atributo `download`. Eso le dice al navegador que lo guarde directamente en vez de abrirlo. Sin páginas intermedias, sin Drive y sin avisos. Por eso los .zip no pueden quedarse en Google Drive: tienen que estar en la carpeta de la prenda.
+Cada .zip vive dentro de la propia web, en `public/products/<id>/`. El botón "download" de la página de producto es un enlace normales a ese archivo con el atributo `download`. Eso le dice al navegador que lo guarde directamente en vez de abrirlo. Sin páginas intermedias, sin Drive y sin avisos. Por eso los .zip no pueden quedarse en Google Drive: tienen que estar en la carpeta de la prenda.
 
 ## Logo animado (GIF) sobre THE RAW
 
@@ -121,7 +117,3 @@ Cada .zip vive dentro de la propia web, en `public/products/<id>/`. Los botones 
 2. Fondo transparente y ya inclinado: la web no lo rota. La sombra la pone la web. Intenta que pese menos de 2 MB.
 3. Al guardar, Cloudflare reconstruye la web y el GIF sustituye al logo rojo. Si borras el archivo, vuelve el logo rojo.
 
-## Encuadre de la foto de THE RAW
-
-La foto destacada (`featured.image` en catalog.json) se recorta en cuadrado. Con `"focus"` eliges qué parte se ve:
-`"50% 0%"` arriba, `"50% 50%"` centro, `"50% 100%"` abajo. Ahora está en `"50% 40%"` para que se vea la mano en el coping.
