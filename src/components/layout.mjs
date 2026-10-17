@@ -4,15 +4,29 @@ import { footer } from "./footer.mjs";
 
 // The page shell: <head>, the tiled wall, the header, the content and the footer.
 // `current` is the nav key to mark ("home", "apparel", …).
-export function layout({ title, description, current, body, site }) {
+export function layout({ title, description, current, body, site, path, image }) {
   const fullTitle = title ? `${title} · ${site.name}` : `${site.name} ${site.tagline}`;
+  const base = (site.url || "").replace(/\/$/, "");
+  const desc = description || site.tagline;
+  const img = image || site.ogImage;
+  const share = [
+    path != null && base ? `<link rel="canonical" href="${esc(base + path)}">` : "",
+    `<meta property="og:site_name" content="${esc(site.name)}">`,
+    `<meta property="og:type" content="${path && path.startsWith("/products/") ? "product" : "website"}">`,
+    `<meta property="og:title" content="${esc(fullTitle)}">`,
+    `<meta property="og:description" content="${esc(desc)}">`,
+    path != null && base ? `<meta property="og:url" content="${esc(base + path)}">` : "",
+    img && base ? `<meta property="og:image" content="${esc(base + "/" + img)}">` : "",
+    `<meta name="twitter:card" content="summary_large_image">`,
+  ].filter(Boolean).join("\n");
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(fullTitle)}</title>
-<meta name="description" content="${esc(description || site.tagline)}">
+<meta name="description" content="${esc(desc)}">
+${share}
 <link rel="icon" href="/logos/waxtapelogo_Negativo-ink.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/Drowner-Free.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/fonts/Besley.woff" as="font" type="font/woff" crossorigin>
@@ -31,11 +45,11 @@ export function layout({ title, description, current, body, site }) {
   </filter>
 </svg>
 <div class="wall">
-${header(current)}
+${header(current, site.locked)}
 <main id="main">
 ${body}
 </main>
-${footer()}
+${footer(site.locked)}
 </div>
 </body>
 </html>

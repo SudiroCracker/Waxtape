@@ -1,7 +1,10 @@
 {
   "site": {
     "name": "waxtape.",
-    "tagline": "Free cosmetic mods for Reskate."
+    "tagline": "Free cosmetic mods for Reskate.",
+    "url": "https://waxtape.pages.dev",
+    "game": "ReSkate 2.0.7+",
+    "thunderstore": { "community": "reskate", "namespace": "Sudiro" }
   },
   "featured": {
     "title": "THE RAW",

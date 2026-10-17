@@ -5,7 +5,7 @@ import { esc, squash } from "./html.mjs";
 export function productCard(p) {
   const search = [p.name, p.type, p.category, p.collab || "", ...p.tags].join(" ").toLowerCase();
   const hit = `<span class="card__hit" aria-hidden="true"><span>view</span>${p.zipReady ? `<small>.zip · ${esc(p.size)}</small>` : ""}</span>`;
-  return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}">
+  return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}" data-type="${esc(p.type)}" data-name="${esc(p.name.toLowerCase())}" data-date="${esc(p.uploaded || "")}">
   <a class="card__link" href="/products/${esc(p.id)}/">
     <span class="card__media"><img src="/${esc(p.thumb)}" alt="" width="206" height="258" loading="lazy"></span>
     <span class="card__name">${esc(squash(p.name))}</span>

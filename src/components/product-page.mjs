@@ -3,7 +3,7 @@ import { downloadBar } from "./download.mjs";
 import { productCard } from "./product-card.mjs";
 
 // Product page: gallery (thumbs as tall as the main image) + category line, and the info column.
-export function productPage(p, taxonomy, related = []) {
+export function productPage(p, taxonomy, related = [], site = {}) {
   const group = taxonomy[p.group];
   const category = group?.categories[p.category];
   const images = [p.thumb, ...p.galleryFound];
@@ -41,6 +41,8 @@ export function productPage(p, taxonomy, related = []) {
       <div><dt>FILE</dt><dd>${esc(p.download.split("/").pop())} · ${esc(p.size)}</dd></div>
       <div><dt>UPDATED</dt><dd>${esc(p.updated)}</dd></div>
       <div><dt>BY</dt><dd>${esc(p.author)}${p.collab ? ` × ${esc(p.collab)}` : ""}</dd></div>
+      ${site.game ? `<div><dt>WORKS WITH</dt><dd>${esc(site.game)}</dd></div>` : ""}
+      ${p.tsUrl ? `<div><dt>THUNDERSTORE</dt><dd><a href="${esc(p.tsUrl)}" rel="noopener"${p.tsApi ? ` data-ts="${esc(p.tsApi)}"` : ""}>${p.downloads != null ? `${p.downloads.toLocaleString("en-US")} downloads` : "view package"}</a></dd></div>` : ""}
     </dl>
     ${related.length ? `<section class="related" aria-labelledby="related-title">
       <img class="ornament ornament--rule" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">
@@ -50,6 +52,10 @@ export function productPage(p, taxonomy, related = []) {
   </section>
 </div>
 <script>
+  // Live Thunderstore count (if their API allows it from the browser); the built-in number stays otherwise.
+  document.querySelectorAll("[data-ts]").forEach(async (a) => {
+    try { const r = await fetch(a.dataset.ts); const d = await r.json(); if (Number.isFinite(d.downloads)) a.textContent = d.downloads.toLocaleString("en-US") + " downloads"; } catch {}
+  });
   // Thumbnails swap the main image.
   document.querySelectorAll(".thumb").forEach((btn) => {
     btn.addEventListener("click", () => {

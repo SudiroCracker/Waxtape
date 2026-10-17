@@ -117,3 +117,13 @@ Cada .zip vive dentro de la propia web, en `public/products/<id>/`. El botón "d
 2. Fondo transparente y ya inclinado: la web no lo rota. La sombra la pone la web. Intenta que pese menos de 2 MB.
 3. Al guardar, Cloudflare reconstruye la web y el GIF sustituye al logo rojo. Si borras el archivo, vuelve el logo rojo.
 
+
+## Novedades (18 oct)
+
+- **Imágenes en WebP:** las fotos de producto y la pared ya son `.webp` (pesan ~70 % menos). Para prendas nuevas puedes subir `.jpg`, `.png` o `.webp`: la web acepta los tres.
+- **Secciones bloqueadas:** si un grupo (accessories, board) no tiene prendas, sale tachado en el menú y en el footer y no se puede pulsar. En cuanto añadas la primera prenda de ese grupo, se desbloquea solo.
+- **Filtros:** en apparel, accessories, board y all mods aparecen chips de TYPE y COLOUR (salen solos de las etiquetas y del tipo de cada prenda; una fila solo aparece si hay al menos 2 opciones) y SORT (newest / a–z). Se combinan con el buscador. Los colores se reconocen si la etiqueta es uno de estos: black, white, off-white, cream, grey, charcoal, red, pink, orange, yellow, green, blue, navy, purple, brown.
+- **Compatibilidad:** la ficha muestra WORKS WITH con el valor de `site.game` en catalog.json (ahora "ReSkate 2.0.7+").
+- **Thunderstore en cada ficha:** enlace al paquete y número de descargas. El paquete se busca con tu usuario (`site.thunderstore.namespace`) y el nombre del zip. Si en Thunderstore se llama distinto, añade a la prenda `"thunderstore": "NombreExacto"`. El número se actualiza cada vez que la web se publica.
+- **Imagen para compartir:** sube `public/img/og.jpg` (1200 × 630) y será la vista previa de la home y las páginas generales en Discord, WhatsApp, X… Las fichas de producto usan su propia foto.
+- **sitemap.xml y robots.txt** se generan solos en cada publicación.

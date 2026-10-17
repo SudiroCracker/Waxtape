@@ -83,6 +83,37 @@ function write(route, html) {
   fs.writeFileSync(file, html);
 }
 
+// Sections with no mods yet are shown locked in the nav and footer, and left out of the sitemap.
+catalog.site.locked = Object.keys(catalog.taxonomy).filter((g) => !catalog.products.some((p) => p.group === g));
+
+// Link previews (Discord, WhatsApp, X…): public/img/og.jpg (or .png/.webp), 1200×630.
+// Without it, previews use the newest product shot.
+const SITE_URL = (catalog.site.url || "").replace(/\/$/, "");
+catalog.site.ogImage = ["jpg", "png", "webp"].map((x) => `img/og.${x}`).find((f) => exists(f)) || catalog.products[0]?.thumb || null;
+
+// Thunderstore: each mod's package is named like its zip (or "thunderstore" in the catalog entry).
+// Download counts are read while building; if Thunderstore can't be reached the page just shows the link.
+const TS = catalog.site.thunderstore;
+for (const p of catalog.products) {
+  p.tsName = p.thunderstore || (p.download ? p.download.split("/").pop().replace(/\.zip$/i, "") : null);
+  p.tsUrl = TS && p.tsName ? `https://thunderstore.io/c/${TS.community}/p/${TS.namespace}/${p.tsName}/` : null;
+  p.tsApi = TS && p.tsName ? `https://thunderstore.io/api/v1/package-metrics/${TS.namespace}/${p.tsName}/` : null;
+}
+if (TS && !process.argv.includes("--offline")) {
+  let reached = 0;
+  await Promise.all(
+    catalog.products.filter((p) => p.tsApi).map(async (p) => {
+      try {
+        const res = await fetch(p.tsApi, { signal: AbortSignal.timeout(5000), headers: { "user-agent": "waxtape-site-build" } });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (Number.isFinite(data.downloads)) { p.downloads = data.downloads; reached++; }
+      } catch {}
+    })
+  );
+  if (!reached) warnings.push("thunderstore: download counts not available right now (pages show the link only)");
+}
+
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.cpSync(PUBLIC, DIST, { recursive: true });
 fs.cpSync(path.join(ROOT, "src/styles"), path.join(DIST, "styles"), { recursive: true });
@@ -97,13 +128,32 @@ for (const [groupKey, group] of Object.entries(catalog.taxonomy)) {
 for (const key of ["about", "guide", "ezine"]) write(`/${key}/`, simplePage(key, catalog));
 write("/404.html", notFoundPage(catalog));
 
+// sitemap.xml + robots.txt, so search engines find every page.
+const routes = ["/", "/all/", "/about/", "/guide/", "/ezine/"];
+for (const [g, group] of Object.entries(catalog.taxonomy)) {
+  if (catalog.site.locked.includes(g)) continue;
+  routes.push(`/${g}/`);
+  for (const c of Object.keys(group.categories)) if (catalog.products.some((p) => p.group === g && p.category === c)) routes.push(`/${g}/${c}/`);
+}
+const lastmod = (p) => p.updated || p.uploaded;
+const urls = [
+  ...routes.map((r) => ({ loc: r })),
+  ...catalog.products.map((p) => ({ loc: `/products/${p.id}/`, lastmod: lastmod(p) })),
+];
+fs.writeFileSync(path.join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url><loc>${SITE_URL}${u.loc}</loc>${u.lastmod ? `<lastmod>${u.lastmod}</lastmod>` : ""}</url>`).join("\n")}
+</urlset>
+`);
+fs.writeFileSync(path.join(DIST, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
+
 const pages = fs.readdirSync(DIST, { recursive: true }).filter((f) => String(f).endsWith(".html")).length;
 console.log(`waxtape: built ${pages} pages into dist/`);
 if (warnings.length) console.log("\nheads up:\n  " + warnings.join("\n  "));
 
 // Optional local preview server.
 if (process.argv.includes("--serve")) {
-  const types = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".png": "image/png", ".woff": "font/woff", ".woff2": "font/woff2", ".zip": "application/zip" };
+  const types = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".xml": "application/xml", ".txt": "text/plain", ".woff": "font/woff", ".woff2": "font/woff2", ".zip": "application/zip" };
   http
     .createServer((req, res) => {
       let rel = decodeURIComponent(req.url.split("?")[0]);

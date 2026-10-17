@@ -11,16 +11,53 @@ const searchBox = () => `<form class="search" role="search" onsubmit="return fal
     <input class="search__input" id="q" type="search" placeholder="Search" autocomplete="off">
   </form>`;
 
+// Filters (type / colour chips) and sort live next to the search; all three combine.
+const COLOURS = ["black", "white", "off-white", "cream", "grey", "charcoal", "red", "pink", "orange", "yellow", "green", "blue", "navy", "purple", "brown"];
+function filterBar(items) {
+  const types = [...new Set(items.map((p) => p.type))].sort();
+  const colours = COLOURS.filter((c) => items.some((p) => p.tags.includes(c)));
+  const row = (name, label, values) =>
+    values.length > 1
+      ? `<div class="filters__row" role="group" aria-label="${label}"><span class="filters__label">${label}</span>${values.map((v) => `<button class="chip" type="button" data-filter="${name}" data-value="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("")}</div>`
+      : "";
+  return `<div class="filters">
+    <div class="filters__rows">${row("type", "TYPE", types)}${row("colour", "COLOUR", colours)}</div>
+    <label class="filters__sort"><span class="filters__label">SORT</span><select id="sort"><option value="new">newest</option><option value="az">a–z</option></select></label>
+  </div>`;
+}
+
 const searchScript = `<script>
   const q = document.getElementById("q");
+  const sort = document.getElementById("sort");
+  const grid = document.querySelector(".sheet .grid");
   const cards = [...document.querySelectorAll(".card[data-search]")];
   const count = document.querySelector(".search__count");
+  const active = { type: null, colour: null };
   function apply() {
     const words = q.value.toLowerCase().trim().replace(/^#/, "").split(/\\s+/).filter(Boolean);
     let shown = 0;
-    cards.forEach((c) => { const ok = words.every((w) => c.dataset.search.includes(w)); c.hidden = !ok; if (ok) shown++; });
-    if (count) count.textContent = words.length ? (shown ? shown + (shown === 1 ? " MOD" : " MODS") : "NOTHING YET") + " FOR \\u201c" + q.value.trim().toUpperCase() + "\\u201d" : "";
+    cards.forEach((c) => {
+      const ok = words.every((w) => c.dataset.search.includes(w))
+        && (!active.type || c.dataset.type === active.type)
+        && (!active.colour || c.dataset.tags.split(" ").includes(active.colour));
+      c.hidden = !ok; if (ok) shown++;
+    });
+    const what = [q.value.trim(), active.type, active.colour].filter(Boolean).join(" · ");
+    if (count) count.textContent = what ? (shown ? shown + (shown === 1 ? " MOD" : " MODS") : "NOTHING YET") + " FOR \\u201c" + what.toUpperCase() + "\\u201d" : "";
   }
+  function order() {
+    if (!sort || !grid) return;
+    const by = sort.value === "az" ? (a, b) => a.dataset.name.localeCompare(b.dataset.name) : (a, b) => b.dataset.date.localeCompare(a.dataset.date) || a.dataset.name.localeCompare(b.dataset.name);
+    const soon = grid.querySelector(".card--soon");
+    [...cards].sort(by).forEach((c) => grid.insertBefore(c, soon));
+  }
+  document.querySelectorAll("[data-filter]").forEach((b) => b.addEventListener("click", () => {
+    const key = b.dataset.filter, on = active[key] !== b.dataset.value;
+    active[key] = on ? b.dataset.value : null;
+    document.querySelectorAll('[data-filter="' + key + '"]').forEach((x) => x.setAttribute("aria-pressed", String(x === b && on)));
+    apply();
+  }));
+  if (sort) sort.addEventListener("change", order);
   q.addEventListener("input", apply);
   function fromHash() { const t = decodeURIComponent(location.hash.slice(1)); if (t) { q.value = t; apply(); } }
   window.addEventListener("hashchange", fromHash);
@@ -84,7 +121,7 @@ export function homePage(catalog) {
   </div>
 </div>
 ${shuffleScript}`;
-  return layout({ current: "home", body, site });
+  return layout({ current: "home", body, site, path: "/" });
 }
 
 // Similar mods: shared tags count most, then same type and category. Fills up with the newest.
@@ -100,8 +137,8 @@ function relatedTo(p, products, n = 4) {
 }
 
 export function productPageHtml(p, catalog) {
-  const body = `<div class="sheet noise">${productPage(p, catalog.taxonomy, relatedTo(p, catalog.products))}</div>`;
-  return layout({ title: p.name.toLowerCase(), description: p.description, current: p.group, body, site: catalog.site });
+  const body = `<div class="sheet noise">${productPage(p, catalog.taxonomy, relatedTo(p, catalog.products), catalog.site)}</div>`;
+  return layout({ title: p.name.toLowerCase(), description: p.description, current: p.group, body, site: catalog.site, path: `/products/${p.id}/`, image: p.thumb });
 }
 
 // A list page: a group (apparel) or a category (apparel › tops).
@@ -125,11 +162,12 @@ export function listPage({ catalog, groupKey, categoryKey }) {
   const body = `<div class="sheet noise sheet--narrow">
   <div class="page-head"><h1 class="page-title">${esc(title)}</h1>${items.length ? searchBox() : ""}</div>
   <ul class="subnav" aria-label="${esc(group.label)} categories">${sub}</ul>
+  ${items.length ? filterBar(items) : ""}
   <p class="search__count" aria-live="polite"></p>
   ${content}
 </div>
 ${items.length ? searchScript : ""}`;
-  return layout({ title, current: groupKey, body, site: catalog.site });
+  return layout({ title, current: groupKey, body, site: catalog.site, path: `/${groupKey}/${categoryKey ? categoryKey + "/" : ""}` });
 }
 
 // All mods, with search by name or tag. Works without a server: filters the cards in the page.
@@ -137,11 +175,12 @@ export function allPage(catalog) {
   const items = [...catalog.products].sort(byNewest);
   const body = `<div class="sheet noise sheet--narrow">
   <div class="page-head"><h1 class="page-title">all mods</h1>${searchBox()}</div>
+  ${filterBar(items)}
   <p class="search__count" aria-live="polite"></p>
   ${productGrid(items, { fill: false })}
 </div>
 ${searchScript}`;
-  return layout({ title: "all mods", current: "", body, site: catalog.site });
+  return layout({ title: "all mods", current: "", body, site: catalog.site, path: "/all/" });
 }
 
 // About, guide, ezine. Each body is plain HTML so the copy is easy to edit.
@@ -199,7 +238,7 @@ const ornament = `<img class="ornament ornament--hang" src="/img/ornaments/decor
 export function simplePage(key, catalog) {
   const page = PAGES[key];
   const body = `<div class="sheet noise sheet--narrow"><div class="page-head page-head--ornate"><h1 class="page-title">${esc(page.title)}</h1>${ornament}</div>${page.html}</div>`;
-  return layout({ title: page.title, description: page.description, current: key, body, site: catalog.site });
+  return layout({ title: page.title, description: page.description, current: key, body, site: catalog.site, path: `/${key}/` });
 }
 
 export function notFoundPage(catalog) {
