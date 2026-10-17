@@ -28,7 +28,7 @@ a { color: inherit; }
   --noise-img: url("/img/camo.svg");
   background-color: var(--bg);
   background-image: var(--noise-img);
-  background-size: 900px 900px;
+  background-size: 540px 540px;
 }
 
 /* ---------- Header ---------- */
@@ -63,7 +63,7 @@ a { color: inherit; }
 /* ---------- Sheet: the big cream page ---------- */
 .sheet { position: relative; isolation: isolate; max-width: min(1634px, calc(100% - 2 * clamp(12px, 2.7vw, 47px))); margin: 58px auto 0; padding: 22px 22px 48px; }
 .sheet.noise { background: none; }
-.sheet.noise::before { content: ""; position: absolute; inset: 0; z-index: -1; background-color: var(--bg); background-image: var(--noise-img); background-size: 900px 900px; filter: url(#rough-edge); }
+.sheet.noise::before { content: ""; position: absolute; inset: 0; z-index: -1; background-color: var(--bg); background-image: var(--noise-img); background-size: 540px 540px; filter: url(#rough-edge); }
 .sheet--narrow { padding: 40px clamp(22px, 4vw, 64px) 64px; }
 
 /* ---------- Home layout ---------- */
