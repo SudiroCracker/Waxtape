@@ -41,7 +41,7 @@ export function homePage(catalog) {
       <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
       ${productGrid(newest)}
     </section>
-    <div class="home__feature">${featurePanel({ product, title: featured.title, image: featured.imageFound || product.thumb, text: featured.text, sticker: featured.stickerFound })}</div>
+    <div class="home__feature">${featurePanel({ product, title: featured.title, image: featured.imageFound || product.thumb, text: featured.text, sticker: featured.stickerFound, focus: featured.focus })}</div>
   </div>
 </div>`;
   return layout({ current: "home", body, site });

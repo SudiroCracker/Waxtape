@@ -120,3 +120,8 @@ Cada .zip vive dentro de la propia web, en `public/products/<id>/`. Los botones 
 1. Sube tu GIF a `public/img/` con el nombre exacto **`sticker.gif`** (si además hay un `sticker.webp`, la web sirve primero el WebP, que pesa mucho menos; si cambias el GIF, borra o sustituye también el WebP) (en GitHub: entra en `public/img`, *Add file → Upload files*).
 2. Fondo transparente y ya inclinado: la web no lo rota. La sombra la pone la web. Intenta que pese menos de 2 MB.
 3. Al guardar, Cloudflare reconstruye la web y el GIF sustituye al logo rojo. Si borras el archivo, vuelve el logo rojo.
+
+## Encuadre de la foto de THE RAW
+
+La foto destacada (`featured.image` en catalog.json) se recorta en cuadrado. Con `"focus"` eliges qué parte se ve:
+`"50% 0%"` arriba, `"50% 50%"` centro, `"50% 100%"` abajo. Ahora está en `"50% 40%"` para que se vea la mano en el coping.

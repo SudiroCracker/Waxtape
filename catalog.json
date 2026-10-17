@@ -6,7 +6,8 @@
   "featured": {
     "product": "straight-teeth",
     "title": "THE RAW",
-    "image": "products/straight-teeth/04.jpg",
+    "image": "products/straight-teeth/02.jpg",
+    "focus": "50% 40%",
     "text": null
   },
   "taxonomy": {
