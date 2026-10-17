@@ -43,6 +43,7 @@ export function productPage(p, taxonomy, related = []) {
       <div><dt>BY</dt><dd>${esc(p.author)}${p.collab ? ` × ${esc(p.collab)}` : ""}</dd></div>
     </dl>
     ${related.length ? `<section class="related" aria-labelledby="related-title">
+      <img class="ornament ornament--rule" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">
       <h2 class="label" id="related-title">MORE LIKE THIS</h2>
       <div class="grid grid--related">${related.map(productCard).join("")}</div>
     </section>` : ""}

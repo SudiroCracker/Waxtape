@@ -22,6 +22,7 @@ export function footer() {
         <li><a href="https://thunderstore.io/" rel="noopener">Thunderstore</a></li>
       </ul></div>
     </div>
+    <img class="ornament ornament--rule site-footer__ornament" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">
     <div class="site-footer__legal">
       <span>All mods are free. Unzip, drop in your Reskate mods folder, skate.</span>
       <span>Waxtape is a fan project, not affiliated with the game's developers or publishers.</span>

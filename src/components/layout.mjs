@@ -15,7 +15,7 @@ export function layout({ title, description, current, body, site }) {
 <meta name="description" content="${esc(description || site.tagline)}">
 <link rel="icon" href="/logos/waxtapelogo_Negativo-ink.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/Drowner-Free.woff" as="font" type="font/woff" crossorigin>
-<link rel="preload" href="/fonts/Satoshi-Black.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/fonts/Besley.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/styles/tokens.css">
 <link rel="stylesheet" href="/styles/site.css">
 </head>

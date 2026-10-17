@@ -38,10 +38,10 @@ export function homePage(catalog) {
   const body = `<div class="sheet noise">
   <div class="home">
     <section class="home__new" aria-labelledby="new-title">
-      <h2 class="label" id="new-title">FRESH OFF THE TRUCK</h2>
+      <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
       ${productGrid(newest)}
     </section>
-    <div class="home__feature">${featurePanel({ product, title: featured.title, image: featured.imageFound || product.thumb, text: featured.text })}</div>
+    <div class="home__feature">${featurePanel({ product, title: featured.title, image: featured.imageFound || product.thumb, text: featured.text, sticker: featured.stickerFound })}</div>
   </div>
 </div>`;
   return layout({ current: "home", body, site });
@@ -153,13 +153,16 @@ const PAGES = {
   },
 };
 
+// Baroque centrepiece hanging next to the title of the editorial pages.
+const ornament = `<img class="ornament ornament--hang" src="/img/ornaments/decor1.png" alt="" width="800" height="315">`;
+
 export function simplePage(key, catalog) {
   const page = PAGES[key];
-  const body = `<div class="sheet noise sheet--narrow"><h1 class="page-title">${esc(page.title)}</h1>${page.html}</div>`;
+  const body = `<div class="sheet noise sheet--narrow"><div class="page-head page-head--ornate"><h1 class="page-title">${esc(page.title)}</h1>${ornament}</div>${page.html}</div>`;
   return layout({ title: page.title, description: page.description, current: key, body, site: catalog.site });
 }
 
 export function notFoundPage(catalog) {
-  const body = `<div class="sheet noise sheet--narrow"><h1 class="page-title">bail.</h1><div class="empty"><p>That page doesn't exist. Maybe it got moved, maybe it never landed.</p><p><a class="go" href="/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>BACK HOME</a></p></div></div>`;
+  const body = `<div class="sheet noise sheet--narrow"><div class="page-head page-head--ornate"><h1 class="page-title">bail.</h1>${ornament}</div><div class="empty"><p>That page doesn't exist. Maybe it got moved, maybe it never landed.</p><p><a class="go" href="/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>BACK HOME</a></p></div></div>`;
   return layout({ title: "not found", current: "", body, site: catalog.site });
 }

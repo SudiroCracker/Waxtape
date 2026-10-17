@@ -114,3 +114,9 @@ Mientras haya un error, la web publicada sigue siendo la anterior, así que nunc
 ## Cómo funciona la descarga en un clic
 
 Cada .zip vive dentro de la propia web, en `public/products/<id>/`. Los botones "download" y ">>>DOWNLOAD NOW" son enlaces normales a ese archivo con el atributo `download`. Eso le dice al navegador que lo guarde directamente en vez de abrirlo. Sin páginas intermedias, sin Drive y sin avisos. Por eso los .zip no pueden quedarse en Google Drive: tienen que estar en la carpeta de la prenda.
+
+## Logo animado (GIF) sobre THE RAW
+
+1. Sube tu GIF a `public/img/` con el nombre exacto **`sticker.gif`** (en GitHub: entra en `public/img`, *Add file → Upload files*).
+2. Tamaño de referencia: 471 × 265 px, fondo transparente (como en el Figma). La sombra la pone la web.
+3. Al guardar, Cloudflare reconstruye la web y el GIF sustituye al logo rojo. Si borras el archivo, vuelve el logo rojo.

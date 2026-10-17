@@ -74,6 +74,8 @@ if (errors.length) {
 }
 if (catalog.featured?.image && exists(catalog.featured.image)) catalog.featured.imageFound = catalog.featured.image;
 else warnings.push(`featured: no public/${catalog.featured?.image}, using the product thumbnail`);
+// The animated logo over THE RAW: drop public/img/sticker.gif (or .webp/.png) and it replaces the red logo.
+catalog.featured.stickerFound = ["gif", "webp", "png"].map((x) => `img/sticker.${x}`).find(exists) || null;
 
 // Write a page at a route ("/apparel/tops/" → dist/apparel/tops/index.html).
 function write(route, html) {

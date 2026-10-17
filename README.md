@@ -55,6 +55,6 @@ Cada cambio que subas a `main` se publica solo.
 
 ## Tipografías y licencias
 
-- **Satoshi** (Indian Type Foundry, Fontshare): Free Font License, uso comercial y web permitido.
+- **Besley** (Owen Earl, Google Fonts): SIL Open Font License, libre para web. Alojada en `public/fonts/` (licencia en `Besley-OFL.txt`).
 - **Drowner Free** (Hainz Studio): licencia de uso personal que permite uso online. Si Waxtape llega a tener ingresos (anuncios, donaciones, merch), compra la licencia comercial.
 - El logotipo está en Adanda Pro, pero solo se usa como vector: no hace falta la fuente.
