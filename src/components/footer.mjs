@@ -19,7 +19,7 @@ export function footer() {
         <li><a href="/ezine/">ezine</a></li>
       </ul></div>
       <div><h2>elsewhere</h2><ul>
-        <li><a href="https://thunderstore.io/" rel="noopener">Thunderstore</a></li>
+        <li><a href="https://thunderstore.io/c/reskate/p/Sudiro/" rel="noopener">Thunderstore</a></li>
       </ul></div>
     </div>
     <img class="ornament ornament--rule site-footer__ornament" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">

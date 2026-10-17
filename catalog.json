@@ -73,6 +73,32 @@
   },
   "products": [
     {
+      "id": "washed-reptile",
+      "name": "Washed Reptile",
+      "collab": null,
+      "group": "apparel",
+      "category": "bottoms",
+      "type": "pants",
+      "tags": ["green", "snakeskin", "washed", "baggy", "denim"],
+      "description": "Baggy acid-washed denim in a faded snakeskin print, finished with red contrast stitching. Cold-blooded, warm fit.",
+      "uploaded": "2026-10-17",
+      "updated": "2026-10-17",
+      "version": "1.0.0"
+    },
+    {
+      "id": "altar-piece",
+      "name": "Altar Piece",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": ["white", "sacred-heart", "floral", "script", "devotional"],
+      "description": "A burning sacred heart under Waxtape script, flanked by roses that stare right back. Wear it like an offering.",
+      "uploaded": "2026-10-17",
+      "updated": "2026-10-17",
+      "version": "1.0.0"
+    },
+    {
       "id": "label-tshirt",
       "name": "Label Tshirt",
       "collab": null,
