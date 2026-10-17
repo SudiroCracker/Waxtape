@@ -11,8 +11,8 @@ export function downloadBar(p) {
   return `<a class="dl" href="${href(p)}" download="${fileName(p)}"><span>download</span><span class="sr-only"> ${esc(p.name)}, .zip, ${esc(p.size)}</span></a>`;
 }
 
-// The ">>>DOWNLOAD NOW" text call.
-export function downloadGo(p) {
-  if (!p.zipReady) return `<a class="go" href="/products/${esc(p.id)}/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>DOWNLOAD NOW</a>`;
-  return `<a class="go" href="${href(p)}" download="${fileName(p)}"><b>&gt;</b><b>&gt;</b><b>&gt;</b>DOWNLOAD NOW<span class="sr-only">: ${esc(p.name)}, ${esc(p.size)}</span></a>`;
+// The ">>>DETAILS" call on the home feature: opens the product page. The word "download"
+// is kept for the one button that actually downloads (downloadBar, on the product page).
+export function detailsGo(p) {
+  return `<a class="go" href="/products/${esc(p.id)}/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>DETAILS<span class="sr-only">: ${esc(p.name)}</span></a>`;
 }

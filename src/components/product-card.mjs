@@ -1,19 +1,16 @@
 import { esc, squash } from "./html.mjs";
 
-// One mod in a grid. Clicking the card opens the product page; the ink bar that slides
-// up on hover is a separate link that downloads the .zip in one click.
+// One mod in a grid. The whole card opens the product page; the ink "details" bar that slides
+// up on hover is part of the same link (downloads only happen from the product page).
 export function productCard(p) {
   const search = [p.name, p.type, p.category, p.collab || "", ...p.tags].join(" ").toLowerCase();
-  const file = p.download.split("/").pop();
-  const hit = p.zipReady
-    ? `<a class="card__hit" href="/${esc(p.download)}" download="${esc(file)}" aria-label="Download ${esc(p.name)}, .zip, ${esc(p.size)}"><span>download</span><small>.zip · ${esc(p.size)}</small></a>`
-    : `<a class="card__hit" href="/products/${esc(p.id)}/" tabindex="-1" aria-hidden="true"><span>download</span><small>.zip</small></a>`;
+  const hit = `<span class="card__hit" aria-hidden="true"><span>details</span>${p.zipReady ? `<small>.zip · ${esc(p.size)}</small>` : ""}</span>`;
   return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}">
   <a class="card__link" href="/products/${esc(p.id)}/">
     <span class="card__media"><img src="/${esc(p.thumb)}" alt="" width="206" height="258" loading="lazy"></span>
     <span class="card__name">${esc(squash(p.name))}</span>
+    ${hit}
   </a>
-  ${hit}
 </article>`;
 }
 
