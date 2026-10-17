@@ -1,10 +1,10 @@
 import { esc, squash } from "./html.mjs";
 
-// One mod in a grid. The whole card opens the product page; the ink "details" bar that slides
+// One mod in a grid. The whole card opens the product page; the ink "check it" bar that slides
 // up on hover is part of the same link (downloads only happen from the product page).
 export function productCard(p) {
   const search = [p.name, p.type, p.category, p.collab || "", ...p.tags].join(" ").toLowerCase();
-  const hit = `<span class="card__hit" aria-hidden="true"><span>details</span>${p.zipReady ? `<small>.zip · ${esc(p.size)}</small>` : ""}</span>`;
+  const hit = `<span class="card__hit" aria-hidden="true"><span>check it</span>${p.zipReady ? `<small>.zip · ${esc(p.size)}</small>` : ""}</span>`;
   return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}">
   <a class="card__link" href="/products/${esc(p.id)}/">
     <span class="card__media"><img src="/${esc(p.thumb)}" alt="" width="206" height="258" loading="lazy"></span>
