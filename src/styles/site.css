@@ -84,7 +84,7 @@ a { color: inherit; }
 @media (max-width: 760px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 14px; } }
 .card { position: relative; min-width: 0; }
 .card__link { display: grid; align-content: start; color: var(--ink); text-decoration: none; }
-.card__media { position: relative; display: block; aspect-ratio: 206 / 258; background: var(--white); overflow: hidden; transition: transform 110ms cubic-bezier(.2, .9, .1, 1), box-shadow 110ms cubic-bezier(.2, .9, .1, 1); }
+.card__media { position: relative; display: block; aspect-ratio: 206 / 258; background: var(--white); transition: transform 110ms cubic-bezier(.2, .9, .1, 1), box-shadow 110ms cubic-bezier(.2, .9, .1, 1); }
 .card__media img { width: 100%; height: 100%; object-fit: cover; }
 .card__hit {
   position: absolute; left: 0; right: 0; bottom: 26px; z-index: 2; padding: 6px 10px 8px; background: var(--ink); color: var(--white); text-decoration: none;
@@ -121,7 +121,7 @@ a { color: inherit; }
 .feature__media img { width: 100%; height: 100%; object-fit: cover; }
 /* Ornate frame over the image: 609/568 of it, offset 22/23 px like the Figma (frame.png has a clear centre). */
 .feature__frame { position: absolute; z-index: 2; left: -3.87%; top: -4.05%; width: 107.2%; aspect-ratio: 1; background: url("/img/ornaments/frame.png") center / 100% 100% no-repeat; pointer-events: none; transition: transform 140ms steps(2); }
-.feature__media:hover .feature__frame, .feature__media:focus-visible .feature__frame { transform: rotate(-1.2deg) scale(1.01); }
+.feature__media:hover .feature__frame, .feature__media:focus-visible .feature__frame { animation: ink-jitter 375ms step-end infinite; }
 .feature__text { display: grid; gap: 1.15em; padding-left: 4px; max-width: 564px; }
 .feature__text p { margin: 0; font-size: 18px; line-height: 1.15; }
 .feature__foot { display: flex; justify-content: flex-end; padding-top: 18px; }
@@ -157,11 +157,10 @@ a { color: inherit; }
    the thumbs share it in equal rows. */
 .gallery { display: grid; grid-template-columns: clamp(64px, 7vw, 112px) minmax(0, 1fr); gap: 16px; align-items: stretch; }
 .gallery__thumbs { display: grid; grid-template-rows: repeat(var(--thumbs, 5), minmax(0, 1fr)); gap: 12px; min-height: 0; }
-.thumb { display: block; padding: 0; border: 0; background: var(--white); cursor: pointer; position: relative; overflow: hidden; min-height: 0; }
+.thumb { display: block; padding: 0; border: 0; background: var(--white); cursor: pointer; position: relative; min-height: 0; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; }
-.thumb:hover { outline: 3px solid var(--ink); outline-offset: -3px; }
-.thumb[aria-current="true"]::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 4px var(--ink); }
-.gallery__main { background: var(--white); border: 1px solid var(--ink); aspect-ratio: 4 / 5; overflow: hidden; }
+
+.gallery__main { position: relative; background: var(--white); aspect-ratio: 4 / 5; }
 .gallery__main img { width: 100%; height: 100%; object-fit: cover; }
 @media (max-width: 640px) {
   .gallery { grid-template-columns: minmax(0, 1fr); }
@@ -303,3 +302,28 @@ a { color: inherit; }
 .filters__sort { display: flex; align-items: center; gap: 8px; }
 .filters__sort .filters__label { min-width: 0; }
 .filters__sort select { height: 34px; border: 0; border-radius: 0; background: var(--white); color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); padding: 0 10px; font: 400 16px/1 var(--font-sans); letter-spacing: var(--track); cursor: pointer; }
+
+/* ---------- Hand-inked frames on product images (reference: rough marker stroke) ----------
+   A bordered overlay run through #ink-1..3 (layout.mjs). On hover/focus the three drawings cycle
+   at ~8 fps with a pixel of jitter: stop-motion wiggle. Reduced motion keeps the still frame. */
+.card__media::after, .thumb::after, .gallery__main::after {
+  content: ""; position: absolute; inset: -3px; z-index: 1; pointer-events: none;
+  border: 4px solid var(--ink); filter: url(#ink-1);
+}
+.gallery__main::after { border-width: 5px; inset: -4px; }
+.thumb::after { border-width: 3px; inset: -2px; }
+.thumb[aria-current="true"]::after { border-width: 5px; }
+.card--soon .card__media::after { display: none; }
+.card:hover .card__media::after, .card:focus-within .card__media::after,
+.thumb:hover::after, .thumb:focus-visible::after { animation: ink-wiggle 375ms step-end infinite; }
+@keyframes ink-wiggle {
+  0%      { filter: url(#ink-1); transform: translate(0, 0) rotate(0deg); }
+  33.33%  { filter: url(#ink-2); transform: translate(.6px, -.6px) rotate(.25deg); }
+  66.66%  { filter: url(#ink-3); transform: translate(-.6px, .4px) rotate(-.2deg); }
+}
+/* The ornate frame on THE RAW wiggles the same way. */
+@keyframes ink-jitter {
+  0%      { transform: rotate(0deg) translate(0, 0); }
+  33.33%  { transform: rotate(-.6deg) translate(1px, -1px); }
+  66.66%  { transform: rotate(.5deg) translate(-1px, 1px); }
+}
