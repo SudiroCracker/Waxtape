@@ -73,6 +73,19 @@
   },
   "products": [
     {
+      "id": "label-tshirt",
+      "name": "Label Tshirt",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": ["red", "logo", "chest-print", "back-print", "essential"],
+      "description": "Brick red tee that wears its name loud. A small waxtape hit on the chest, the big one across the back.",
+      "uploaded": "2026-10-17",
+      "updated": "2026-10-17",
+      "version": "1.0.0"
+    },
+    {
       "id": "original-sin",
       "name": "Original Sin",
       "collab": null,
