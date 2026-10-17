@@ -4,6 +4,30 @@ import { productGrid } from "../components/product-card.mjs";
 import { featurePanel } from "../components/feature-panel.mjs";
 import { productPage } from "../components/product-page.mjs";
 
+// Search box for list pages: a plain field, no icon. Filters the cards on the page by name, type,
+// category, collab and tags. "/" focuses it; /all/#y2k opens with that search.
+const searchBox = () => `<form class="search" role="search" onsubmit="return false">
+    <label class="sr-only" for="q">Search mods</label>
+    <input class="search__input" id="q" type="search" placeholder="Search" autocomplete="off">
+  </form>`;
+
+const searchScript = `<script>
+  const q = document.getElementById("q");
+  const cards = [...document.querySelectorAll(".card[data-search]")];
+  const count = document.querySelector(".search__count");
+  function apply() {
+    const words = q.value.toLowerCase().trim().replace(/^#/, "").split(/\\s+/).filter(Boolean);
+    let shown = 0;
+    cards.forEach((c) => { const ok = words.every((w) => c.dataset.search.includes(w)); c.hidden = !ok; if (ok) shown++; });
+    if (count) count.textContent = words.length ? (shown ? shown + (shown === 1 ? " MOD" : " MODS") : "NOTHING YET") + " FOR \\u201c" + q.value.trim().toUpperCase() + "\\u201d" : "";
+  }
+  q.addEventListener("input", apply);
+  function fromHash() { const t = decodeURIComponent(location.hash.slice(1)); if (t) { q.value = t; apply(); } }
+  window.addEventListener("hashchange", fromHash);
+  fromHash();
+  document.addEventListener("keydown", (e) => { if (e.key === "/" && document.activeElement !== q) { e.preventDefault(); q.focus(); } });
+</script>`;
+
 const byNewest = (a, b) => (b.uploaded || "").localeCompare(a.uploaded || "") || a.name.localeCompare(b.name);
 
 // Home: NEW!!! grid on the left, THE RAW feature on the right.
@@ -59,61 +83,80 @@ export function listPage({ catalog, groupKey, categoryKey }) {
     ? productGrid(items)
     : `<div class="empty"><p class="label">nothing here yet.</p><p>The first ${esc(title)} mods are on the way. Check the <a href="/ezine/">ezine</a> for drops.</p></div>`;
   const body = `<div class="sheet noise sheet--narrow">
-  <h1 class="page-title">${esc(title)}</h1>
+  <div class="page-head"><h1 class="page-title">${esc(title)}</h1>${items.length ? searchBox() : ""}</div>
   <ul class="subnav" aria-label="${esc(group.label)} categories">${sub}</ul>
+  <p class="search__count" aria-live="polite"></p>
   ${content}
-</div>`;
+</div>
+${items.length ? searchScript : ""}`;
   return layout({ title, current: groupKey, body, site: catalog.site });
 }
 
 // All mods, with search by name or tag. Works without a server: filters the cards in the page.
 export function allPage(catalog) {
   const items = [...catalog.products].sort(byNewest);
-  const tags = [...new Set(items.flatMap((p) => p.tags))].sort();
   const body = `<div class="sheet noise sheet--narrow">
-  <h1 class="page-title">all mods</h1>
-  <form class="search" role="search" onsubmit="return false">
-    <label class="sr-only" for="q">Search mods</label>
-    <input class="search__input" id="q" type="search" placeholder="search mods, tags… (try y2k)" autocomplete="off">
-  </form>
-  <ul class="tagline tagline--tags search__tags" aria-label="Tags">${each(tags, (t) => `<li><a href="#${esc(t)}" data-tag="${esc(t)}">#${esc(t)}</a></li>`)}</ul>
+  <div class="page-head"><h1 class="page-title">all mods</h1>${searchBox()}</div>
   <p class="search__count" aria-live="polite"></p>
   ${productGrid(items, { fill: false })}
 </div>
-<script>
-  const q = document.getElementById("q");
-  const cards = [...document.querySelectorAll(".card[data-search]")];
-  const count = document.querySelector(".search__count");
-  function apply() {
-    const words = q.value.toLowerCase().trim().replace(/^#/, "").split(/\\s+/).filter(Boolean);
-    let shown = 0;
-    cards.forEach((c) => {
-      const ok = words.every((w) => c.dataset.search.includes(w));
-      c.hidden = !ok;
-      if (ok) shown++;
-    });
-    count.textContent = words.length ? shown + (shown === 1 ? " mod" : " mods") + " for \\u201c" + q.value.trim() + "\\u201d" : "";
-  }
-  q.addEventListener("input", apply);
-  function fromHash() { const t = decodeURIComponent(location.hash.slice(1)); if (t) { q.value = t; apply(); } }
-  window.addEventListener("hashchange", fromHash);
-  fromHash();
-  document.addEventListener("keydown", (e) => { if (e.key === "/" && document.activeElement !== q) { e.preventDefault(); q.focus(); } });
-</script>`;
+${searchScript}`;
   return layout({ title: "all mods", current: "", body, site: catalog.site });
 }
 
-// About, guide, ezine: simple placeholder pages until their content exists.
-const SOON = {
-  about: { title: "about", text: "Waxtape is a fake skate brand with real clothes for Reskate. Every fit is free: download the .zip, drop it in the game, go skate." },
-  guide: { title: "guide", text: "The install guide is on its way. Short version: download the .zip, unzip it into your Reskate mods folder, restart the game." },
-  ezine: { title: "ezine", text: "Issues about the game and new drops. Issue 01 is being written." },
+// About, guide, ezine. Each body is plain HTML so the copy is easy to edit.
+const PATH = String.raw`\Reskategame\ReSkate-1.0.3\Mods`;
+const PAGES = {
+  guide: {
+    title: "guide",
+    description: "How to install Waxtape mods in Reskate.",
+    html: `<div class="prose">
+  <p class="label">INSTALL GUIDE</p>
+  <p class="prose__lead">Installing a Waxtape mod in Reskate is straightforward. No installers, no extra tools: every piece ships as a single .zip, ready to drop into the game.</p>
+  <ol class="steps">
+    <li><h2>Download</h2><p>Open the piece you want and press <strong>download</strong>. The .zip saves straight to your computer.</p></li>
+    <li><h2>Extract</h2><p>Right-click the .zip and choose <em>Extract all</em>, or use your archive tool of choice. Keep the extracted folder exactly as it comes: do not rename or reorganise its contents.</p></li>
+    <li><h2>Paste into Mods</h2><p>Paste the extracted folder into the Mods directory of your Reskate installation:</p>
+      <div class="path"><code id="mods-path">${PATH}</code><button class="path__copy" type="button" data-copy="mods-path">COPY</button></div>
+      <p class="prose__note">The number in the path is the game version. If yours differs, use the folder that matches your installation.</p></li>
+    <li><h2>Skate</h2><p>Launch Reskate. The piece is now part of your wardrobe.</p></li>
+  </ol>
+  <p class="prose__note">Something not showing up? Check that the folder sits directly inside <code>Mods</code> and not inside a second folder with the same name, which is a common result of extracting twice.</p>
+</div>
+<script>
+  document.querySelectorAll("[data-copy]").forEach((btn) => btn.addEventListener("click", async () => {
+    const text = document.getElementById(btn.dataset.copy).textContent;
+    try { await navigator.clipboard.writeText(text); btn.textContent = "COPIED"; }
+    catch { const r = document.createRange(); r.selectNodeContents(document.getElementById(btn.dataset.copy)); getSelection().removeAllRanges(); getSelection().addRange(r); btn.textContent = "SELECTED"; }
+    setTimeout(() => (btn.textContent = "COPY"), 1600);
+  }));
+</script>`,
+  },
+  about: {
+    title: "about",
+    description: "Waxtape, a fictional skate brand with real fits for Reskate, created by Sudiro Rubin.",
+    html: `<div class="prose">
+  <p class="label">ABOUT</p>
+  <p class="prose__lead">Waxtape is a fictional skate brand with real fits for Reskate. Every piece is free: download the .zip, drop it in the game, go skate.</p>
+  <p>Waxtape was created by <a href="https://sudirorubin.com/" rel="noopener">Sudiro Rubin</a>, who designs the brand, the clothes and this site.</p>
+  <p class="prose__note">Waxtape is a fan project, not affiliated with the game's developers or publishers.</p>
+</div>`,
+  },
+  ezine: {
+    title: "ezine",
+    description: "The Waxtape ezine: a monthly online issue. Coming soon.",
+    html: `<div class="prose">
+  <p class="label">COMING SOON</p>
+  <p class="prose__lead">The Waxtape ezine is on its way: a monthly online issue with news from the game, new drops and the stories behind them.</p>
+  <p><a class="go" href="/all/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>SEE ALL MODS</a></p>
+</div>`,
+  },
 };
 
 export function simplePage(key, catalog) {
-  const page = SOON[key];
-  const body = `<div class="sheet noise sheet--narrow"><h1 class="page-title">${esc(page.title)}</h1><div class="empty"><p>${esc(page.text)}</p><p><a class="go" href="/all/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>SEE ALL MODS</a></p></div></div>`;
-  return layout({ title: page.title, current: key, body, site: catalog.site });
+  const page = PAGES[key];
+  const body = `<div class="sheet noise sheet--narrow"><h1 class="page-title">${esc(page.title)}</h1>${page.html}</div>`;
+  return layout({ title: page.title, description: page.description, current: key, body, site: catalog.site });
 }
 
 export function notFoundPage(catalog) {

@@ -1,4 +1,4 @@
-// Footer floating on the wall photo, in ink: logo, shout, three link columns, legal line.
+// Footer floating on the wall photo, in ink: three link columns with the logo at the bottom left, then the legal line.
 export function footer() {
   const year = new Date().getFullYear();
   return `<footer class="site-footer">
@@ -6,7 +6,6 @@ export function footer() {
     <div class="site-footer__top">
       <div class="site-footer__brand">
         <img src="/logos/waxtapelogo_Positivo-ink.svg" alt="waxtape." width="220" height="55">
-        <p class="site-footer__shout">go skate.</p>
       </div>
       <div><h2>shop</h2><ul>
         <li><a href="/apparel/">apparel</a></li>
