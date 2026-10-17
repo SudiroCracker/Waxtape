@@ -1,6 +1,6 @@
 import { esc, each } from "../components/html.mjs";
 import { layout } from "../components/layout.mjs";
-import { productGrid } from "../components/product-card.mjs";
+import { productGrid, productCard, soonCard } from "../components/product-card.mjs";
 import { featurePanel } from "../components/feature-panel.mjs";
 import { productPage } from "../components/product-page.mjs";
 
@@ -30,20 +30,37 @@ const searchScript = `<script>
 
 const byNewest = (a, b) => (b.uploaded || "").localeCompare(a.uploaded || "") || a.name.localeCompare(b.name);
 
-// Home: NEW!!! grid on the left, THE RAW feature on the right.
+// Home: FRESH OFF THE TRUCKS grid on the left, THE RAW feature on the right.
+// Every mod is in the page; a small script shuffles them on each load and shows the first
+// HOME_MAX, so returning visitors see a different wall each time. Without JS: the newest HOME_MAX.
+const HOME_MAX = 12;
+const shuffleScript = `<script>
+  (() => {
+    const grid = document.querySelector(".home__new .grid");
+    const cards = [...grid.querySelectorAll(".card[data-search]")];
+    for (let i = cards.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [cards[i], cards[j]] = [cards[j], cards[i]]; }
+    const soon = grid.querySelector(".card--soon");
+    cards.forEach((c, i) => { c.hidden = i >= ${HOME_MAX}; grid.insertBefore(c, soon); });
+  })();
+</script>`;
+
 export function homePage(catalog) {
   const { site, featured, products } = catalog;
-  const newest = [...products].sort(byNewest).slice(0, 12);
-  const product = products.find((p) => p.id === featured.product) || newest[0];
+  const all = [...products].sort(byNewest);
+  const product = products.find((p) => p.id === featured.product) || all[0];
+  const shown = Math.min(all.length, HOME_MAX);
+  const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p) : productCard(p).replace('<article class="card"', '<article class="card" hidden')));
+  for (let i = shown % 4; i && i < 4; i++) cards.push(soonCard());
   const body = `<div class="sheet noise">
   <div class="home">
     <section class="home__new" aria-labelledby="new-title">
       <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
-      ${productGrid(newest)}
+      <div class="grid">${cards.join("")}</div>
     </section>
     <div class="home__feature">${featurePanel({ product, title: featured.title, image: featured.imageFound || product.thumb, text: featured.text, sticker: featured.stickerFound, focus: featured.focus })}</div>
   </div>
-</div>`;
+</div>
+${shuffleScript}`;
   return layout({ current: "home", body, site });
 }
 
