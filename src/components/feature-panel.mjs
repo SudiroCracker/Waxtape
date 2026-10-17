@@ -12,8 +12,8 @@ export function featurePanel({ product, title, image, text, sticker }) {
     .join("");
   const material = product.material ? `<p>${esc(product.material)}</p>` : "";
   return `<article class="feature" aria-labelledby="feature-title">
-  ${sticker
-    ? `<img class="feature__sticker feature__sticker--gif" src="/${esc(sticker)}" alt="" width="471" height="265">`
+  ${sticker && sticker.length
+    ? `<picture class="feature__sticker feature__sticker--gif">${sticker.slice(0, -1).map((f) => `<source srcset="/${esc(f)}" type="image/${f.split(".").pop()}">`).join("")}<img src="/${esc(sticker.at(-1))}" alt="" width="1120" height="360"></picture>`
     : `<img class="feature__sticker" src="/logos/waxtapelogo_Negativo-announce.svg" alt="" width="397" height="92">`}
   <a class="feature__media" href="/products/${esc(product.id)}/"><img src="/${esc(image)}" alt="${esc(product.name)}" width="568" height="568"><span class="feature__frame" aria-hidden="true"></span></a>
   <h2 class="label" id="feature-title">${esc(title)}</h2>

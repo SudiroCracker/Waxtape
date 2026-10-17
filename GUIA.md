@@ -117,6 +117,6 @@ Cada .zip vive dentro de la propia web, en `public/products/<id>/`. Los botones 
 
 ## Logo animado (GIF) sobre THE RAW
 
-1. Sube tu GIF a `public/img/` con el nombre exacto **`sticker.gif`** (en GitHub: entra en `public/img`, *Add file → Upload files*).
-2. Tamaño de referencia: 471 × 265 px, fondo transparente (como en el Figma). La sombra la pone la web.
+1. Sube tu GIF a `public/img/` con el nombre exacto **`sticker.gif`** (si además hay un `sticker.webp`, la web sirve primero el WebP, que pesa mucho menos; si cambias el GIF, borra o sustituye también el WebP) (en GitHub: entra en `public/img`, *Add file → Upload files*).
+2. Fondo transparente y ya inclinado: la web no lo rota. La sombra la pone la web. Intenta que pese menos de 2 MB.
 3. Al guardar, Cloudflare reconstruye la web y el GIF sustituye al logo rojo. Si borras el archivo, vuelve el logo rojo.

@@ -116,7 +116,9 @@ a { color: inherit; }
 .feature::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--panel); filter: url(#rough-edge-strong); }
 .feature__sticker { position: absolute; top: -22px; left: -41px; z-index: 3; width: min(397px, 70%); height: auto; transform: rotate(-7.43deg); transform-origin: 0 50%; pointer-events: none; }
 /* The animated logo (Figma "gif0000"): 471×265, hanging over the panel's top-left, soft drop shadow. */
-.feature__sticker--gif { top: -106px; left: -54px; width: 76.7%; aspect-ratio: 471 / 265; object-fit: cover; transform: none; filter: drop-shadow(16px 18px 7.6px rgba(0, 0, 0, .25)); }
+/* The GIF is already tilted, so no rotation here. Its own ratio (1120×360). */
+.feature__sticker--gif { top: -78px; left: -54px; width: 80%; transform: none; filter: drop-shadow(16px 18px 7.6px rgba(0, 0, 0, .25)); }
+.feature__sticker--gif img { width: 100%; height: auto; }
 .feature__media { position: relative; display: block; aspect-ratio: 1; background: var(--white); }
 .feature__media img { width: 100%; height: 100%; object-fit: cover; }
 /* Ornate frame over the image: 609/568 of it, offset 22/23 px like the Figma (frame.png has a clear centre). */
@@ -235,7 +237,7 @@ a { color: inherit; }
   .home__feature { margin-top: 30px; }
   .sheet { margin-top: 28px; padding: 18px 16px 40px; }
   .feature__sticker { left: -12px; }
-  .feature__sticker--gif { top: -64px; width: 86%; }
+  .feature__sticker--gif { top: -44px; width: 88%; }
   .home__feature { margin-left: 0; }
 }
 
