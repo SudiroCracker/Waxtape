@@ -36,34 +36,24 @@ a { color: inherit; }
 .site-header__logo { flex: none; width: 196px; display: block; padding-bottom: 6px; }
 .site-header__logo img { width: 100%; height: auto; }
 .nav { flex: 1; min-width: 0; max-width: 1061px; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
-.nav__links { flex: 1; min-width: 0; display: flex; justify-content: flex-start; gap: 4px clamp(36px, 5.5vw, 96px); flex-wrap: wrap; list-style: none; margin: 0; padding: 0 0 7px; }
+.nav__links { flex: 1; min-width: 0; display: flex; justify-content: flex-start; gap: 4px clamp(28px, 3.6vw, 62px); flex-wrap: wrap; list-style: none; margin: 0; padding: 0 0 7px; }
 .nav__link {
   position: relative; isolation: isolate; display: inline-block; padding: 0 6px 4px;
   font-family: var(--font-display); font-size: 40px; line-height: 1; letter-spacing: var(--track); text-transform: lowercase;
   color: var(--ink); text-decoration: none; transition: color 90ms steps(2);
 }
-/* Hover: a ragged ink brush blob slaps in and jitters (stop motion). Active: the blob stays,
-   tilted, with a baroque flourish (decor2) hanging under it. */
-.nav__link::before {
-  content: ""; position: absolute; inset: -2px -14px -6px; z-index: -1; background: var(--ink);
-  filter: url(#ink-2); transform: rotate(-2.5deg) scale(.2, 0); transform-origin: 30% 60%;
-  transition: transform 150ms steps(3);
-}
+/* Nav (Figma "MacBook Pro 16 - 10"): plain ink text; the active section wears the baroque
+   flourish (highlight.webp, cut from decor1) underneath. Hover: the flourish appears and jitters. */
+.nav__link::before { display: none; }
 .nav__link::after {
-  content: ""; position: absolute; left: 50%; bottom: -26px; width: 118%; height: 22px; z-index: -1;
-  background: url("/img/ornaments/decor2.png") center / contain no-repeat;
-  transform: translateX(-50%) scaleX(0); transition: transform 150ms steps(3); pointer-events: none;
+  content: ""; position: absolute; left: -14%; right: -14%; top: calc(100% - 2px); aspect-ratio: 800 / 161;
+  background: url("/img/ornaments/highlight.webp") center / contain no-repeat; pointer-events: none;
+  opacity: 0; transform: scale(.6, .2); transition: transform 150ms steps(3), opacity 0ms 0ms;
 }
-.nav__link:hover, .nav__link:focus-visible { color: var(--bg); }
-.nav__link:hover::before, .nav__link:focus-visible::before { transform: rotate(-2.5deg) scale(1); animation: brush-wiggle 375ms step-end infinite; }
-.nav__link[aria-current="page"] { color: var(--white); }
-.nav__link[aria-current="page"]::before { transform: rotate(-3deg) scale(1); filter: url(#ink-1); animation: none; }
-.nav__link[aria-current="page"]::after { transform: translateX(-50%) scaleX(1); }
-@keyframes brush-wiggle {
-  0%      { filter: url(#ink-1); transform: rotate(-2.5deg) scale(1); }
-  33.33%  { filter: url(#ink-2); transform: rotate(-1deg) scale(1.03, .97) translate(1px, -1px); }
-  66.66%  { filter: url(#ink-3); transform: rotate(-3.5deg) scale(.98, 1.04) translate(-1px, 1px); }
-}
+.nav__link:hover::after, .nav__link:focus-visible::after { opacity: 1; transform: none; animation: ink-jitter 375ms step-end infinite; }
+.nav__link:hover, .nav__link:focus-visible { color: var(--ink); }
+.nav__link[aria-current="page"]::after { opacity: 1; transform: none; animation: none; }
+
 
 .pill {
   display: inline-block; padding: 0 10px 3px; background: var(--ink); color: var(--white);
@@ -243,7 +233,7 @@ a { color: inherit; }
   .site-header { flex-wrap: wrap; align-items: center; padding: 20px 16px 0; gap: 16px; }
   .site-header__logo { width: 150px; }
   .nav { flex-basis: 100%; flex-wrap: nowrap; align-items: center; gap: 12px; }
-  .nav__links { flex-wrap: nowrap; justify-content: flex-start; gap: 14px; overflow-x: auto; scrollbar-width: none; padding: 4px 4px 12px; margin: 0 -4px; }
+  .nav__links { flex-wrap: nowrap; justify-content: flex-start; gap: 22px; overflow-x: auto; scrollbar-width: none; padding: 4px 14px 30px; margin: 0 -14px -18px; }
   .nav__links::-webkit-scrollbar { display: none; }
   .nav__link { font-size: 28px; white-space: nowrap; }
   .pill { flex: none; font-size: 24px; margin-bottom: 8px; }
@@ -261,12 +251,16 @@ a { color: inherit; }
 /* ---------- List page head: title left, search right ---------- */
 .page-head { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; margin-bottom: 32px; }
 .page-head .page-title { margin: 0; }
-.search { flex: 0 1 420px; margin: 0; }
-.search__input { width: 100%; height: 50px; padding: 0 26px 2px; border: 0; border-radius: 999px; background: none; color: var(--ink); font: italic 600 19px/1 var(--font-sans); letter-spacing: -.02em; -webkit-appearance: none; appearance: none; }
+.search { flex: 0 1 321px; margin: 0; }
+.search { position: relative; display: flex; align-items: baseline; gap: 10px; padding: 0 0 6px 14px; }
+.search::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--ink); filter: url(#ink-1); pointer-events: none; }
+.search:focus-within::after { animation: ink-wiggle 375ms step-end infinite; }
+.search__label { flex: none; font: 900 21px/1 var(--font-sans); letter-spacing: var(--track); color: var(--ink); }
+.search__input { flex: 1; min-width: 0; height: 30px; padding: 0; border: 0; border-radius: 0; background: none; color: var(--ink); font: 400 18px/1 var(--font-sans); letter-spacing: var(--track); -webkit-appearance: none; appearance: none; }
 .search__input::placeholder { color: var(--ink-soft); opacity: 1; }
 .search__input:focus { outline: none; }
 .search__input::-webkit-search-cancel-button { filter: grayscale(1); }
-.search__count { min-height: 1.2em; margin: -14px 0 18px; font: 700 13px/1.2 var(--font-sans); letter-spacing: .02em; text-transform: uppercase; color: var(--ink-soft); }
+.search__count { min-height: 1.2em; margin: 4px 0 22px; font: 400 16px/1.2 var(--font-sans); letter-spacing: var(--track); color: var(--ink); }
 @media (max-width: 640px) { .search { flex-basis: 100%; } }
 
 /* ---------- More like this (product page) ---------- */
@@ -309,31 +303,26 @@ a { color: inherit; }
 
 /* ---------- Filters + sort (list pages) ---------- */
 .filters { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 32px; margin: -14px 0 26px; }
-.filters__row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
-.filters__label { min-width: 74px; font: 900 13px/1 var(--font-sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
-/* Search tokens: baroque cartouches. A rounded double ink rule, roughened by the ink filter,
-   Besley italic inside. Hover: the rule jitters. Active: inked solid, cream text. */
-.chip, .select, .search { position: relative; isolation: isolate; }
-.chip::before, .select::before, .search::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  border: 7px double var(--ink); border-radius: 26px; filter: url(#ink-1);
-}
+.filters { align-items: baseline; margin: 6px 0 6px; }
+.filters__row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 24px; }
+/* Category tabs: Besley SemiBold caps; the active one Black and bigger. Hover: inked underline. */
 .chip {
-  border: 0; background: none; color: var(--ink); cursor: pointer;
-  padding: 7px 18px 9px; font: italic 600 18px/1 var(--font-sans); letter-spacing: -.02em;
+  position: relative; border: 0; background: none; padding: 2px 0 6px; color: var(--ink); cursor: pointer;
+  font: 600 16px/1 var(--font-sans); letter-spacing: var(--track); text-transform: uppercase;
 }
-.chip sup { margin-left: 3px; font: normal 700 10px/1 var(--font-sans); letter-spacing: 0; vertical-align: 6px; }
-.chip:hover::before, .chip:focus-visible::before, .select:hover::before, .search:focus-within::before { animation: ink-wiggle 375ms step-end infinite; }
-.chip[aria-pressed="true"] { color: var(--bg); }
-.chip[aria-pressed="true"]::before { background: var(--ink); border-style: solid; filter: url(#ink-2); }
-.chip:disabled { cursor: not-allowed; opacity: .38; text-decoration: line-through; }
-.chip:disabled::before { animation: none; }
-.filters__sort { display: flex; align-items: center; gap: 10px; }
-.filters__sort .filters__label { min-width: 0; }
-.select { display: inline-block; }
-.select::after { content: ""; position: absolute; right: 16px; top: 50%; width: 7px; height: 7px; border: solid var(--ink); border-width: 0 2px 2px 0; transform: translateY(-70%) rotate(45deg); pointer-events: none; }
-.select select { height: 40px; border: 0; background: none; color: var(--ink); padding: 0 38px 2px 18px; font: italic 600 18px/1 var(--font-sans); letter-spacing: -.02em; cursor: pointer; -webkit-appearance: none; appearance: none; }
-.select select:focus { outline: none; }
+.chip::after { content: ""; position: absolute; left: -2px; right: -2px; bottom: 0; height: 3px; background: var(--ink); filter: url(#ink-1); transform: scaleX(0); transform-origin: left; transition: transform 120ms steps(3); }
+.chip:hover::after, .chip:focus-visible::after { transform: scaleX(1); animation: ink-wiggle 375ms step-end infinite; }
+.chip[aria-pressed="true"] { font-weight: 900; font-size: 21px; }
+.chip[aria-pressed="true"]::after { display: none; }
+.chip:focus-visible { outline: none; }
+.chip:disabled { cursor: not-allowed; opacity: .35; }
+.chip:disabled::after { display: none; }
+.filters__label { font: 900 21px/1 var(--font-sans); letter-spacing: var(--track); text-transform: uppercase; color: var(--ink); }
+.filters__sort { display: flex; align-items: baseline; gap: 8px; }
+.select { position: relative; display: inline-block; }
+.select::after { content: ""; position: absolute; right: 2px; top: 45%; width: 6px; height: 6px; border: solid var(--ink); border-width: 0 2px 2px 0; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
+.select select { border: 0; background: none; color: var(--ink); padding: 0 16px 0 0; font: 600 16px/1 var(--font-sans); letter-spacing: var(--track); text-transform: uppercase; cursor: pointer; -webkit-appearance: none; appearance: none; }
+.select select:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
 /* ---------- Hand-inked frames on product images (reference: rough marker stroke) ----------
    A bordered overlay run through #ink-1..3 (layout.mjs). On hover/focus the three drawings cycle

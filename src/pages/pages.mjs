@@ -7,20 +7,20 @@ import { productPage } from "../components/product-page.mjs";
 // Search box for list pages: a plain field, no icon. Filters the cards on the page by name, type,
 // category, collab and tags. "/" focuses it; /all/#y2k opens with that search.
 const searchBox = () => `<form class="search" role="search" onsubmit="return false">
-    <label class="sr-only" for="q">Search mods</label>
-    <input class="search__input" id="q" type="search" placeholder="Search" autocomplete="off">
+    <label class="search__label" for="q">Search:</label>
+    <input class="search__input" id="q" type="search" autocomplete="off">
   </form>`;
 
-// TYPE chips (the group's categories: top, bottom, shoes, accesories) and SORT (newest, a–z, colour)
-// live next to the search; they combine. Empty categories show but can't be picked.
+// Filter row (Figma "MacBook Pro 16 - 11"): ALL + the group's categories in Besley caps, the
+// active one in Black and bigger; SORT: on the right; "Showing N of M pieces" underneath.
+// Empty categories show but can't be picked.
 function filterBar(items, categories, activeKey = null) {
-  const chips = categories
-    .map(({ key, label, count }) =>
-      `<button class="chip" type="button" data-filter="category" data-value="${esc(key)}" aria-pressed="${key === activeKey}"${count ? "" : " disabled"}>${esc(label.toLowerCase())}<sup>${count}</sup></button>`)
-    .join("");
+  const chip = (key, label, enabled = true) =>
+    `<button class="chip" type="button" data-filter="category" data-value="${esc(key)}" aria-pressed="${(activeKey || "") === key}"${enabled ? "" : " disabled"}>${esc(label.toUpperCase())}</button>`;
+  const chips = [chip("", "all"), ...categories.map(({ key, label, count }) => chip(key, label, count > 0))].join("");
   return `<div class="filters">
-    ${categories.length > 1 ? `<div class="filters__row" role="group" aria-label="Type"><span class="filters__label">TYPE</span>${chips}</div>` : "<span></span>"}
-    <label class="filters__sort"><span class="filters__label">SORT</span><span class="select"><select id="sort"><option value="new">newest</option><option value="az">a–z</option><option value="colour">colour</option></select></span></label>
+    ${categories.length > 1 ? `<div class="filters__row" role="group" aria-label="Type">${chips}</div>` : "<span></span>"}
+    <label class="filters__sort"><span class="filters__label">SORT:</span><span class="select"><select id="sort"><option value="new">newest</option><option value="az">a–z</option><option value="colour">colour</option></select></span></label>
   </div>`;
 }
 const categoriesOf = (catalog, groups, items) =>
@@ -32,7 +32,7 @@ const searchScript = `<script>
   const grid = document.querySelector(".sheet .grid");
   const cards = [...document.querySelectorAll(".card[data-search]")];
   const count = document.querySelector(".search__count");
-  const active = { category: document.querySelector('[data-filter][aria-pressed="true"]')?.dataset.value || null };
+  const active = { category: document.querySelector('[data-filter][aria-pressed="true"]')?.dataset.value || "" };
   function apply() {
     const words = q.value.toLowerCase().trim().replace(/^#/, "").split(/\\s+/).filter(Boolean);
     let shown = 0;
@@ -41,9 +41,7 @@ const searchScript = `<script>
         && (!active.category || c.dataset.category === active.category);
       c.hidden = !ok; if (ok) shown++;
     });
-    const chip = document.querySelector('[data-filter][aria-pressed="true"]');
-    const what = [q.value.trim(), chip && chip.firstChild.textContent].filter(Boolean).join(" · ");
-    if (count) count.textContent = what ? (shown ? shown + (shown === 1 ? " MOD" : " MODS") : "NOTHING YET") + " FOR \\u201c" + what.toUpperCase() + "\\u201d" : "";
+    if (count) count.textContent = "Showing " + shown + " of " + cards.length + (cards.length === 1 ? " piece" : " pieces");
   }
   function order() {
     if (!sort || !grid) return;
@@ -55,9 +53,8 @@ const searchScript = `<script>
     [...cards].sort(by).forEach((c) => grid.insertBefore(c, soon));
   }
   document.querySelectorAll("[data-filter]").forEach((b) => b.addEventListener("click", () => {
-    const key = b.dataset.filter, on = active[key] !== b.dataset.value;
-    active[key] = on ? b.dataset.value : null;
-    document.querySelectorAll('[data-filter="' + key + '"]').forEach((x) => x.setAttribute("aria-pressed", String(x === b && on)));
+    active.category = b.dataset.value;
+    document.querySelectorAll("[data-filter]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     apply();
   }));
   if (sort) sort.addEventListener("change", order);

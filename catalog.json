@@ -15,7 +15,7 @@
       "label": "Apparel",
       "categories": {
         "tops": {
-          "label": "Top",
+          "label": "Tops",
           "types": ["bra", "coat", "jacket", "tshirt"]
         },
         "bottoms": {
