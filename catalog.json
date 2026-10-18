@@ -15,33 +15,20 @@
       "label": "Apparel",
       "categories": {
         "tops": {
-          "label": "Tops",
+          "label": "Top",
           "types": ["bra", "coat", "jacket", "tshirt"]
         },
         "bottoms": {
-          "label": "Bottoms",
+          "label": "Bottom",
           "types": ["pants", "shorts"]
         },
         "shoes": {
           "label": "Shoes",
           "types": []
-        }
-      }
-    },
-    "accessories": {
-      "label": "Accessories",
-      "categories": {
-        "eyewear": {
-          "label": "Eyewear",
-          "types": []
         },
-        "hats": {
-          "label": "Hats",
-          "types": []
-        },
-        "socks": {
-          "label": "Socks",
-          "types": []
+        "accessories": {
+          "label": "Accesories",
+          "types": ["eyewear", "hats", "socks"]
         }
       }
     },

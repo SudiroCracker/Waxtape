@@ -35,7 +35,7 @@ export function productPage(p, taxonomy, related = [], site = {}) {
     <div class="info__title"><h1 id="product-name">${esc(p.name)}</h1>${collab}</div>
     <div class="info__block"><h2 class="label">INFO</h2><p>${esc(p.description)}</p></div>
     ${downloadBar(p)}
-    <p class="info__help">Need help? <a href="/guide/">Install guide here!!</a></p>
+    <p class="info__help">Need help? <a href="/about/#install">Install guide here!!</a></p>
     <dl class="info__facts">
       <div><dt>VERSION</dt><dd>${esc(p.version)}</dd></div>
       <div><dt>FILE</dt><dd>${esc(p.download.split("/").pop())} · ${esc(p.size)}</dd></div>

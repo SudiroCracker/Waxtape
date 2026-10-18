@@ -11,20 +11,20 @@ const searchBox = () => `<form class="search" role="search" onsubmit="return fal
     <input class="search__input" id="q" type="search" placeholder="Search" autocomplete="off">
   </form>`;
 
-// Filters (type / colour chips) and sort live next to the search; all three combine.
-const COLOURS = ["black", "white", "off-white", "cream", "grey", "charcoal", "red", "pink", "orange", "yellow", "green", "blue", "navy", "purple", "brown"];
-function filterBar(items) {
-  const types = [...new Set(items.map((p) => p.type))].sort();
-  const colours = COLOURS.filter((c) => items.some((p) => p.tags.includes(c)));
-  const row = (name, label, values) =>
-    values.length > 1
-      ? `<div class="filters__row" role="group" aria-label="${label}"><span class="filters__label">${label}</span>${values.map((v) => `<button class="chip" type="button" data-filter="${name}" data-value="${esc(v)}" aria-pressed="false">${esc(v)}</button>`).join("")}</div>`
-      : "";
+// TYPE chips (the group's categories: top, bottom, shoes, accesories) and SORT (newest, a–z, colour)
+// live next to the search; they combine. Empty categories show but can't be picked.
+function filterBar(items, categories, activeKey = null) {
+  const chips = categories
+    .map(({ key, label, count }) =>
+      `<button class="chip" type="button" data-filter="category" data-value="${esc(key)}" aria-pressed="${key === activeKey}"${count ? "" : " disabled"}>${esc(label.toLowerCase())}<sup>${count}</sup></button>`)
+    .join("");
   return `<div class="filters">
-    <div class="filters__rows">${row("type", "TYPE", types)}${row("colour", "COLOUR", colours)}</div>
-    <label class="filters__sort"><span class="filters__label">SORT</span><select id="sort"><option value="new">newest</option><option value="az">a–z</option></select></label>
+    ${categories.length > 1 ? `<div class="filters__row" role="group" aria-label="Type"><span class="filters__label">TYPE</span>${chips}</div>` : "<span></span>"}
+    <label class="filters__sort"><span class="filters__label">SORT</span><span class="select"><select id="sort"><option value="new">newest</option><option value="az">a–z</option><option value="colour">colour</option></select></span></label>
   </div>`;
 }
+const categoriesOf = (catalog, groups, items) =>
+  groups.flatMap((g) => Object.entries(catalog.taxonomy[g].categories).map(([key, c]) => ({ key, label: c.label, count: items.filter((p) => p.group === g && p.category === key).length })));
 
 const searchScript = `<script>
   const q = document.getElementById("q");
@@ -32,22 +32,25 @@ const searchScript = `<script>
   const grid = document.querySelector(".sheet .grid");
   const cards = [...document.querySelectorAll(".card[data-search]")];
   const count = document.querySelector(".search__count");
-  const active = { type: null, colour: null };
+  const active = { category: document.querySelector('[data-filter][aria-pressed="true"]')?.dataset.value || null };
   function apply() {
     const words = q.value.toLowerCase().trim().replace(/^#/, "").split(/\\s+/).filter(Boolean);
     let shown = 0;
     cards.forEach((c) => {
       const ok = words.every((w) => c.dataset.search.includes(w))
-        && (!active.type || c.dataset.type === active.type)
-        && (!active.colour || c.dataset.tags.split(" ").includes(active.colour));
+        && (!active.category || c.dataset.category === active.category);
       c.hidden = !ok; if (ok) shown++;
     });
-    const what = [q.value.trim(), active.type, active.colour].filter(Boolean).join(" · ");
+    const chip = document.querySelector('[data-filter][aria-pressed="true"]');
+    const what = [q.value.trim(), chip && chip.firstChild.textContent].filter(Boolean).join(" · ");
     if (count) count.textContent = what ? (shown ? shown + (shown === 1 ? " MOD" : " MODS") : "NOTHING YET") + " FOR \\u201c" + what.toUpperCase() + "\\u201d" : "";
   }
   function order() {
     if (!sort || !grid) return;
-    const by = sort.value === "az" ? (a, b) => a.dataset.name.localeCompare(b.dataset.name) : (a, b) => b.dataset.date.localeCompare(a.dataset.date) || a.dataset.name.localeCompare(b.dataset.name);
+    const newest = (a, b) => b.dataset.date.localeCompare(a.dataset.date) || a.dataset.name.localeCompare(b.dataset.name);
+    const by = sort.value === "az" ? (a, b) => a.dataset.name.localeCompare(b.dataset.name)
+      : sort.value === "colour" ? (a, b) => a.dataset.colour - b.dataset.colour || newest(a, b)
+      : newest;
     const soon = grid.querySelector(".card--soon");
     [...cards].sort(by).forEach((c) => grid.insertBefore(c, soon));
   }
@@ -62,6 +65,7 @@ const searchScript = `<script>
   function fromHash() { const t = decodeURIComponent(location.hash.slice(1)); if (t) { q.value = t; apply(); } }
   window.addEventListener("hashchange", fromHash);
   fromHash();
+  apply();
   document.addEventListener("keydown", (e) => { if (e.key === "/" && document.activeElement !== q) { e.preventDefault(); q.focus(); } });
 </script>`;
 
@@ -143,31 +147,22 @@ export function productPageHtml(p, catalog) {
 
 // A list page: a group (apparel) or a category (apparel › tops).
 export function listPage({ catalog, groupKey, categoryKey }) {
+  // /apparel/ and /apparel/tops/ are the same listing; the category page opens with its chip on.
   const group = catalog.taxonomy[groupKey];
-  const category = categoryKey ? group.categories[categoryKey] : null;
-  const items = catalog.products
-    .filter((p) => p.group === groupKey && (!categoryKey || p.category === categoryKey))
-    .sort(byNewest);
-  const sub = Object.entries(group.categories)
-    .map(([key, c]) => {
-      const count = catalog.products.filter((p) => p.group === groupKey && p.category === key).length;
-      const current = key === categoryKey ? ' aria-current="page"' : "";
-      return `<li><a href="/${groupKey}/${key}/"${current}>${esc(c.label.toLowerCase())} ${count}</a></li>`;
-    })
-    .join("");
-  const title = (category || group).label.toLowerCase();
+  const items = catalog.products.filter((p) => p.group === groupKey).sort(byNewest);
+  const title = group.label.toLowerCase();
   const content = items.length
     ? productGrid(items)
     : `<div class="empty"><p class="label">nothing here yet.</p><p>The first ${esc(title)} mods are on the way. Check the <a href="/ezine/">ezine</a> for drops.</p></div>`;
   const body = `<div class="sheet noise sheet--narrow">
   <div class="page-head"><h1 class="page-title">${esc(title)}</h1>${items.length ? searchBox() : ""}</div>
-  <ul class="subnav" aria-label="${esc(group.label)} categories">${sub}</ul>
-  ${items.length ? filterBar(items) : ""}
+  ${items.length ? filterBar(items, categoriesOf(catalog, [groupKey], items), categoryKey) : ""}
   <p class="search__count" aria-live="polite"></p>
   ${content}
 </div>
 ${items.length ? searchScript : ""}`;
-  return layout({ title, current: groupKey, body, site: catalog.site, path: `/${groupKey}/${categoryKey ? categoryKey + "/" : ""}` });
+  const pageTitle = categoryKey ? `${title} · ${group.categories[categoryKey].label.toLowerCase()}` : title;
+  return layout({ title: pageTitle, current: groupKey, body, site: catalog.site, path: `/${groupKey}/${categoryKey ? categoryKey + "/" : ""}` });
 }
 
 // All mods, with search by name or tag. Works without a server: filters the cards in the page.
@@ -175,7 +170,7 @@ export function allPage(catalog) {
   const items = [...catalog.products].sort(byNewest);
   const body = `<div class="sheet noise sheet--narrow">
   <div class="page-head"><h1 class="page-title">all mods</h1>${searchBox()}</div>
-  ${filterBar(items)}
+  ${filterBar(items, categoriesOf(catalog, Object.keys(catalog.taxonomy).filter((g) => !catalog.site.locked.includes(g)), items))}
   <p class="search__count" aria-live="polite"></p>
   ${productGrid(items, { fill: false })}
 </div>
@@ -183,14 +178,21 @@ ${searchScript}`;
   return layout({ title: "all mods", current: "", body, site: catalog.site, path: "/all/" });
 }
 
-// About, guide, ezine. Each body is plain HTML so the copy is easy to edit.
+// About (with the install guide at #install) and ezine. Each body is plain HTML so the copy is easy to edit.
 const PATH = String.raw`\Reskategame\ReSkate-1.0.3\Mods`;
 const PAGES = {
-  guide: {
-    title: "guide",
-    description: "How to install Waxtape mods in Reskate.",
+  about: {
+    title: "about",
+    description: "Waxtape, a fictional skate brand with real fits for Reskate, created by Sudiro Rubin. How to install the mods.",
     html: `<div class="prose">
-  <p class="label">INSTALL GUIDE</p>
+  <p class="label">ABOUT</p>
+  <p class="prose__lead">Waxtape is a fictional skate brand with real fits for Reskate. Every piece is free: download the .zip, drop it in the game, go skate.</p>
+  <p>Waxtape was created by <a href="https://sudirorubin.com/" rel="noopener">Sudiro Rubin</a>, who designs the brand, the clothes and this site.</p>
+  <p class="prose__note">Waxtape is a fan project, not affiliated with the game's developers or publishers.</p>
+</div>
+<img class="ornament ornament--rule about__rule" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">
+<section class="prose" id="install" aria-labelledby="install-title">
+  <h2 class="label" id="install-title">INSTALL GUIDE</h2>
   <p class="prose__lead">Installing a Waxtape mod in Reskate is straightforward. No installers, no extra tools: every piece ships as a single .zip, ready to drop into the game.</p>
   <ol class="steps">
     <li><h2>Download</h2><p>Open the piece you want and press <strong>download</strong>. The .zip saves straight to your computer.</p></li>
@@ -201,7 +203,7 @@ const PAGES = {
     <li><h2>Skate</h2><p>Launch Reskate. The piece is now part of your wardrobe.</p></li>
   </ol>
   <p class="prose__note">Something not showing up? Check that the folder sits directly inside <code>Mods</code> and not inside a second folder with the same name, which is a common result of extracting twice.</p>
-</div>
+</section>
 <script>
   document.querySelectorAll("[data-copy]").forEach((btn) => btn.addEventListener("click", async () => {
     const text = document.getElementById(btn.dataset.copy).textContent;
@@ -210,16 +212,6 @@ const PAGES = {
     setTimeout(() => (btn.textContent = "COPY"), 1600);
   }));
 </script>`,
-  },
-  about: {
-    title: "about",
-    description: "Waxtape, a fictional skate brand with real fits for Reskate, created by Sudiro Rubin.",
-    html: `<div class="prose">
-  <p class="label">ABOUT</p>
-  <p class="prose__lead">Waxtape is a fictional skate brand with real fits for Reskate. Every piece is free: download the .zip, drop it in the game, go skate.</p>
-  <p>Waxtape was created by <a href="https://sudirorubin.com/" rel="noopener">Sudiro Rubin</a>, who designs the brand, the clothes and this site.</p>
-  <p class="prose__note">Waxtape is a fan project, not affiliated with the game's developers or publishers.</p>
-</div>`,
   },
   ezine: {
     title: "ezine",

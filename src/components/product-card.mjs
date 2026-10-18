@@ -1,11 +1,15 @@
 import { esc, squash } from "./html.mjs";
 
+// Colour order for "sort by colour": darks, lights, then the hues. First colour tag wins.
+export const COLOURS = ["black", "charcoal", "grey", "white", "off-white", "cream", "brown", "red", "pink", "orange", "yellow", "green", "blue", "navy", "purple"];
+const colourRank = (p) => { const i = COLOURS.findIndex((c) => p.tags.includes(c)); return i < 0 ? 99 : i; };
+
 // One mod in a grid. The whole card opens the product page; the ink "view" bar that slides
 // up on hover is part of the same link (downloads only happen from the product page).
 export function productCard(p) {
   const search = [p.name, p.type, p.category, p.collab || "", ...p.tags].join(" ").toLowerCase();
   const hit = `<span class="card__hit" aria-hidden="true"><span>view</span>${p.zipReady ? `<small>.zip · ${esc(p.size)}</small>` : ""}</span>`;
-  return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}" data-type="${esc(p.type)}" data-name="${esc(p.name.toLowerCase())}" data-date="${esc(p.uploaded || "")}">
+  return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}" data-type="${esc(p.type)}" data-category="${esc(p.category)}" data-colour="${colourRank(p)}" data-name="${esc(p.name.toLowerCase())}" data-date="${esc(p.uploaded || "")}">
   <a class="card__link" href="/products/${esc(p.id)}/">
     <span class="card__media"><img src="/${esc(p.thumb)}" alt="" width="206" height="258" loading="lazy"></span>
     <span class="card__name">${esc(squash(p.name))}</span>

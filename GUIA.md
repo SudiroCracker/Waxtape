@@ -72,7 +72,7 @@ Para cambiar una foto, sube un archivo con el mismo nombre en la misma carpeta y
 | `name` | El nombre visible. En las tarjetas sale todo junto ("SkullHoodie") y en la ficha en minúsculas ("skull hoodie") |
 | `collab` | `null` si es solo Waxtape. Si es colaboración, la marca entre comillas: `"Ed Hardy"` |
 | `group` | `apparel`, `accessories` o `board` |
-| `category` | En apparel: `tops`, `bottoms`, `shoes`. En accessories: `eyewear`, `hats`, `socks`. En board: `deck`, `grip`, `trucks`, `wheels`, `stickers` |
+| `category` | En apparel: `tops`, `bottoms`, `shoes`, `accessories` (gafas, gorras y calcetines van todos en `accessories`, con `type` `eyewear`, `hats` o `socks`). En board: `deck`, `grip`, `trucks`, `wheels`, `stickers` |
 | `type` | En tops: `bra`, `coat`, `jacket`, `tshirt`. En bottoms: `pants`, `shorts` |
 | `tags` | 4 a 7 palabras en minúsculas: color, corte, gráfico y época. Alimentan el buscador y "more like this" |
 | `description` | 2 o 3 frases en inglés. Si necesitas comillas dentro del texto, escríbelas como `\"` |
@@ -139,3 +139,11 @@ Cada .zip vive dentro de la propia web, en `public/products/<id>/`. El botón "d
 ## Marco de la imagen grande
 
 La foto grande de cada ficha va dentro de `public/img/ornaments/frame-tall.webp` (832 × 1040, ventana interior 752 × 954). Las tarjetas y miniaturas mantienen el trazo de tinta.
+
+## Navegación nueva (18 oct)
+
+- Menú: **apparel · board · ezine · about**. La home se abre con el logo.
+- **Accessories** ya no es una sección aparte: es una categoría más de apparel (`"group": "apparel", "category": "accessories"`). `/accessories/` redirige a `/apparel/accessories/`.
+- En apparel, el filtro TYPE muestra **top · bottom · shoes · accesories** con su número; las vacías salen tachadas. `/apparel/tops/` abre la lista con "top" ya marcado.
+- SORT: **newest · a–z · colour**. "colour" ordena por la primera etiqueta de color de cada prenda: black, charcoal, grey, white, off-white, cream, brown, red, pink, orange, yellow, green, blue, navy, purple.
+- La guía de instalación está dentro de **about** (`/about/#install`); `/guide/` redirige ahí. Las redirecciones están en `public/_redirects`.
