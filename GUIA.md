@@ -161,3 +161,10 @@ Durante los partidos, los operadores españoles bloquean rangos de IP compartido
 Por eso los dos CNAME de waxtape.store (raíz y www) están en **DNS only** (nube gris), no en Proxied: así la web se sirve desde
 las IPs de Cloudflare Pages, que no entran en esos bloqueos. **No vuelvas a activar el proxy** en esos registros.
 Cloudflare mostrará un aviso amarillo recomendando el proxy: se puede cerrar.
+
+## Exclusivos de waxtape.store (19 oct)
+
+Si una prenda no está (o no puede estar) en Thunderstore, añade a su ficha en catalog.json:
+`"thunderstore": false`. La ficha deja de enlazar al paquete, muestra **EXCLUSIVE · Only on waxtape.store**
+y el contador DOWNLOADS cuenta solo las descargas de la web.
+Ahora mismo: Friendship Deck, Letty Deck y Midcalf Twin (Thunderstore los rechazó como "Invalid submission").

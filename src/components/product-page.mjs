@@ -44,6 +44,7 @@ export function productPage(p, taxonomy, related = [], site = {}) {
       ${site.game ? `<div><dt>WORKS WITH</dt><dd>${esc(site.game)}</dd></div>` : ""}
       <div><dt>DOWNLOADS</dt><dd data-downloads="${esc(p.id)}">${p.downloads != null ? p.downloads.toLocaleString("en-US") : "—"}</dd></div>
       ${p.tsUrl ? `<div><dt>THUNDERSTORE</dt><dd><a href="${esc(p.tsUrl)}" rel="noopener">view package</a></dd></div>` : ""}
+      ${p.exclusive ? `<div><dt>EXCLUSIVE</dt><dd>Only on waxtape.store</dd></div>` : ""}
     </dl>
     ${related.length ? `<section class="related" aria-labelledby="related-title">
       <img class="ornament ornament--rule" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">

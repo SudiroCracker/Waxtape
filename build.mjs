@@ -95,7 +95,9 @@ catalog.site.ogImage = ["jpg", "png", "webp"].map((x) => `img/og.${x}`).find((f)
 // Download counts are read while building; if Thunderstore can't be reached the page just shows the link.
 const TS = catalog.site.thunderstore;
 for (const p of catalog.products) {
-  p.tsName = p.thunderstore || (p.download ? p.download.split("/").pop().replace(/\.zip$/i, "") : null);
+  // "thunderstore": false → exclusive to waxtape.store (no Thunderstore link or count).
+  p.exclusive = p.thunderstore === false;
+  p.tsName = p.exclusive ? null : p.thunderstore || (p.download ? p.download.split("/").pop().replace(/\.zip$/i, "") : null);
   p.tsUrl = TS && p.tsName ? `https://thunderstore.io/c/${TS.community}/p/${TS.namespace}/${p.tsName}/` : null;
   p.tsApi = TS && p.tsName ? `https://thunderstore.io/api/v1/package-metrics/${TS.namespace}/${p.tsName}/` : null;
 }
