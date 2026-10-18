@@ -1,4 +1,7 @@
 import { esc } from "./html.mjs";
+
+// Changes on every build so browsers (iPhone Safari above all) never keep an old stylesheet.
+const VERSION = Date.now().toString(36);
 import { header } from "./header.mjs";
 import { footer } from "./footer.mjs";
 
@@ -30,8 +33,8 @@ ${share}
 <link rel="icon" href="/logos/waxtapelogo_Negativo-ink.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/Drowner-Free.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/fonts/Besley.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="/styles/tokens.css">
-<link rel="stylesheet" href="/styles/site.css">
+<link rel="stylesheet" href="/styles/tokens.css?v=${VERSION}">
+<link rel="stylesheet" href="/styles/site.css?v=${VERSION}">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">

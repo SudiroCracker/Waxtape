@@ -165,12 +165,12 @@ a { color: inherit; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Big product image sits inside the ornate frame (frame-tall.webp, 832×1040, window 752×954 at 39,42). */
-/* Height from a padding box (1040/832 = 125%), not aspect-ratio: Safari can collapse an
-   aspect-ratio box whose only content is absolutely positioned, which hid the image on iPhone. */
-.gallery__main { position: relative; align-self: start; height: auto; }
-.gallery__main::before { content: ""; display: block; padding-top: 125%; }
+/* The photo sits in normal flow (4:5 from the image itself) and the frame is drawn over it.
+   Padding (as % of width) places it in the frame's window: 832x1040 frame, window at 39,42.
+   No aspect-ratio or absolute photo: mobile Safari collapsed those and hid the image. */
+.gallery__main { position: relative; align-self: start; padding: 4.6% 4.2% 5.9%; }
 .gallery__frame { position: absolute; inset: 0; z-index: 1; background: url("/img/ornaments/frame-tall.webp") center / 100% 100% no-repeat; pointer-events: none; }
-.gallery__main img { position: absolute; left: 4.2%; top: 3.6%; width: 91.6%; height: 92.8%; object-fit: cover; background: var(--white); }
+.gallery__main img { display: block; width: 100%; height: auto; background: var(--white); }
 @media (max-width: 640px) {
   .gallery { grid-template-columns: minmax(0, 1fr); }
   .gallery__thumbs { order: 2; grid-template-rows: none; grid-template-columns: repeat(var(--thumbs, 5), minmax(0, 1fr)); }
