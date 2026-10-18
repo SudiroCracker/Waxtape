@@ -60,6 +60,19 @@
   },
   "products": [
     {
+      "id": "midcalf-twin",
+      "name": "Midcalf Twin",
+      "collab": null,
+      "group": "apparel",
+      "category": "accessories",
+      "type": "socks",
+      "tags": ["red", "cherub", "ribbed", "midcalf", "classical"],
+      "description": "Ribbed red mid-calf socks with a flying cherub on each leg. A matching pair, the way angels come.",
+      "uploaded": "2026-10-19",
+      "updated": "2026-10-19",
+      "version": "1.0.0"
+    },
+    {
       "id": "letty-deck",
       "name": "Letty Deck",
       "collab": null,
