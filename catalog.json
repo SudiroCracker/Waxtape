@@ -2,7 +2,7 @@
   "site": {
     "name": "waxtape.",
     "tagline": "Free cosmetic mods for Reskate.",
-    "url": "https://waxtape.pages.dev",
+    "url": "https://waxtape.store",
     "game": "ReSkate 2.0.7+",
     "thunderstore": { "community": "reskate", "namespace": "Sudiro" }
   },

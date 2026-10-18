@@ -49,7 +49,7 @@ En resumen, cada prenda es una carpeta `public/products/<id>/` con `product.jpg`
    - Framework preset: **None**
    - Build command: **`node build.mjs`**
    - Build output directory: **`dist`**
-3. Pulsa Deploy. La web queda en `https://waxtape.pages.dev`, o en el nombre que elijas.
+3. Pulsa Deploy. La web queda en `https://waxtape.pages.dev`; el dominio propio es `https://waxtape.store` (Custom domains en Cloudflare Pages).
 
 Cada cambio que subas a `main` se publica solo.
 

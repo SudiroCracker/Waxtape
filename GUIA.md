@@ -13,7 +13,7 @@ Cuando guardas los cambios en GitHub, Cloudflare reconstruye la web y en uno o d
 
 ## 1. Prepara los archivos en tu ordenador
 
-Elige un **id** para la prenda. Es su nombre interno y forma parte de la dirección web, `waxtape.pages.dev/products/<id>/`.
+Elige un **id** para la prenda. Es su nombre interno y forma parte de la dirección web, `waxtape.store/products/<id>/`.
 
 - Va en minúsculas, sin espacios ni tildes, con guiones: `skull-hoodie`, `cropped-hokki`.
 - No se puede repetir y conviene no cambiarlo nunca, porque cambiaría la dirección.
@@ -147,3 +147,10 @@ La foto grande de cada ficha va dentro de `public/img/ornaments/frame-tall.webp`
 - En apparel, el filtro TYPE muestra **top · bottom · shoes · accesories** con su número; las vacías salen tachadas. `/apparel/tops/` abre la lista con "top" ya marcado.
 - SORT: **newest · a–z · colour**. "colour" ordena por la primera etiqueta de color de cada prenda: black, charcoal, grey, white, off-white, cream, brown, red, pink, orange, yellow, green, blue, navy, purple.
 - La guía de instalación está dentro de **about** (`/about/#install`); `/guide/` redirige ahí. Las redirecciones están en `public/_redirects`.
+
+## Dominio waxtape.store (18 oct)
+
+- La web vive en **https://waxtape.store**. `waxtape.pages.dev` y `www.waxtape.store` redirigen ahí (301) conservando la ruta: lo hace `functions/_middleware.js`.
+- El dominio está conectado en Cloudflare Pages → waxtape → Custom domains. Los registros DNS (dos CNAME y el TXT de Google) están en la zona waxtape.store. **No borres el TXT `google-site-verification`**: es lo que mantiene la propiedad en Search Console.
+- Search Console: propiedad de dominio `waxtape.store`, verificada por DNS, con `sitemap.xml` enviado.
+- Los manifest de los zips ya apuntan a waxtape.store; las copias para Thunderstore están actualizadas.
