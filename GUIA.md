@@ -154,3 +154,10 @@ La foto grande de cada ficha va dentro de `public/img/ornaments/frame-tall.webp`
 - El dominio está conectado en Cloudflare Pages → waxtape → Custom domains. Los registros DNS (dos CNAME y el TXT de Google) están en la zona waxtape.store. **No borres el TXT `google-site-verification`**: es lo que mantiene la propiedad en Search Console.
 - Search Console: propiedad de dominio `waxtape.store`, verificada por DNS, con `sitemap.xml` enviado.
 - Los manifest de los zips ya apuntan a waxtape.store; las copias para Thunderstore están actualizadas.
+
+## Bloqueos de LaLiga (18 oct)
+
+Durante los partidos, los operadores españoles bloquean rangos de IP compartidos de Cloudflare y la web dejaba de cargar en España.
+Por eso los dos CNAME de waxtape.store (raíz y www) están en **DNS only** (nube gris), no en Proxied: así la web se sirve desde
+las IPs de Cloudflare Pages, que no entran en esos bloqueos. **No vuelvas a activar el proxy** en esos registros.
+Cloudflare mostrará un aviso amarillo recomendando el proxy: se puede cerrar.
