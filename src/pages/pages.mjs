@@ -196,11 +196,11 @@ const PAGES = {
     <li><h2>Open the zip</h2><p>Open the .zip (double-click it, or use your archive tool of choice). Inside you will find a folder named after the piece, for example <code>Wt_Washed_Reptile</code>, next to a README, a manifest and an icon. Those three are for mod managers: you don't need them.</p></li>
     <li><h2>Drop the folder into Mods</h2><p>Drag <strong>only that folder</strong> into the Mods directory of your Reskate installation:</p>
       <div class="path"><code id="mods-path">${PATH}</code><button class="path__copy" type="button" data-copy="mods-path">COPY</button></div>
-      <p class="prose__note">Check it: opening <code>Mods\Wt_Washed_Reptile</code> should show <code>Win32</code> and <code>layout.toc</code> straight away. If you see another <code>Wt_Washed_Reptile</code> folder inside, move that one up a level. Using "Extract all" on the zip creates exactly that extra folder.</p>
+      <p class="prose__note">Check it: opening <code>Mods&#92;Wt_Washed_Reptile</code> should show <code>Win32</code> and <code>layout.toc</code> straight away. If you see another <code>Wt_Washed_Reptile</code> folder inside, move that one up a level. Using "Extract all" on the zip creates exactly that extra folder.</p>
       <p class="prose__note">The number in the path is the game version. If yours differs, use the folder that matches your installation. Then open the ReSkate launcher and make sure the mod is switched on.</p></li>
     <li><h2>Skate</h2><p>Launch Reskate. The piece is now part of your wardrobe.</p></li>
   </ol>
-  <p class="prose__note">Something not showing up? Nine times out of ten the folder sits one level too deep (<code>Mods\Wt_Name\Wt_Name</code>). Move it up so the mod files are directly inside <code>Mods\Wt_Name</code>.</p>
+  <p class="prose__note">Something not showing up? Nine times out of ten the folder sits one level too deep (<code>Mods&#92;Wt_Name&#92;Wt_Name</code>). Move it up so the mod files are directly inside <code>Mods&#92;Wt_Name</code>.</p>
 </section>
 <script>
   document.querySelectorAll("[data-copy]").forEach((btn) => btn.addEventListener("click", async () => {
