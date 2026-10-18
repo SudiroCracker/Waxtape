@@ -127,3 +127,15 @@ Cada .zip vive dentro de la propia web, en `public/products/<id>/`. El botón "d
 - **Thunderstore en cada ficha:** enlace al paquete y número de descargas. El paquete se busca con tu usuario (`site.thunderstore.namespace`) y el nombre del zip. Si en Thunderstore se llama distinto, añade a la prenda `"thunderstore": "NombreExacto"`. El número se actualiza cada vez que la web se publica.
 - **Imagen para compartir:** sube `public/img/og.jpg` (1200 × 630) y será la vista previa de la home y las páginas generales en Discord, WhatsApp, X… Las fichas de producto usan su propia foto.
 - **sitemap.xml y robots.txt** se generan solos en cada publicación.
+
+## Contador de descargas (18 oct)
+
+- **DOWNLOADS** en cada ficha = descargas en Thunderstore + descargas desde la web.
+- Thunderstore se consulta desde Cloudflare y se guarda 1 hora: el número nunca tiene más de una hora de retraso. No hace falta publicar para que se actualice.
+- Las descargas de la web se cuentan al pulsar "download" y se guardan en una base de datos D1 de Cloudflare llamada `waxtape`, conectada al proyecto como `DB`. Sin esa conexión la web funciona igual y solo suma Thunderstore.
+- El código está en `functions/api/` (lo ejecuta Cloudflare Pages, no hay que configurarlo).
+- Thunderstore no permite que otras webs sumen descargas a su contador: la suma se muestra en waxtape, no en Thunderstore.
+
+## Marco de la imagen grande
+
+La foto grande de cada ficha va dentro de `public/img/ornaments/frame-tall.webp` (832 × 1040, ventana interior 752 × 954). Las tarjetas y miniaturas mantienen el trazo de tinta.

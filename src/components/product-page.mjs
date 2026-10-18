@@ -27,7 +27,7 @@ export function productPage(p, taxonomy, related = [], site = {}) {
   <section class="product__media" aria-label="Images">
     <div class="gallery" style="--thumbs:${images.length}">
       <div class="gallery__thumbs">${thumbs}</div>
-      <div class="gallery__main"><img id="main-image" src="/${esc(p.thumb)}" alt="${esc(p.name)}" width="661" height="826"></div>
+      <div class="gallery__main"><img id="main-image" src="/${esc(p.thumb)}" alt="${esc(p.name)}" width="661" height="826"><span class="gallery__frame" aria-hidden="true"></span></div>
     </div>
     <ul class="tagline" aria-label="Category">${each(path, (x) => `<li><a href="${x.href}">${esc(x.label)}</a></li>`)}</ul>
   </section>
@@ -42,7 +42,8 @@ export function productPage(p, taxonomy, related = [], site = {}) {
       <div><dt>UPDATED</dt><dd>${esc(p.updated)}</dd></div>
       <div><dt>BY</dt><dd>${esc(p.author)}${p.collab ? ` × ${esc(p.collab)}` : ""}</dd></div>
       ${site.game ? `<div><dt>WORKS WITH</dt><dd>${esc(site.game)}</dd></div>` : ""}
-      ${p.tsUrl ? `<div><dt>THUNDERSTORE</dt><dd><a href="${esc(p.tsUrl)}" rel="noopener"${p.tsApi ? ` data-ts="${esc(p.tsApi)}"` : ""}>${p.downloads != null ? `${p.downloads.toLocaleString("en-US")} downloads` : "view package"}</a></dd></div>` : ""}
+      <div><dt>DOWNLOADS</dt><dd data-downloads="${esc(p.id)}">${p.downloads != null ? p.downloads.toLocaleString("en-US") : "—"}</dd></div>
+      ${p.tsUrl ? `<div><dt>THUNDERSTORE</dt><dd><a href="${esc(p.tsUrl)}" rel="noopener">view package</a></dd></div>` : ""}
     </dl>
     ${related.length ? `<section class="related" aria-labelledby="related-title">
       <img class="ornament ornament--rule" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">
@@ -52,10 +53,14 @@ export function productPage(p, taxonomy, related = [], site = {}) {
   </section>
 </div>
 <script>
-  // Live Thunderstore count (if their API allows it from the browser); the built-in number stays otherwise.
-  document.querySelectorAll("[data-ts]").forEach(async (a) => {
-    try { const r = await fetch(a.dataset.ts); const d = await r.json(); if (Number.isFinite(d.downloads)) a.textContent = d.downloads.toLocaleString("en-US") + " downloads"; } catch {}
+  // Downloads = Thunderstore (refreshed hourly) + downloads from this site. See functions/api/.
+  document.querySelectorAll("[data-downloads]").forEach(async (el) => {
+    try { const r = await fetch("/api/stats/" + el.dataset.downloads); const d = await r.json(); if (Number.isFinite(d.total) && d.total > 0) el.textContent = d.total.toLocaleString("en-US"); } catch {}
   });
+  // Count a download from this site (doesn't delay or change the download itself).
+  document.querySelectorAll("a.dl[download]").forEach((a) => a.addEventListener("click", () => {
+    try { navigator.sendBeacon("/api/hit/" + a.dataset.id); } catch {}
+  }));
   // Thumbnails swap the main image.
   document.querySelectorAll(".thumb").forEach((btn) => {
     btn.addEventListener("click", () => {

@@ -8,7 +8,7 @@ const fileName = (p) => esc(p.download.split("/").pop());
 // The full-width ink bar on the product page.
 export function downloadBar(p) {
   if (!p.zipReady) return `<a class="dl" aria-disabled="true"><span>soon</span></a>`;
-  return `<a class="dl" href="${href(p)}" download="${fileName(p)}"><span>download</span><span class="sr-only"> ${esc(p.name)}, .zip, ${esc(p.size)}</span></a>`;
+  return `<a class="dl" href="${href(p)}" download="${fileName(p)}" data-id="${esc(p.id)}"><span>download</span><span class="sr-only"> ${esc(p.name)}, .zip, ${esc(p.size)}</span></a>`;
 }
 
 // The ">>>DETAILS" call on the home feature: opens the product page. The word "download"

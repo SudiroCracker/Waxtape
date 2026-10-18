@@ -128,6 +128,10 @@ for (const [groupKey, group] of Object.entries(catalog.taxonomy)) {
 for (const key of ["about", "guide", "ezine"]) write(`/${key}/`, simplePage(key, catalog));
 write("/404.html", notFoundPage(catalog));
 
+// Product list for the download counter (functions/api/*): id → Thunderstore metrics URL.
+fs.mkdirSync(path.join(DIST, "data"), { recursive: true });
+fs.writeFileSync(path.join(DIST, "data/products.json"), JSON.stringify(Object.fromEntries(catalog.products.map((p) => [p.id, { ts: p.tsApi }]))));
+
 // sitemap.xml + robots.txt, so search engines find every page.
 const routes = ["/", "/all/", "/about/", "/guide/", "/ezine/"];
 for (const [g, group] of Object.entries(catalog.taxonomy)) {

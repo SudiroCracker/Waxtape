@@ -160,8 +160,10 @@ a { color: inherit; }
 .thumb { display: block; padding: 0; border: 0; background: var(--white); cursor: pointer; position: relative; min-height: 0; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; }
 
-.gallery__main { position: relative; background: var(--white); aspect-ratio: 4 / 5; }
-.gallery__main img { width: 100%; height: 100%; object-fit: cover; }
+/* Big product image sits inside the ornate frame (frame-tall.webp, 832×1040, window 752×954 at 39,42). */
+.gallery__main { position: relative; aspect-ratio: 832 / 1040; }
+.gallery__frame { position: absolute; inset: 0; z-index: 1; background: url("/img/ornaments/frame-tall.webp") center / 100% 100% no-repeat; pointer-events: none; }
+.gallery__main img { position: absolute; left: 4.2%; top: 3.6%; width: 91.6%; height: 92.8%; object-fit: cover; background: var(--white); }
 @media (max-width: 640px) {
   .gallery { grid-template-columns: minmax(0, 1fr); }
   .gallery__thumbs { order: 2; grid-template-rows: none; grid-template-columns: repeat(var(--thumbs, 5), minmax(0, 1fr)); }
@@ -306,11 +308,10 @@ a { color: inherit; }
 /* ---------- Hand-inked frames on product images (reference: rough marker stroke) ----------
    A bordered overlay run through #ink-1..3 (layout.mjs). On hover/focus the three drawings cycle
    at ~8 fps with a pixel of jitter: stop-motion wiggle. Reduced motion keeps the still frame. */
-.card__media::after, .thumb::after, .gallery__main::after {
+.card__media::after, .thumb::after {
   content: ""; position: absolute; inset: -3px; z-index: 1; pointer-events: none;
   border: 4px solid var(--ink); filter: url(#ink-1);
 }
-.gallery__main::after { border-width: 5px; inset: -4px; }
 .thumb::after { border-width: 3px; inset: -2px; }
 .thumb[aria-current="true"]::after { border-width: 5px; }
 .card--soon .card__media::after { display: none; }
