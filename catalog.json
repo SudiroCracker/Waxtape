@@ -60,6 +60,20 @@
   },
   "products": [
     {
+      "id": "midcalf-stairway",
+      "name": "Midcalf Stairway",
+      "collab": null,
+      "group": "apparel",
+      "category": "accessories",
+      "type": "socks",
+      "tags": ["cream", "sky", "clouds", "painterly", "midcalf"],
+      "description": "Mid-calf socks washed in a painted sunset sky, peach and baby-blue clouds all the way up. A stairway to heaven, ankle first.",
+      "uploaded": "2026-10-19",
+      "updated": "2026-10-19",
+      "version": "1.0.0",
+      "thunderstore": false
+    },
+    {
       "id": "midcalf-twin",
       "name": "Midcalf Twin",
       "collab": null,
