@@ -60,6 +60,19 @@
   },
   "products": [
     {
+      "id": "letty-deck",
+      "name": "Letty Deck",
+      "collab": null,
+      "group": "board",
+      "category": "deck",
+      "type": "deck",
+      "tags": ["cream", "pin-up", "cowgirl", "western", "vintage"],
+      "description": "A vintage pin-up cowgirl perched on a ranch fence, lasso in hand and a cactus at her boots. Saddle up.",
+      "uploaded": "2026-10-18",
+      "updated": "2026-10-18",
+      "version": "1.0.0"
+    },
+    {
       "id": "friendship-deck",
       "name": "Friendship Deck",
       "collab": null,
