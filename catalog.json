@@ -37,7 +37,7 @@
       "categories": {
         "deck": {
           "label": "Deck",
-          "types": []
+          "types": ["deck"]
         },
         "grip": {
           "label": "Grip",
@@ -59,6 +59,19 @@
     }
   },
   "products": [
+    {
+      "id": "friendship-deck",
+      "name": "Friendship Deck",
+      "collab": null,
+      "group": "board",
+      "category": "deck",
+      "type": "deck",
+      "tags": ["blue", "cherubs", "painting", "script", "classical"],
+      "description": "Two cherubs locked in a hug under a baby-blue sky, Waxtape script running nose to tail. A deck for the homies.",
+      "uploaded": "2026-10-18",
+      "updated": "2026-10-18",
+      "version": "1.0.0"
+    },
     {
       "id": "washed-reptile",
       "name": "Washed Reptile",
