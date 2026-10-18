@@ -46,7 +46,7 @@ a { color: inherit; }
    flourish (highlight.webp, cut from decor1) underneath. Hover: the flourish appears and jitters. */
 .nav__link::before { display: none; }
 .nav__link::after {
-  content: ""; position: absolute; left: -14%; right: -14%; top: calc(100% - 2px); aspect-ratio: 800 / 161;
+  content: ""; position: absolute; left: -14%; right: -14%; top: calc(100% - 2px); aspect-ratio: 600 / 117;
   background: url("/img/ornaments/highlight.webp") center / contain no-repeat; pointer-events: none;
   opacity: 0; transform: scale(.6, .2); transition: transform 150ms steps(3), opacity 0ms 0ms;
 }
