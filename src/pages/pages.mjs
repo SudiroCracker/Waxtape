@@ -113,6 +113,7 @@ export function homePage(catalog) {
   const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p) : productCard(p).replace('<article class="card"', '<article class="card" hidden')));
   for (let i = shown % 4; i && i < 4; i++) cards.push(soonCard());
   const body = `<div class="sheet noise">
+  <h1 class="sr-only">Waxtape Store: Waxtape skate clothing and board mods for ReSkate</h1>
   <div class="home">
     <section class="home__new" aria-labelledby="new-title">
       <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
@@ -139,7 +140,14 @@ function relatedTo(p, products, n = 4) {
 
 export function productPageHtml(p, catalog) {
   const body = `<div class="sheet noise">${productPage(p, catalog.taxonomy, relatedTo(p, catalog.products), catalog.site)}</div>`;
-  return layout({ title: p.name.toLowerCase(), description: p.description, current: p.group, body, site: catalog.site, path: `/products/${p.id}/`, image: p.thumb });
+  const base = (catalog.site.url || "").replace(/\/$/, "");
+  const product = {
+    "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.description,
+    image: [p.thumb, ...p.galleryFound].map((f) => `${base}/${f}`), brand: { "@type": "Brand", name: catalog.site.brand || "Waxtape" },
+    url: `${base}/products/${p.id}/`, category: `${p.group} / ${p.category}`,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", availability: "https://schema.org/InStock", url: `${base}/products/${p.id}/` },
+  };
+  return layout({ title: p.name, description: `${p.description} Free ReSkate mod by Waxtape skate.`, current: p.group, body, site: catalog.site, path: `/products/${p.id}/`, image: p.thumb, schema: [product] });
 }
 
 // A list page: a group (apparel) or a category (apparel › tops).

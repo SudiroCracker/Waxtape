@@ -7,20 +7,32 @@ import { footer } from "./footer.mjs";
 
 // The page shell: <head>, the tiled wall, the header, the content and the footer.
 // `current` is the nav key to mark ("home", "apparel", …).
-export function layout({ title, description, current, body, site, path, image }) {
-  const fullTitle = title ? `${title} · ${site.name}` : `${site.name} ${site.tagline}`;
+export function layout({ title, description, current, body, site, path, image, schema = [] }) {
+  const brand = site.brand || site.name;
+  const fullTitle = title ? `${title} · ${brand}` : site.homeTitle || `${brand} ${site.tagline}`;
   const base = (site.url || "").replace(/\/$/, "");
-  const desc = description || site.tagline;
+  const desc = description || (path === "/" && site.homeDescription) || site.tagline;
+  // Structured data so Google shows the brand as "Waxtape Store" and matches its other names.
+  if (path === "/" && base) {
+    schema = [
+      { "@context": "https://schema.org", "@type": "WebSite", name: brand, alternateName: (site.alternateNames || []).filter((n) => n !== brand), url: base + "/" },
+      { "@context": "https://schema.org", "@type": "Organization", name: brand, alternateName: (site.alternateNames || []).filter((n) => n !== brand), url: base + "/", logo: base + "/img/logo-512.png", sameAs: site.sameAs || [] },
+      ...schema,
+    ];
+  }
   const img = image || site.ogImage;
   const share = [
     path != null && base ? `<link rel="canonical" href="${esc(base + path)}">` : "",
-    `<meta property="og:site_name" content="${esc(site.name)}">`,
+    `<meta property="og:site_name" content="${esc(brand)}">`,
+    `<meta name="application-name" content="${esc(brand)}">`,
+    `<meta name="apple-mobile-web-app-title" content="${esc(brand)}">`,
     `<meta property="og:type" content="${path && path.startsWith("/products/") ? "product" : "website"}">`,
     `<meta property="og:title" content="${esc(fullTitle)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,
     path != null && base ? `<meta property="og:url" content="${esc(base + path)}">` : "",
     img && base ? `<meta property="og:image" content="${esc(base + "/" + img)}">` : "",
     `<meta name="twitter:card" content="summary_large_image">`,
+    ...schema.map((s) => `<script type="application/ld+json">${JSON.stringify(s).replace(/</g, "\\u003c")}</script>`),
   ].filter(Boolean).join("\n");
   return `<!doctype html>
 <html lang="en">
@@ -30,7 +42,9 @@ export function layout({ title, description, current, body, site, path, image })
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(desc)}">
 ${share}
+<link rel="icon" href="/img/favicon-48.png" type="image/png" sizes="48x48">
 <link rel="icon" href="/logos/waxtapelogo_Negativo-ink.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="preload" href="/fonts/Drowner-Free.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/fonts/Besley.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/styles/tokens.css?v=${VERSION}">

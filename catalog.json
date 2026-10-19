@@ -4,7 +4,12 @@
     "tagline": "Free cosmetic mods for Reskate.",
     "url": "https://waxtape.store",
     "game": "ReSkate 2.0.7+",
-    "thunderstore": { "community": "reskate", "namespace": "Sudiro" }
+    "thunderstore": { "community": "reskate", "namespace": "Sudiro" },
+    "brand": "Waxtape Store",
+    "alternateNames": ["Waxtape", "Waxtape Skate", "Waxtape Store", "waxtapestore", "waxtape.store"],
+    "homeTitle": "Waxtape Store · Waxtape skate clothing mods for ReSkate | waxtape.store",
+    "homeDescription": "Waxtape Store (waxtape.store) is the home of Waxtape skate: free skate clothing and board mods for ReSkate. Tees, shorts, socks and decks, ready to download.",
+    "sameAs": ["https://thunderstore.io/c/reskate/p/Sudiro/"]
   },
   "featured": {
     "title": "THE RAW",

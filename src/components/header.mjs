@@ -16,7 +16,7 @@ export function header(current, locked = []) {
       : `<li><a class="nav__link" href="${item.href}"${item.key === current ? ' aria-current="page"' : ""}><span>${item.label}</span></a></li>`
   ).join("");
   return `<header class="site-header">
-  <a class="site-header__logo" href="/" aria-label="waxtape. home"><img src="/logos/waxtapelogo_Positivo-ink.svg" alt="waxtape." width="196" height="49"></a>
+  <a class="site-header__logo" href="/" aria-label="Waxtape Store home"><img src="/logos/waxtapelogo_Positivo-ink.svg" alt="Waxtape Store" width="196" height="49"></a>
   <nav class="nav" aria-label="Main">
     <ul class="nav__links">${links}</ul>
   </nav>

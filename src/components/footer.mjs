@@ -6,7 +6,7 @@ export function footer(locked = []) {
   <div class="site-footer__in">
     <div class="site-footer__top">
       <div class="site-footer__brand">
-        <img src="/logos/waxtapelogo_Positivo-ink.svg" alt="waxtape." width="220" height="55">
+        <img src="/logos/waxtapelogo_Positivo-ink.svg" alt="Waxtape Store" width="220" height="55">
       </div>
       <div><h2>shop</h2><ul>
         ${shop("apparel", "apparel")}
@@ -26,7 +26,7 @@ export function footer(locked = []) {
     <div class="site-footer__legal">
       <span>All mods are free. Unzip, drop in your Reskate mods folder, skate.</span>
       <span>Waxtape is a fan project, not affiliated with the game's developers or publishers.</span>
-      <span>© ${year} waxtape.</span>
+      <span>© ${year} Waxtape Store · Waxtape skate · waxtape.store</span>
     </div>
   </div>
 </footer>`;
