@@ -42,9 +42,13 @@ export function layout({ title, description, current, body, site, path, image, s
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(desc)}">
 ${share}
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="/img/favicon-48.png" type="image/png" sizes="48x48">
-<link rel="icon" href="/logos/waxtapelogo_Negativo-ink.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#212122">
 <link rel="preload" href="/fonts/Drowner-Free.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/fonts/Besley.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/styles/tokens.css?v=${VERSION}">
