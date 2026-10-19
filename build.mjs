@@ -65,6 +65,20 @@ for (const p of catalog.products) {
   p.version = p.version || "1.0.0";
   p.updated = p.updated || p.uploaded;
   p.collab = p.collab || null;
+
+  // Variants (another cut or colour of the same piece): "variants": [{ "id", "name" }] in the entry.
+  // Each one lives in products/<id>/variants/<variant-id>/ with its own product.webp and .zip,
+  // and is its own mod (own zip, own Thunderstore package, own download count).
+  p.variants = (p.variants || []).map((v) => {
+    const vf = `${folder}/variants/${v.id}`;
+    const vfiles = fs.existsSync(path.join(PUBLIC, vf)) ? fs.readdirSync(path.join(PUBLIC, vf)) : [];
+    if (!vfiles.length) errors.push(`${p.id}: variant "${v.id}" has no folder public/${vf}/`);
+    const thumb = v.thumb ? `${vf}/${v.thumb}` : `${vf}/` + (vfiles.find((f) => /^product\.(jpe?g|png|webp)$/i.test(f)) || "product.jpg");
+    const download = `${vf}/${vfiles.find((f) => f.toLowerCase().endsWith(".zip")) || v.id + ".zip"}`;
+    const zipReady = exists(download);
+    if (!zipReady) warnings.push(`${p.id}: variant "${v.id}" has no .zip`);
+    return { ...v, key: `${p.id}--${v.id}`, thumb, download, zipReady, size: zipReady ? formatSize(fs.statSync(path.join(PUBLIC, download)).size) : "—", version: v.version || "1.0.0", updated: v.updated || v.uploaded || p.updated };
+  });
 }
 const ids = catalog.products.map((p) => p.id);
 for (const id of ids.filter((id, i) => ids.indexOf(id) !== i)) errors.push(`two products use the id "${id}"`);
@@ -100,6 +114,10 @@ for (const p of catalog.products) {
   p.tsName = p.exclusive ? null : p.thunderstore || (p.download ? p.download.split("/").pop().replace(/\.zip$/i, "") : null);
   p.tsUrl = TS && p.tsName ? `https://thunderstore.io/c/${TS.community}/p/${TS.namespace}/${p.tsName}/` : null;
   p.tsApi = TS && p.tsName ? `https://thunderstore.io/api/v1/package-metrics/${TS.namespace}/${p.tsName}/` : null;
+  for (const v of p.variants) {
+    v.tsName = v.thunderstore === false ? null : v.thunderstore || v.download.split("/").pop().replace(/\.zip$/i, "");
+    v.tsApi = TS && v.tsName ? `https://thunderstore.io/api/v1/package-metrics/${TS.namespace}/${v.tsName}/` : null;
+  }
 }
 if (TS && !process.argv.includes("--offline")) {
   let reached = 0;
@@ -110,6 +128,17 @@ if (TS && !process.argv.includes("--offline")) {
         if (!res.ok) return;
         const data = await res.json();
         if (Number.isFinite(data.downloads)) { p.downloads = data.downloads; reached++; }
+      } catch {}
+    })
+  );
+  // A variant only links to Thunderstore once its package exists there.
+  await Promise.all(
+    catalog.products.flatMap((p) => p.variants).filter((v) => v.tsApi).map(async (v) => {
+      try {
+        const res = await fetch(v.tsApi, { signal: AbortSignal.timeout(5000), headers: { "user-agent": "waxtape-site-build" } });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (Number.isFinite(data.downloads)) { v.downloads = data.downloads; v.tsUrl = `https://thunderstore.io/c/${TS.community}/p/${TS.namespace}/${v.tsName}/`; }
       } catch {}
     })
   );
@@ -132,7 +161,7 @@ write("/404.html", notFoundPage(catalog));
 
 // Product list for the download counter (functions/api/*): id → Thunderstore metrics URL.
 fs.mkdirSync(path.join(DIST, "data"), { recursive: true });
-fs.writeFileSync(path.join(DIST, "data/products.json"), JSON.stringify(Object.fromEntries(catalog.products.map((p) => [p.id, { ts: p.tsApi }]))));
+fs.writeFileSync(path.join(DIST, "data/products.json"), JSON.stringify(Object.fromEntries(catalog.products.flatMap((p) => [[p.id, { ts: p.tsApi }], ...p.variants.map((v) => [v.key, { ts: v.tsApi }])]))));
 
 // sitemap.xml + robots.txt, so search engines find every page.
 const routes = ["/", "/all/", "/about/", "/ezine/"];

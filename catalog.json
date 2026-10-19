@@ -204,7 +204,11 @@
       "description": "Cropped off-white tee with a slim fit. This alien peeing takes a leak right on the chest.",
       "uploaded": "2026-10-16",
       "updated": "2026-10-16",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "variant": "Cropped",
+      "variants": [
+        { "id": "relaxed-fit", "name": "Relaxed Fit", "version": "1.0.0", "uploaded": "2026-10-19" }
+      ]
     },
     {
       "id": "edhardy-rose-shorts",

@@ -168,3 +168,14 @@ Si una prenda no está (o no puede estar) en Thunderstore, añade a su ficha en 
 `"thunderstore": false`. La ficha deja de enlazar al paquete, muestra **EXCLUSIVE · Only on waxtape.store**
 y el contador DOWNLOADS cuenta solo las descargas de la web.
 Ahora mismo: Friendship Deck, Letty Deck y Midcalf Twin (Thunderstore los rechazó como "Invalid submission").
+
+## Variantes de producto (otro corte o color de la misma prenda)
+
+1. Crea `public/products/<id>/variants/<variante>/` con `product.webp` (foto Product) y el `.zip` de la variante (un mod independiente, con su manifest/icon/README).
+2. En la entrada del catálogo añade el nombre de la versión base y la lista de variantes:
+   ```json
+   "variant": "Cropped",
+   "variants": [ { "id": "relaxed-fit", "name": "Relaxed Fit", "version": "1.0.0", "uploaded": "2026-10-19" } ]
+   ```
+3. Las tarjetas muestran `+N` a la derecha del nombre. En la página del producto aparece la fila VARIANT sobre el botón download: cada miniatura cambia el zip, VERSION, FILE, UPDATED y la imagen principal.
+4. Cada variante cuenta sus descargas aparte (web + Thunderstore); DOWNLOADS muestra la suma. El enlace de Thunderstore de una variante solo aparece cuando su paquete ya existe allí (se comprueba en cada build). `"thunderstore": false` en la variante la deja como exclusiva.

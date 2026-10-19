@@ -351,3 +351,25 @@ a { color: inherit; }
   66.66%  { transform: rotate(.5deg) translate(-1px, 1px); }
 }
 .about__rule { margin: 44px 0 36px; }
+
+/* ---------- Product variants (another cut or colour of the same piece) ---------- */
+/* Card: "+X" right-aligned on the name line. */
+.card__row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; min-width: 0; }
+.card__row .card__name { min-width: 0; }
+.card__vars { flex: none; font: 900 14px/26px var(--font-sans); letter-spacing: var(--track); color: var(--ink); }
+.grid--related .card__vars { font-size: 12px; }
+/* Product page: small shots above the download button. */
+.variants { display: grid; gap: 10px; margin: 4px 0 2px; }
+.variants__label { margin: 0; display: flex; align-items: baseline; gap: 8px; font: 700 15px/1.2 var(--font-sans); letter-spacing: var(--track); }
+.variants__label .label { font-size: 15px; }
+.variants__label small { margin-left: auto; font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+.variants__row { display: flex; flex-wrap: wrap; gap: 12px; }
+.variant { position: relative; width: 64px; aspect-ratio: 4 / 5; padding: 0; border: 0; background: var(--white); cursor: pointer; }
+.variant img { width: 100%; height: 100%; object-fit: cover; }
+.variant::after { content: ""; position: absolute; inset: -2px; pointer-events: none; border: 2px solid var(--ink); filter: url(#ink-1); }
+.variant[aria-pressed="true"]::after { border-width: 4px; inset: -4px; }
+.variant:hover::after, .variant:focus-visible::after { animation: ink-wiggle 375ms step-end infinite; }
+.variant:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
+.variant:disabled { opacity: .4; cursor: default; }
+@media (prefers-reduced-motion: reduce) { .variant::after { animation: none !important; } }
+.info__facts [hidden] { display: none; }
