@@ -164,8 +164,8 @@
       "tags": ["cream", "boxy", "engraving", "baroque", "monochrome", "big-print"],
       "description": "Boxy cream tee with Fine art on the front, all the mess on the board.",
       "uploaded": "2026-10-16",
-      "updated": "2026-10-16",
-      "version": "1.0.0"
+      "updated": "2026-10-19",
+      "version": "1.0.1"
     },
     {
       "id": "straight-teeth",
@@ -177,8 +177,8 @@
       "tags": ["black", "washed", "photo-print", "collage", "grunge"],
       "description": "Smiley closeups say CHeeeese!!. Straight teeth not included.",
       "uploaded": "2026-10-16",
-      "updated": "2026-10-16",
-      "version": "1.0.0"
+      "updated": "2026-10-19",
+      "version": "1.0.1"
     },
     {
       "id": "tsitra-longsleeve",
@@ -190,8 +190,8 @@
       "tags": ["charcoal", "cream", "layered", "longsleeve", "mirrored-text", "minimal"],
       "description": "Faded charcoal tee layered over cream long sleeves, the classic double-sleeve skate fit. Small mirrored \"artist\" wordmark on the chest, so it reads right in the mirror.",
       "uploaded": "2026-10-16",
-      "updated": "2026-10-16",
-      "version": "1.0.0"
+      "updated": "2026-10-19",
+      "version": "1.0.1"
     },
     {
       "id": "cropped-hokki",
@@ -203,8 +203,8 @@
       "tags": ["off-white", "cropped", "y2k", "chrome", "character", "small-print"],
       "description": "Cropped off-white tee with a slim fit. This alien peeing takes a leak right on the chest.",
       "uploaded": "2026-10-16",
-      "updated": "2026-10-16",
-      "version": "1.0.0",
+      "updated": "2026-10-19",
+      "version": "1.0.1",
       "variant": "Cropped",
       "variants": [
         { "id": "relaxed-fit", "name": "Relaxed Fit", "version": "1.0.0", "uploaded": "2026-10-19" }
@@ -220,8 +220,8 @@
       "tags": ["denim", "dirty-wash", "baggy", "jorts", "tattoo", "roses", "2000s"],
       "description": "Waxtape × Ed Hardy. Baggy dirty-wash denim shorts with a carpenter-style. It's got the style aswell as the iconic E.Hardy signature. Small wt logo on the pocket.",
       "uploaded": "2026-10-16",
-      "updated": "2026-10-16",
-      "version": "1.0.0"
+      "updated": "2026-10-19",
+      "version": "1.0.1"
     }
   ]
 }
