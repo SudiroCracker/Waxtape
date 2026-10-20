@@ -167,7 +167,7 @@ Cloudflare mostrará un aviso amarillo recomendando el proxy: se puede cerrar.
 Si una prenda no está (o no puede estar) en Thunderstore, añade a su ficha en catalog.json:
 `"thunderstore": false`. La ficha deja de enlazar al paquete, muestra **EXCLUSIVE · Only on waxtape.store**
 y el contador DOWNLOADS cuenta solo las descargas de la web.
-Ahora mismo: Friendship Deck, Letty Deck y Midcalf Twin (Thunderstore los rechazó como "Invalid submission").
+Ahora mismo: ninguno (todos los mods están publicados en Thunderstore).
 
 ## Variantes de producto (otro corte o color de la misma prenda)
 
