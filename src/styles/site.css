@@ -373,3 +373,4 @@ a { color: inherit; }
 .variant:disabled { opacity: .4; cursor: default; }
 @media (prefers-reduced-motion: reduce) { .variant::after { animation: none !important; } }
 .info__facts [hidden] { display: none; }
+.home__all { margin-top: 32px; }

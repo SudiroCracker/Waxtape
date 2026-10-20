@@ -71,7 +71,7 @@ const byNewest = (a, b) => (b.uploaded || "").localeCompare(a.uploaded || "") ||
 // Home: FRESH OFF THE TRUCKS grid on the left, THE RAW feature on the right.
 // Every mod is in the page; a small script shuffles them on each load and shows the first
 // HOME_MAX, so returning visitors see a different wall each time. Without JS: the newest HOME_MAX.
-const HOME_MAX = 12;
+const HOME_MAX = 16; // 4 rows of 4
 const shuffleScript = `<script>
   (() => {
     const grid = document.querySelector(".home__new .grid");
@@ -118,6 +118,7 @@ export function homePage(catalog) {
     <section class="home__new" aria-labelledby="new-title">
       <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
       <div class="grid">${cards.join("")}</div>
+      ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/apparel/"><span>view all</span></a>` : ""}
     </section>
     <div class="home__feature">${panels}${featureScript}</div>
   </div>
