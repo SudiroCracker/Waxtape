@@ -5,7 +5,7 @@ import { featurePanel } from "../components/feature-panel.mjs";
 import { productPage } from "../components/product-page.mjs";
 
 // Search box for list pages: a plain field, no icon. Filters the cards on the page by name, type,
-// category, collab and tags. "/" focuses it; /all/#y2k opens with that search.
+// category, collab and tags. "/" focuses it; /mods/#y2k opens with that search.
 const searchBox = () => `<form class="search" role="search" onsubmit="return false">
     <label class="search__label" for="q">Search:</label>
     <input class="search__input" id="q" type="search" autocomplete="off">
@@ -118,7 +118,7 @@ export function homePage(catalog) {
     <section class="home__new" aria-labelledby="new-title">
       <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
       <div class="grid">${cards.join("")}</div>
-      ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/apparel/"><span>view mods</span></a>` : ""}
+      ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/mods/"><span>more</span></a>` : ""}
     </section>
     <div class="home__feature">${panels}${featureScript}</div>
   </div>
@@ -175,13 +175,13 @@ ${items.length ? searchScript : ""}`;
 export function allPage(catalog) {
   const items = [...catalog.products].sort(byNewest);
   const body = `<div class="sheet noise sheet--narrow">
-  <div class="page-head"><h1 class="page-title">all mods</h1>${searchBox()}</div>
+  <div class="page-head"><h1 class="page-title">mods</h1>${searchBox()}</div>
   ${filterBar(items, categoriesOf(catalog, Object.keys(catalog.taxonomy).filter((g) => !catalog.site.locked.includes(g)), items))}
   <p class="search__count" aria-live="polite"></p>
   ${productGrid(items, { fill: false })}
 </div>
 ${searchScript}`;
-  return layout({ title: "all mods", current: "", body, site: catalog.site, path: "/all/" });
+  return layout({ title: "mods", current: "", body, site: catalog.site, path: "/mods/" });
 }
 
 // About (with the install guide at #install) and ezine. Each body is plain HTML so the copy is easy to edit.
@@ -226,7 +226,7 @@ const PAGES = {
     html: `<div class="prose">
   <p class="label">COMING SOON</p>
   <p class="prose__lead">The Waxtape ezine is on its way: a monthly online issue with news from the game, new drops and the stories behind them.</p>
-  <p><a class="go" href="/all/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>SEE ALL MODS</a></p>
+  <p><a class="go" href="/mods/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>SEE THE MODS</a></p>
 </div>`,
   },
 };

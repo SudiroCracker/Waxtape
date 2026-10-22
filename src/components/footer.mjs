@@ -11,7 +11,7 @@ export function footer(locked = []) {
       <div><h2>shop</h2><ul>
         ${shop("apparel", "apparel")}
         ${shop("board", "board")}
-        <li><a href="/all/">all mods</a></li>
+        <li><a href="/mods/">mods</a></li>
       </ul></div>
       <div><h2>help</h2><ul>
         <li><a href="/about/#install">install guide</a></li>
