@@ -118,7 +118,7 @@ export function homePage(catalog) {
     <section class="home__new" aria-labelledby="new-title">
       <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
       <div class="grid">${cards.join("")}</div>
-      ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/apparel/"><span>view all</span></a>` : ""}
+      ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/apparel/"><span>view mods</span></a>` : ""}
     </section>
     <div class="home__feature">${panels}${featureScript}</div>
   </div>
