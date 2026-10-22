@@ -21,7 +21,7 @@
       "categories": {
         "tops": {
           "label": "Tops",
-          "types": ["bra", "coat", "jacket", "tshirt"]
+          "types": ["bra", "coat", "jacket", "sweatshirt", "tshirt"]
         },
         "bottoms": {
           "label": "Bottom",
@@ -64,6 +64,24 @@
     }
   },
   "products": [
+    {
+      "id": "amano-fleece",
+      "name": "Amano Fleece",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "sweatshirt",
+      "tags": ["black", "fleece", "half-zip", "manga", "illustration"],
+      "description": "Black half-zip fleece covered in a hand-inked manga girl and wild brush splatter that wraps round to the back. Cosy enough for a winter session.",
+      "uploaded": "2026-10-22",
+      "updated": "2026-10-22",
+      "version": "1.0.0",
+      "thunderstore": false,
+      "variant": "Black",
+      "variants": [
+        { "id": "white", "name": "White", "version": "1.0.0", "uploaded": "2026-10-22", "thunderstore": false }
+      ]
+    },
     {
       "id": "player-2026",
       "name": "Player 2026",
