@@ -121,7 +121,7 @@ export function homePage(catalog) {
       <div class="grid">${cards.join("")}</div>
       ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/items/"><span>more</span></a>` : ""}
     </section>
-    <div class="home__feature">${panels}${featureScript}${spottedEntry(catalog)}</div>
+    <div class="home__feature">${panels}${featureScript}${site.showSpotted ? spottedEntry(catalog) : ""}</div>
   </div>
 </div>
 ${shuffleScript}`;

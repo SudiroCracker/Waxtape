@@ -1,5 +1,5 @@
 // Footer floating on the wall photo, in ink: three link columns with the logo at the bottom left, then the legal line.
-export function footer(locked = []) {
+export function footer(locked = [], showSpotted = false) {
   const shop = (key, label) => (locked.includes(key) ? `<li><span class="is-locked" aria-disabled="true">${label}<span class="sr-only"> (coming soon)</span></span></li>` : `<li><a href="/${key}/">${label}</a></li>`);
   const year = new Date().getFullYear();
   return `<footer class="site-footer">
@@ -16,7 +16,7 @@ export function footer(locked = []) {
       <div><h2>help</h2><ul>
         <li><a href="/about/#install">install guide</a></li>
         <li><a href="/about/">about</a></li>
-        <li><a href="/spotted/">spotted</a></li>
+        ${showSpotted ? `<li><a href="/spotted/">spotted</a></li>` : ""}
         <li><a href="/ezine/">ezine</a></li>
       </ul></div>
       <div><h2>elsewhere</h2><ul>

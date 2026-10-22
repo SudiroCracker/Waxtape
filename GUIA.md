@@ -188,3 +188,4 @@ Ahora mismo: ninguno (todos los mods están publicados en Thunderstore).
   { "img": "spotted/2026-10-23-nombre.webp", "player": "nombre", "items": ["maji-chino"], "date": "2026-10-23", "caption": "opcional" }
   ```
 - La home muestra las 4 más recientes bajo THE RAW (los huecos vacíos dicen «your shot»). La página completa está en `/spotted/`, con enlace a cada item que lleva puesto.
+- Interruptor: `"showSpotted": false` en `site` (catalog.json) oculta el panel de la home, el enlace del pie y la entrada del sitemap. La página /spotted/ sigue existiendo sin enlazar.

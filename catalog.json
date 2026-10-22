@@ -9,7 +9,8 @@
     "alternateNames": ["Waxtape", "Waxtape Skate", "Waxtape Store", "waxtapestore", "waxtape.store"],
     "homeTitle": "Waxtape Store · Waxtape skate clothing items for ReSkate | waxtape.store",
     "homeDescription": "Waxtape Store (waxtape.store) is the home of Waxtape skate: free skate clothing and board items for ReSkate (game mods). Tees, shorts, socks and decks, ready to download.",
-    "sameAs": ["https://thunderstore.io/c/reskate/p/Sudiro/"]
+    "sameAs": ["https://thunderstore.io/c/reskate/p/Sudiro/"],
+    "showSpotted": false
   },
   "featured": {
     "title": "THE RAW",

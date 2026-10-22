@@ -101,7 +101,7 @@ ${header(current, site.locked)}
 <main id="main">
 ${body}
 </main>
-${footer(site.locked)}
+${footer(site.locked, site.showSpotted)}
 </div>
 </body>
 </html>

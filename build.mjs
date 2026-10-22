@@ -165,7 +165,7 @@ fs.mkdirSync(path.join(DIST, "data"), { recursive: true });
 fs.writeFileSync(path.join(DIST, "data/products.json"), JSON.stringify(Object.fromEntries(catalog.products.flatMap((p) => [[p.id, { ts: p.tsApi }], ...p.variants.map((v) => [v.key, { ts: v.tsApi }])]))));
 
 // sitemap.xml + robots.txt, so search engines find every page.
-const routes = ["/", "/items/", "/spotted/", "/about/", "/ezine/"];
+const routes = ["/", "/items/", ...(catalog.site.showSpotted ? ["/spotted/"] : []), "/about/", "/ezine/"];
 for (const [g, group] of Object.entries(catalog.taxonomy)) {
   if (catalog.site.locked.includes(g)) continue;
   routes.push(`/${g}/`);
