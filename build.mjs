@@ -150,7 +150,7 @@ fs.cpSync(PUBLIC, DIST, { recursive: true });
 fs.cpSync(path.join(ROOT, "src/styles"), path.join(DIST, "styles"), { recursive: true });
 
 write("/", homePage(catalog));
-write("/mods/", allPage(catalog));
+write("/items/", allPage(catalog));
 for (const p of catalog.products) write(`/products/${p.id}/`, productPageHtml(p, catalog));
 for (const [groupKey, group] of Object.entries(catalog.taxonomy)) {
   write(`/${groupKey}/`, listPage({ catalog, groupKey }));
@@ -164,7 +164,7 @@ fs.mkdirSync(path.join(DIST, "data"), { recursive: true });
 fs.writeFileSync(path.join(DIST, "data/products.json"), JSON.stringify(Object.fromEntries(catalog.products.flatMap((p) => [[p.id, { ts: p.tsApi }], ...p.variants.map((v) => [v.key, { ts: v.tsApi }])]))));
 
 // sitemap.xml + robots.txt, so search engines find every page.
-const routes = ["/", "/mods/", "/about/", "/ezine/"];
+const routes = ["/", "/items/", "/about/", "/ezine/"];
 for (const [g, group] of Object.entries(catalog.taxonomy)) {
   if (catalog.site.locked.includes(g)) continue;
   routes.push(`/${g}/`);

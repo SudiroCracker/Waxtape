@@ -32,7 +32,7 @@ export function layout({ title, description, current, body, site, path, image, s
     path != null && base ? `<meta property="og:url" content="${esc(base + path)}">` : "",
     img && base ? `<meta property="og:image" content="${esc(base + "/" + img)}">` : "",
     img && base ? `<meta name="twitter:image" content="${esc(base + "/" + img)}">` : "",
-    img && img === site.ogImage && img.startsWith("img/og.") ? `<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta property="og:image:alt" content="${esc(brand)}: Waxtape skate mods for ReSkate">` : "",
+    img && img === site.ogImage && img.startsWith("img/og.") ? `<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta property="og:image:alt" content="${esc(brand)}: Waxtape skate items for ReSkate">` : "",
     `<meta name="twitter:card" content="summary_large_image">`,
     ...schema.map((s) => `<script type="application/ld+json">${JSON.stringify(s).replace(/</g, "\\u003c")}</script>`),
   ].filter(Boolean).join("\n");

@@ -2,5 +2,7 @@
 /guide /about/#install 301
 /accessories/* /apparel/accessories/ 301
 /accessories /apparel/accessories/ 301
-/all/ /mods/ 301
-/all /mods/ 301
+/all/ /items/ 301
+/all /items/ 301
+/mods/ /items/ 301
+/mods /items/ 301

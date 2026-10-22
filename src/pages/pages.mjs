@@ -5,7 +5,7 @@ import { featurePanel } from "../components/feature-panel.mjs";
 import { productPage } from "../components/product-page.mjs";
 
 // Search box for list pages: a plain field, no icon. Filters the cards on the page by name, type,
-// category, collab and tags. "/" focuses it; /mods/#y2k opens with that search.
+// category, collab and tags. "/" focuses it; /items/#y2k opens with that search.
 const searchBox = () => `<form class="search" role="search" onsubmit="return false">
     <label class="search__label" for="q">Search:</label>
     <input class="search__input" id="q" type="search" autocomplete="off">
@@ -113,12 +113,12 @@ export function homePage(catalog) {
   const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p) : productCard(p).replace('<article class="card"', '<article class="card" hidden')));
   for (let i = shown % 4; i && i < 4; i++) cards.push(soonCard());
   const body = `<div class="sheet noise">
-  <h1 class="sr-only">Waxtape Store: Waxtape skate clothing and board mods for ReSkate</h1>
+  <h1 class="sr-only">Waxtape Store: Waxtape skate clothing and board items for ReSkate</h1>
   <div class="home">
     <section class="home__new" aria-labelledby="new-title">
       <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
       <div class="grid">${cards.join("")}</div>
-      ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/mods/"><span>more</span></a>` : ""}
+      ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/items/"><span>more</span></a>` : ""}
     </section>
     <div class="home__feature">${panels}${featureScript}</div>
   </div>
@@ -148,7 +148,7 @@ export function productPageHtml(p, catalog) {
     url: `${base}/products/${p.id}/`, category: `${p.group} / ${p.category}`,
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", availability: "https://schema.org/InStock", url: `${base}/products/${p.id}/` },
   };
-  return layout({ title: p.name, description: `${p.description} Free ReSkate mod by Waxtape skate.`, current: p.group, body, site: catalog.site, path: `/products/${p.id}/`, image: p.thumb, schema: [product] });
+  return layout({ title: p.name, description: `${p.description} Free ReSkate item by Waxtape skate.`, current: p.group, body, site: catalog.site, path: `/products/${p.id}/`, image: p.thumb, schema: [product] });
 }
 
 // A list page: a group (apparel) or a category (apparel › tops).
@@ -159,7 +159,7 @@ export function listPage({ catalog, groupKey, categoryKey }) {
   const title = group.label.toLowerCase();
   const content = items.length
     ? productGrid(items)
-    : `<div class="empty"><p class="label">nothing here yet.</p><p>The first ${esc(title)} mods are on the way. Check the <a href="/ezine/">ezine</a> for drops.</p></div>`;
+    : `<div class="empty"><p class="label">nothing here yet.</p><p>The first ${esc(title)} items are on the way. Check the <a href="/ezine/">ezine</a> for drops.</p></div>`;
   const body = `<div class="sheet noise sheet--narrow">
   <div class="page-head"><h1 class="page-title">${esc(title)}</h1>${items.length ? searchBox() : ""}</div>
   ${items.length ? filterBar(items, categoriesOf(catalog, [groupKey], items), categoryKey) : ""}
@@ -175,13 +175,13 @@ ${items.length ? searchScript : ""}`;
 export function allPage(catalog) {
   const items = [...catalog.products].sort(byNewest);
   const body = `<div class="sheet noise sheet--narrow">
-  <div class="page-head"><h1 class="page-title">mods</h1>${searchBox()}</div>
+  <div class="page-head"><h1 class="page-title">items</h1>${searchBox()}</div>
   ${filterBar(items, categoriesOf(catalog, Object.keys(catalog.taxonomy).filter((g) => !catalog.site.locked.includes(g)), items))}
   <p class="search__count" aria-live="polite"></p>
   ${productGrid(items, { fill: false })}
 </div>
 ${searchScript}`;
-  return layout({ title: "mods", current: "", body, site: catalog.site, path: "/mods/" });
+  return layout({ title: "items", current: "", body, site: catalog.site, path: "/items/" });
 }
 
 // About (with the install guide at #install) and ezine. Each body is plain HTML so the copy is easy to edit.
@@ -189,7 +189,7 @@ const PATH = String.raw`\Reskategame\ReSkate-1.0.3\Mods`;
 const PAGES = {
   about: {
     title: "about",
-    description: "Waxtape, a fictional skate brand with real fits for Reskate, created by Sudiro Rubin. How to install the mods.",
+    description: "Waxtape, a fictional skate brand with real fits for Reskate, created by Sudiro Rubin. How to install the items.",
     html: `<div class="prose">
   <p class="label">ABOUT</p>
   <p class="prose__lead">Waxtape is a fictional skate brand with real fits for Reskate. Every piece is free: download the .zip, drop it in the game, go skate.</p>
@@ -199,17 +199,17 @@ const PAGES = {
 <img class="ornament ornament--rule about__rule" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">
 <section class="prose" id="install" aria-labelledby="install-title">
   <h2 class="label" id="install-title">INSTALL GUIDE</h2>
-  <p class="prose__lead">Installing a Waxtape mod in Reskate is straightforward. No installers, no extra tools: every piece ships as a single .zip, ready to drop into the game.</p>
+  <p class="prose__lead">Installing a Waxtape item in Reskate is straightforward. No installers, no extra tools: every piece ships as a single .zip, ready to drop into the game.</p>
   <ol class="steps">
     <li><h2>Download</h2><p>Open the piece you want and press <strong>download</strong>. The .zip saves straight to your computer.</p></li>
     <li><h2>Open the zip</h2><p>Open the .zip (double-click it, or use your archive tool of choice). Inside you will find a folder named after the piece, for example <code>Wt_Washed_Reptile</code>, next to a README, a manifest and an icon. Those three are for mod managers: you don't need them.</p></li>
     <li><h2>Drop the folder into Mods</h2><p>Drag <strong>only that folder</strong> into the Mods directory of your Reskate installation:</p>
       <div class="path"><code id="mods-path">${PATH}</code><button class="path__copy" type="button" data-copy="mods-path">COPY</button></div>
       <p class="prose__note">Check it: opening <code>Mods&#92;Wt_Washed_Reptile</code> should show <code>Win32</code> and <code>layout.toc</code> straight away. If you see another <code>Wt_Washed_Reptile</code> folder inside, move that one up a level. Using "Extract all" on the zip creates exactly that extra folder.</p>
-      <p class="prose__note">The number in the path is the game version. If yours differs, use the folder that matches your installation. Then open the ReSkate launcher and make sure the mod is switched on.</p></li>
+      <p class="prose__note">The number in the path is the game version. If yours differs, use the folder that matches your installation. Then open the ReSkate launcher and make sure the item is switched on.</p></li>
     <li><h2>Skate</h2><p>Launch Reskate. The piece is now part of your wardrobe.</p></li>
   </ol>
-  <p class="prose__note">Something not showing up? Nine times out of ten the folder sits one level too deep (<code>Mods&#92;Wt_Name&#92;Wt_Name</code>). Move it up so the mod files are directly inside <code>Mods&#92;Wt_Name</code>.</p>
+  <p class="prose__note">Something not showing up? Nine times out of ten the folder sits one level too deep (<code>Mods&#92;Wt_Name&#92;Wt_Name</code>). Move it up so the item files are directly inside <code>Mods&#92;Wt_Name</code>.</p>
 </section>
 <script>
   document.querySelectorAll("[data-copy]").forEach((btn) => btn.addEventListener("click", async () => {
@@ -226,7 +226,7 @@ const PAGES = {
     html: `<div class="prose">
   <p class="label">COMING SOON</p>
   <p class="prose__lead">The Waxtape ezine is on its way: a monthly online issue with news from the game, new drops and the stories behind them.</p>
-  <p><a class="go" href="/mods/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>SEE THE MODS</a></p>
+  <p><a class="go" href="/items/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>SEE THE ITEMS</a></p>
 </div>`,
   },
 };

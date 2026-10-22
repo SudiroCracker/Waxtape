@@ -11,7 +11,7 @@ export function footer(locked = []) {
       <div><h2>shop</h2><ul>
         ${shop("apparel", "apparel")}
         ${shop("board", "board")}
-        <li><a href="/mods/">mods</a></li>
+        <li><a href="/items/">items</a></li>
       </ul></div>
       <div><h2>help</h2><ul>
         <li><a href="/about/#install">install guide</a></li>
@@ -24,7 +24,7 @@ export function footer(locked = []) {
     </div>
     <img class="ornament ornament--rule site-footer__ornament" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">
     <div class="site-footer__legal">
-      <span>All mods are free. Unzip, drop in your Reskate mods folder, skate.</span>
+      <span>All items are free. Unzip, drop in your Reskate Mods folder, skate.</span>
       <span>Waxtape is a fan project, not affiliated with the game's developers or publishers.</span>
       <span>© ${year} Waxtape Store · Waxtape skate · waxtape.store</span>
     </div>
