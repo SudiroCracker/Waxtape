@@ -179,3 +179,12 @@ Ahora mismo: ninguno (todos los mods están publicados en Thunderstore).
    ```
 3. Las tarjetas muestran `+N` a la derecha del nombre. En la página del producto aparece la fila VARIANT sobre el botón download: cada miniatura cambia el zip, VERSION, FILE, UPDATED y la imagen principal.
 4. Cada variante cuenta sus descargas aparte (web + Thunderstore); DOWNLOADS muestra la suma. El enlace de Thunderstore de una variante solo aparece cuando su paquete ya existe allí (se comprueba en cada build). `"thunderstore": false` en la variante la deja como exclusiva.
+
+## Spotted (fotos de la comunidad)
+
+- Las fotos van en `public/spotted/` (WebP, idealmente 1600 px de ancho, horizontales 16:10).
+- En `catalog.json`, la lista `"spotted"` lleva una entrada por foto:
+  ```json
+  { "img": "spotted/2026-10-23-nombre.webp", "player": "nombre", "items": ["maji-chino"], "date": "2026-10-23", "caption": "opcional" }
+  ```
+- La home muestra las 4 más recientes bajo THE RAW (los huecos vacíos dicen «your shot»). La página completa está en `/spotted/`, con enlace a cada item que lleva puesto.

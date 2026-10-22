@@ -1,3 +1,4 @@
+import { spottedEntry, spottedGallery } from "../components/spotted.mjs";
 import { esc, each } from "../components/html.mjs";
 import { layout } from "../components/layout.mjs";
 import { productGrid, productCard, soonCard } from "../components/product-card.mjs";
@@ -120,7 +121,7 @@ export function homePage(catalog) {
       <div class="grid">${cards.join("")}</div>
       ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/items/"><span>more</span></a>` : ""}
     </section>
-    <div class="home__feature">${panels}${featureScript}</div>
+    <div class="home__feature">${panels}${featureScript}${spottedEntry(catalog)}</div>
   </div>
 </div>
 ${shuffleScript}`;
@@ -233,6 +234,11 @@ const PAGES = {
 
 // Baroque centrepiece hanging next to the title of the editorial pages.
 const ornament = `<img class="ornament ornament--hang" src="/img/ornaments/decor1.png" alt="" width="800" height="315">`;
+
+export function spottedPage(catalog) {
+  const body = `<div class="sheet noise"><div class="page-head page-head--ornate"><h1 class="page-title">spotted</h1>${ornament}</div>${spottedGallery(catalog)}</div>`;
+  return layout({ title: "spotted", description: "Waxtape in the wild: community screenshots of Waxtape skate items worn in ReSkate.", current: "spotted", body, site: catalog.site, path: "/spotted/" });
+}
 
 export function simplePage(key, catalog) {
   const page = PAGES[key];

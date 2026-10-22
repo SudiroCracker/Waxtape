@@ -374,3 +374,30 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) { .variant::after { animation: none !important; } }
 .info__facts [hidden] { display: none; }
 .home__all { margin-top: 32px; }
+
+/* ---------- SPOTTED: community shots (home entry under THE RAW + /spotted/) ---------- */
+.spot-entry { position: relative; isolation: isolate; display: grid; gap: 15px; margin-top: 40px; padding: 24px 23px 15px 24px; }
+.spot-entry::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--panel); filter: url(#rough-edge-strong); }
+.spot-entry__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; text-decoration: none; }
+.spot-tile { position: relative; display: block; aspect-ratio: 16 / 10; background: var(--white); }
+.spot-tile img { width: 100%; height: 100%; object-fit: cover; }
+.spot-tile::after { content: ""; position: absolute; inset: -2px; pointer-events: none; border: 3px solid var(--ink); filter: url(#ink-1); }
+.spot-entry:hover .spot-tile::after { animation: ink-wiggle 375ms step-end infinite; }
+.spot-tile--empty { display: grid; place-items: center; background: transparent; }
+.spot-tile--empty::after { border-style: dashed; border-width: 2px; opacity: .45; }
+.spot-tile--empty span { font-family: var(--font-display); font-size: 26px; letter-spacing: var(--track); color: var(--ink-soft); opacity: .6; }
+.spot-entry__note { color: var(--ink-soft); font-size: 15px !important; }
+.spotted__lead { margin: 0 0 8px; max-width: 62ch; }
+.spotted__submit { margin: 0 0 32px; max-width: 62ch; font-size: 15px; color: var(--ink-soft); }
+.spotted { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 22px; }
+@media (max-width: 900px) { .spotted { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .spotted { grid-template-columns: minmax(0, 1fr); } }
+.spot { margin: 0; display: grid; gap: 8px; }
+.spot__media { position: relative; display: block; aspect-ratio: 16 / 10; background: var(--white); }
+.spot__media img { width: 100%; height: 100%; object-fit: cover; }
+.spot__media::after { content: ""; position: absolute; inset: -3px; pointer-events: none; border: 4px solid var(--ink); filter: url(#ink-1); }
+.spot__media:hover::after, .spot__media:focus-visible::after { animation: ink-wiggle 375ms step-end infinite; }
+.spot figcaption { font-size: 15px; line-height: 1.25; }
+.spot figcaption a { color: var(--ink); }
+.spot figcaption small { display: block; color: var(--ink-soft); font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { .spot-tile::after, .spot__media::after { animation: none !important; } }

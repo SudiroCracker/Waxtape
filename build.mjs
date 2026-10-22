@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import http from "node:http";
-import { homePage, productPageHtml, listPage, allPage, simplePage, notFoundPage } from "./src/pages/pages.mjs";
+import { homePage, productPageHtml, listPage, allPage, simplePage, spottedPage, notFoundPage } from "./src/pages/pages.mjs";
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const PUBLIC = path.join(ROOT, "public");
@@ -157,6 +157,7 @@ for (const [groupKey, group] of Object.entries(catalog.taxonomy)) {
   for (const categoryKey of Object.keys(group.categories)) write(`/${groupKey}/${categoryKey}/`, listPage({ catalog, groupKey, categoryKey }));
 }
 for (const key of ["about", "ezine"]) write(`/${key}/`, simplePage(key, catalog));
+write("/spotted/", spottedPage(catalog));
 write("/404.html", notFoundPage(catalog));
 
 // Product list for the download counter (functions/api/*): id → Thunderstore metrics URL.
@@ -164,7 +165,7 @@ fs.mkdirSync(path.join(DIST, "data"), { recursive: true });
 fs.writeFileSync(path.join(DIST, "data/products.json"), JSON.stringify(Object.fromEntries(catalog.products.flatMap((p) => [[p.id, { ts: p.tsApi }], ...p.variants.map((v) => [v.key, { ts: v.tsApi }])]))));
 
 // sitemap.xml + robots.txt, so search engines find every page.
-const routes = ["/", "/items/", "/about/", "/ezine/"];
+const routes = ["/", "/items/", "/spotted/", "/about/", "/ezine/"];
 for (const [g, group] of Object.entries(catalog.taxonomy)) {
   if (catalog.site.locked.includes(g)) continue;
   routes.push(`/${g}/`);

@@ -16,6 +16,7 @@ export function footer(locked = []) {
       <div><h2>help</h2><ul>
         <li><a href="/about/#install">install guide</a></li>
         <li><a href="/about/">about</a></li>
+        <li><a href="/spotted/">spotted</a></li>
         <li><a href="/ezine/">ezine</a></li>
       </ul></div>
       <div><h2>elsewhere</h2><ul>
