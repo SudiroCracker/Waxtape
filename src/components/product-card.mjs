@@ -12,7 +12,7 @@ export function productCard(p) {
   return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}" data-type="${esc(p.type)}" data-category="${esc(p.category)}" data-colour="${colourRank(p)}" data-name="${esc(p.name.toLowerCase())}" data-date="${esc(p.uploaded || "")}"${p.requestedBy ? ' data-custom="1"' : ""}>
   <a class="card__link" href="/products/${esc(p.id)}/">
     <span class="card__media"><img src="/${esc(p.thumb)}" alt="" width="206" height="258" loading="lazy"></span>
-    <span class="card__row"><span class="card__name">${esc(squash(p.name))}</span>${p.variants?.length ? `<span class="card__vars" title="${p.variants.length + 1} versions">+${p.variants.length}<span class="sr-only"> more version${p.variants.length > 1 ? "s" : ""}</span></span>` : ""}</span>
+    <span class="card__row"><span class="card__name">${esc(squash(p.name))}</span>${p.requestedBy || p.variants?.length ? `<span class="card__meta">${p.requestedBy ? `<span class="card__custom" title="Requested by @${esc(p.requestedBy)}">custom</span>` : ""}${p.variants?.length ? `<span class="card__vars" title="${p.variants.length + 1} versions">+${p.variants.length}<span class="sr-only"> more version${p.variants.length > 1 ? "s" : ""}</span></span>` : ""}</span>` : ""}</span>
     ${hit}
   </a>
 </article>`;
