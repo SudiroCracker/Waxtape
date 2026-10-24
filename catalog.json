@@ -67,6 +67,20 @@
   "spotted": [],
   "products": [
     {
+      "id": "evalution",
+      "name": "Evalution",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "jacket",
+      "tags": ["white", "zip-hoodie", "distressed", "face-print", "grunge"],
+      "description": "Washed white zip hoodie with a faded, distressed print of a face across the front and small rips all over. Boxy, heavy and worn-in.",
+      "uploaded": "2026-10-24",
+      "updated": "2026-10-24",
+      "version": "1.0.3",
+      "requestedBy": "e8wz"
+    },
+    {
       "id": "saints-n-tears",
       "name": "Saints n Tears",
       "collab": null,
