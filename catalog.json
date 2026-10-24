@@ -67,6 +67,24 @@
   "spotted": [],
   "products": [
     {
+      "id": "saints-n-tears",
+      "name": "Saints n Tears",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": ["white", "longsleeve", "cross", "script", "grunge"],
+      "description": "White long sleeve washed in handwritten verses, with a smeared red cross on the chest and saints & tears scrawled down the sleeve.",
+      "uploaded": "2026-10-24",
+      "updated": "2026-10-24",
+      "version": "1.0.0",
+      "thunderstore": false,
+      "variant": "White",
+      "variants": [
+        { "id": "black", "name": "Black", "version": "1.0.0", "uploaded": "2026-10-24", "thunderstore": false }
+      ]
+    },
+    {
       "id": "amano-fleece",
       "name": "Amano Fleece",
       "collab": null,
