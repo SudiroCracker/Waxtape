@@ -7,9 +7,9 @@ const colourRank = (p) => { const i = COLOURS.findIndex((c) => p.tags.includes(c
 // One mod in a grid. The whole card opens the product page; the ink "view" bar that slides
 // up on hover is part of the same link (downloads only happen from the product page).
 export function productCard(p) {
-  const search = [p.name, p.type, p.category, p.collab || "", ...p.tags].join(" ").toLowerCase();
+  const search = [p.name, p.type, p.category, p.collab || "", ...p.tags, p.requestedBy ? "customs custom " + p.requestedBy : ""].join(" ").toLowerCase();
   const hit = `<span class="card__hit" aria-hidden="true"><span>view</span>${p.zipReady ? `<small>.zip · ${esc(p.size)}</small>` : ""}</span>`;
-  return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}" data-type="${esc(p.type)}" data-category="${esc(p.category)}" data-colour="${colourRank(p)}" data-name="${esc(p.name.toLowerCase())}" data-date="${esc(p.uploaded || "")}">
+  return `<article class="card" data-search="${esc(search)}" data-tags="${esc(p.tags.join(" "))}" data-type="${esc(p.type)}" data-category="${esc(p.category)}" data-colour="${colourRank(p)}" data-name="${esc(p.name.toLowerCase())}" data-date="${esc(p.uploaded || "")}"${p.requestedBy ? ' data-custom="1"' : ""}>
   <a class="card__link" href="/products/${esc(p.id)}/">
     <span class="card__media"><img src="/${esc(p.thumb)}" alt="" width="206" height="258" loading="lazy"></span>
     <span class="card__row"><span class="card__name">${esc(squash(p.name))}</span>${p.variants?.length ? `<span class="card__vars" title="${p.variants.length + 1} versions">+${p.variants.length}<span class="sr-only"> more version${p.variants.length > 1 ? "s" : ""}</span></span>` : ""}</span>

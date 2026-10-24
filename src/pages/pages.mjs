@@ -18,9 +18,11 @@ const searchBox = () => `<form class="search" role="search" onsubmit="return fal
 function filterBar(items, categories, activeKey = null) {
   const chip = (key, label, enabled = true) =>
     `<button class="chip" type="button" data-filter="category" data-value="${esc(key)}" aria-pressed="${(activeKey || "") === key}"${enabled ? "" : " disabled"}>${esc(label.toUpperCase())}</button>`;
-  const chips = [chip("", "all"), ...categories.map(({ key, label, count }) => chip(key, label, count > 0))].join("");
+  // CUSTOMS: pieces made from a player's request ("requestedBy" in catalog.json). Shown only when the page has some.
+  const customs = items.filter((p) => p.requestedBy).length;
+  const chips = [chip("", "all"), ...categories.map(({ key, label, count }) => chip(key, label, count > 0)), ...(customs ? [chip("customs", "customs")] : [])].join("");
   return `<div class="filters">
-    ${categories.length > 1 ? `<div class="filters__row" role="group" aria-label="Type">${chips}</div>` : "<span></span>"}
+    ${categories.length > 1 || customs ? `<div class="filters__row" role="group" aria-label="Type">${chips}</div>` : "<span></span>"}
     <label class="filters__sort"><span class="filters__label">SORT:</span><span class="select"><select id="sort"><option value="new">newest</option><option value="az">a–z</option><option value="colour">colour</option></select></span></label>
   </div>`;
 }
@@ -39,7 +41,7 @@ const searchScript = `<script>
     let shown = 0;
     cards.forEach((c) => {
       const ok = words.every((w) => c.dataset.search.includes(w))
-        && (!active.category || c.dataset.category === active.category);
+        && (!active.category || (active.category === "customs" ? c.dataset.custom === "1" : c.dataset.category === active.category));
       c.hidden = !ok; if (ok) shown++;
     });
     if (count) count.textContent = "Showing " + shown + " of " + cards.length + (cards.length === 1 ? " piece" : " pieces");

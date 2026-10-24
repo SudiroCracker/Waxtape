@@ -35,7 +35,7 @@ export function productPage(p, taxonomy, related = [], site = {}) {
   </section>
   <section class="info" aria-labelledby="product-name">
     <div class="info__title"><h1 id="product-name">${esc(p.name)}</h1>${collab}</div>
-    <div class="info__block"><h2 class="label">INFO</h2><p>${esc(p.description)}</p></div>
+    <div class="info__block"><h2 class="label">INFO</h2><p>${esc(p.description)}</p>${p.requestedBy ? `<p class="info__req">-requested by <b>@${esc(p.requestedBy)}</b>-</p>` : ""}</div>
     ${variantPicker(p)}
     ${downloadBar(p)}
     <p class="info__help">Need help? <a href="/about/#install">Install guide here!!</a></p>

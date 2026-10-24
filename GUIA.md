@@ -189,3 +189,9 @@ Ahora mismo: ninguno (todos los mods están publicados en Thunderstore).
   ```
 - La home muestra las 4 más recientes bajo THE RAW (los huecos vacíos dicen «your shot»). La página completa está en `/spotted/`, con enlace a cada item que lleva puesto.
 - Interruptor: `"showSpotted": false` en `site` (catalog.json) oculta el panel de la home, el enlace del pie y la entrada del sitemap. La página /spotted/ sigue existiendo sin enlazar.
+
+## Customs (items pedidos por jugadores)
+
+- Añade `"requestedBy": "usuario"` a la ficha en `catalog.json` (sin la @).
+- La ficha muestra «-requested by @usuario-» bajo la descripción, y el item aparece también al filtrar por **CUSTOMS** en items y en su sección (el chip solo sale si hay alguno en esa página). Buscar «customs» o el nombre del usuario también lo encuentra.
+- En el manifest de Thunderstore, la descripción lleva «-requested by @usuario-» antes de «waxtape․store online».
