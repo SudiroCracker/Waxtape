@@ -79,10 +79,9 @@
       "updated": "2026-10-24",
       "version": "1.0.0",
       "requestedBy": "e8wz",
-      "thunderstore": false,
       "variant": "White",
       "variants": [
-        { "id": "black", "name": "Black", "version": "1.0.0", "uploaded": "2026-10-24", "thunderstore": false }
+        { "id": "black", "name": "Black", "version": "1.0.0", "uploaded": "2026-10-24" }
       ]
     },
     {
