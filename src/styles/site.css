@@ -406,3 +406,30 @@ a { color: inherit; }
 .card__meta { flex: none; display: inline-flex; align-items: baseline; gap: 8px; }
 .card__custom { font: 900 14px/26px var(--font-sans); letter-spacing: var(--track); color: var(--announce); }
 .grid--related .card__custom { font-size: 12px; }
+
+/* ---------- About: contact band on the right ---------- */
+.with-aside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 32px clamp(32px, 5vw, 80px); align-items: start; }
+.with-aside__main { min-width: 0; }
+@media (max-width: 900px) { .with-aside { grid-template-columns: minmax(0, 1fr); } }
+.contact { position: sticky; top: 24px; isolation: isolate; display: grid; gap: 14px; padding: 26px 22px 24px; }
+.contact::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--panel); filter: url(#rough-edge-strong); }
+@media (max-width: 900px) { .contact { position: relative; top: 0; } }
+.contact .label { font-size: 24px; }
+.contact__lead { margin: 0; font-size: 16px; line-height: 1.2; }
+.contact__form { display: grid; gap: 14px; }
+.field { display: grid; gap: 4px; }
+.field__label { font: 900 12px/1 var(--font-sans); letter-spacing: .02em; text-transform: uppercase; }
+.field__input { position: relative; width: 100%; padding: 8px 10px; border: 0; border-radius: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.2 var(--font-sans); letter-spacing: var(--track); box-shadow: inset 0 -3px 0 var(--ink); -webkit-appearance: none; appearance: none; }
+.field__input:focus { outline: none; box-shadow: inset 0 -3px 0 var(--announce); }
+.field__area { resize: vertical; min-height: 120px; }
+.field__select { display: block; background: var(--bg); box-shadow: inset 0 -3px 0 var(--ink); padding: 9px 10px; }
+.field__select select { width: 100%; text-transform: none; font-weight: 400; }
+.field__select::after { right: 12px; }
+.contact__send { height: 48px; font-size: 34px; cursor: pointer; border: 0; }
+.contact__status:empty { display: none; }
+.contact__status { margin: -4px 0 0; }
+.contact__or { margin: 4px 0 -6px; }
+.contact__mail { display: flex; align-items: stretch; background: var(--ink); }
+.contact__mail a { flex: 1; min-width: 0; padding: 10px 12px; color: var(--white); font: 700 15px/1.2 var(--font-sans); letter-spacing: var(--track); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.contact__mail a:hover { text-decoration: underline; }
+.contact .small { font-size: 13px; line-height: 1.25; color: var(--ink-soft); }

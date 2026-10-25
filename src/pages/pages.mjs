@@ -187,11 +187,56 @@ ${searchScript}`;
   return layout({ title: "items", current: "", body, site: catalog.site, path: "/items/" });
 }
 
+// Contact band on About: a vertical strip on the right with a small form. Sending opens the
+// visitor's mail app with everything filled in, addressed to site.email (no server, no spam).
+function contactBand(catalog) {
+  const email = catalog.site.email;
+  if (!email) return "";
+  return `<aside class="contact" id="contact" aria-labelledby="contact-title">
+  <h2 class="label" id="contact-title">CONTACT</h2>
+  <p class="contact__lead">Want a custom piece, found a bug, or up for a collab? Drop a line.</p>
+  <form class="contact__form" id="contact-form" data-to="${esc(email)}" novalidate>
+    <label class="field"><span class="field__label">Name or @discord</span><input class="field__input" name="name" autocomplete="nickname" required></label>
+    <label class="field"><span class="field__label">Your email</span><input class="field__input" name="email" type="email" autocomplete="email"></label>
+    <label class="field"><span class="field__label">About</span><span class="select field__select"><select name="topic">
+      <option>Custom request</option><option>Install help</option><option>Bug report</option><option>Collab</option><option>Something else</option>
+    </select></span></label>
+    <label class="field"><span class="field__label">Message</span><textarea class="field__input field__area" name="message" rows="6" required></textarea></label>
+    <button class="dl contact__send" type="submit"><span>send</span></button>
+    <p class="contact__status small" aria-live="polite"></p>
+  </form>
+  <p class="contact__or small">Or write straight to</p>
+  <div class="contact__mail"><a href="mailto:${esc(email)}" id="contact-mail">${esc(email)}</a><button class="path__copy" type="button" data-copy-contact data-copy="contact-mail">COPY</button></div>
+</aside>
+<script>
+  (() => {
+    const copy = document.querySelector('.contact [data-copy]');
+    if (copy) copy.addEventListener("click", async () => {
+      const text = document.getElementById(copy.dataset.copy).textContent;
+      try { await navigator.clipboard.writeText(text); copy.textContent = "COPIED"; } catch { copy.textContent = "SELECT IT"; }
+      setTimeout(() => (copy.textContent = "COPY"), 1600);
+    });
+    const f = document.getElementById("contact-form"); if (!f) return;
+    const status = f.querySelector(".contact__status");
+    f.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(f));
+      if (!d.name.trim() || !d.message.trim()) { status.textContent = "Add your name and a message first."; (d.name.trim() ? f.message : f.name).focus(); return; }
+      const subject = "[waxtape] " + d.topic + " · " + d.name.trim();
+      const body = d.message.trim() + "\n\n— " + d.name.trim() + (d.email ? " (" + d.email.trim() + ")" : "");
+      location.href = "mailto:" + f.dataset.to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      status.textContent = "Your mail app should open with the message ready. Nothing happened? Copy the address below.";
+    });
+  })();
+</script>`;
+}
+
 // About (with the install guide at #install) and ezine. Each body is plain HTML so the copy is easy to edit.
 const PATH = String.raw`\Reskategame\ReSkate-1.0.3\Mods`;
 const PAGES = {
   about: {
     title: "about",
+    aside: contactBand,
     description: "Waxtape, a fictional skate brand with real fits for Reskate, created by Sudiro Rubin. How to install the items.",
     html: `<div class="prose">
   <p class="label">ABOUT</p>
@@ -215,7 +260,7 @@ const PAGES = {
   <p class="prose__note">Something not showing up? Nine times out of ten the folder sits one level too deep (<code>Mods&#92;Wt_Name&#92;Wt_Name</code>). Move it up so the item files are directly inside <code>Mods&#92;Wt_Name</code>.</p>
 </section>
 <script>
-  document.querySelectorAll("[data-copy]").forEach((btn) => btn.addEventListener("click", async () => {
+  document.querySelectorAll("[data-copy]:not([data-copy-contact])").forEach((btn) => btn.addEventListener("click", async () => {
     const text = document.getElementById(btn.dataset.copy).textContent;
     try { await navigator.clipboard.writeText(text); btn.textContent = "COPIED"; }
     catch { const r = document.createRange(); r.selectNodeContents(document.getElementById(btn.dataset.copy)); getSelection().removeAllRanges(); getSelection().addRange(r); btn.textContent = "SELECTED"; }
@@ -244,7 +289,8 @@ export function spottedPage(catalog) {
 
 export function simplePage(key, catalog) {
   const page = PAGES[key];
-  const body = `<div class="sheet noise sheet--narrow"><div class="page-head page-head--ornate"><h1 class="page-title">${esc(page.title)}</h1>${ornament}</div>${page.html}</div>`;
+  const content = page.aside ? `<div class="with-aside"><div class="with-aside__main">${page.html}</div>${page.aside(catalog)}</div>` : page.html;
+  const body = `<div class="sheet noise sheet--narrow"><div class="page-head page-head--ornate"><h1 class="page-title">${esc(page.title)}</h1>${ornament}</div>${content}</div>`;
   return layout({ title: page.title, description: page.description, current: key, body, site: catalog.site, path: `/${key}/` });
 }
 
