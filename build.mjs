@@ -80,6 +80,10 @@ for (const p of catalog.products) {
     return { ...v, key: `${p.id}--${v.id}`, thumb, download, zipReady, size: zipReady ? formatSize(fs.statSync(path.join(PUBLIC, download)).size) : "—", version: v.version || "1.0.0", updated: v.updated || v.uploaded || p.updated };
   });
 }
+// "hidden": true keeps a product (and its files) in the catalog but off the site until it's ready.
+const hiddenIds = catalog.products.filter((p) => p.hidden).map((p) => p.id);
+catalog.products = catalog.products.filter((p) => !p.hidden);
+if (hiddenIds.length) warnings.push(`hidden (not on the site): ${hiddenIds.join(", ")}`);
 const ids = catalog.products.map((p) => p.id);
 for (const id of ids.filter((id, i) => ids.indexOf(id) !== i)) errors.push(`two products use the id "${id}"`);
 if (errors.length) {

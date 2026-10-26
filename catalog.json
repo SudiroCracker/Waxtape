@@ -69,6 +69,7 @@
   "products": [
     {
       "id": "empyre-patch-shorts",
+      "hidden": true,
       "name": "Empyre Patch Shorts",
       "collab": null,
       "group": "apparel",

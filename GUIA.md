@@ -195,3 +195,4 @@ Ahora mismo: ninguno (todos los mods están publicados en Thunderstore).
 - Añade `"requestedBy": "usuario"` a la ficha en `catalog.json` (sin la @).
 - La ficha muestra «-requested by @usuario-» bajo la descripción, y el item aparece también al filtrar por **CUSTOMS** en items y en su sección (el chip solo sale si hay alguno en esa página). Buscar «customs» o el nombre del usuario también lo encuentra.
 - En el manifest de Thunderstore, la descripción lleva «-requested by @usuario-» antes de «waxtape․store online».
+- `"hidden": true` en una ficha la deja fuera de la web (listas, ficha, sitemap y contador) sin borrar sus archivos. Quítalo para publicarla.
