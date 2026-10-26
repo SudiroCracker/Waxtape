@@ -68,6 +68,21 @@
   "spotted": [],
   "products": [
     {
+      "id": "cdpd",
+      "name": "CDPD",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": ["black", "relaxed", "gothic", "back-print", "blackletter"],
+      "description": "Black relaxed tee with a big back print: gothic CDPD lettering split by a cross, stacked lines of blackletter text and a small spiral emblem.",
+      "uploaded": "2026-10-26",
+      "updated": "2026-10-26",
+      "version": "1.0.0",
+      "requestedBy": "kkylla",
+      "thunderstore": false
+    },
+    {
       "id": "evalution",
       "name": "Evalution",
       "collab": null,
