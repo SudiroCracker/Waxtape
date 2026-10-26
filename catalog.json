@@ -68,6 +68,21 @@
   "spotted": [],
   "products": [
     {
+      "id": "empyre-patch-shorts",
+      "name": "Empyre Patch Shorts",
+      "collab": null,
+      "group": "apparel",
+      "category": "bottoms",
+      "type": "shorts",
+      "tags": ["black", "baggy", "denim", "patch", "graffiti"],
+      "description": "Baggy black denim shorts with a grumpy spray-can patch on the back pocket and a little red-and-yellow tag on the waistband.",
+      "uploaded": "2026-10-26",
+      "updated": "2026-10-26",
+      "version": "1.0.0",
+      "requestedBy": "e8wz",
+      "thunderstore": false
+    },
+    {
       "id": "cdpd",
       "name": "CDPD",
       "collab": null,
