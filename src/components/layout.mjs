@@ -4,6 +4,7 @@ import { esc } from "./html.mjs";
 const VERSION = Date.now().toString(36);
 import { header } from "./header.mjs";
 import { footer } from "./footer.mjs";
+import { cardHoverScript } from "./product-card.mjs";
 
 // The page shell: <head>, the tiled wall, the header, the content and the footer.
 // `current` is the nav key to mark ("home", "apparel", …).
@@ -106,6 +107,7 @@ ${body}
 </main>
 ${footer(site.locked, site.showSpotted, { dark })}
 </div>
+${body.includes("card__alt") ? cardHoverScript : ""}
 </body>
 </html>
 `;
