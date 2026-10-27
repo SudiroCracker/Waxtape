@@ -8,6 +8,7 @@ import fs from "node:fs";
 import path from "node:path";
 import http from "node:http";
 import { homePage, productPageHtml, listPage, allPage, simplePage, spottedPage, notFoundPage } from "./src/pages/pages.mjs";
+import { ezineIndexPage, issuePage } from "./src/pages/ezine.mjs";
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const PUBLIC = path.join(ROOT, "public");
@@ -149,6 +150,51 @@ if (TS && !process.argv.includes("--offline")) {
   if (!reached) warnings.push("thunderstore: download counts not available right now (pages show the link only)");
 }
 
+
+// ---------- ezine ----------
+// Issues live in ezine.json (newest first) and their files in public/ezine/<number>/.
+// Width and height are read from each WebP so cover, spreads and back cover size themselves.
+function webpSize(file) {
+  const b = fs.readFileSync(file);
+  if (b.toString("ascii", 0, 4) !== "RIFF" || b.toString("ascii", 8, 12) !== "WEBP") return null;
+  const kind = b.toString("ascii", 12, 16);
+  if (kind === "VP8X") return { w: 1 + b.readUIntLE(24, 3), h: 1 + b.readUIntLE(27, 3) };
+  if (kind === "VP8 ") return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff };
+  if (kind === "VP8L") { const n = b.readUInt32LE(21); return { w: 1 + (n & 0x3fff), h: 1 + ((n >> 14) & 0x3fff) }; }
+  return null;
+}
+let issues = [];
+if (fs.existsSync(path.join(ROOT, "ezine.json"))) {
+  try { issues = JSON.parse(fs.readFileSync(path.join(ROOT, "ezine.json"), "utf8")).issues || []; }
+  catch (err) { console.error("\nezine.json has a mistake, so the site was not built:\n  " + err.message + "\n"); process.exit(1); }
+}
+const viewerVersion = Date.now().toString(36);
+issues = issues.filter((issue) => {
+  const rel = `ezine/${issue.number}`;
+  const dir = path.join(PUBLIC, rel);
+  const files = fs.existsSync(dir) ? fs.readdirSync(dir) : [];
+  const spreads = files.filter((f) => /^\d{2}\.webp$/.test(f)).sort().map((f) => {
+    const n = f.slice(0, 2);
+    const mid = webpSize(path.join(dir, f));
+    const big = files.includes(`${n}@2x.webp`) ? webpSize(path.join(dir, `${n}@2x.webp`)) : null;
+    const thumb = files.includes(`${n}-t.webp`) ? webpSize(path.join(dir, `${n}-t.webp`)) : mid;
+    if (!big) warnings.push(`ezine ${issue.number}: no ${n}@2x.webp (zoom uses the normal image)`);
+    return { ...mid, w2: big ? big.w : mid.w, tw: thumb.w, th: thumb.h };
+  });
+  if (!spreads.length) { warnings.push(`ezine ${issue.number}: no spreads in public/${rel}/ yet (issue not published)`); return false; }
+  const counted = spreads.reduce((n, s) => n + (s.w < s.h ? 1 : 2), 0);
+  if (issue.pages && counted !== issue.pages) warnings.push(`ezine ${issue.number}: the spreads add up to ${counted} pages, ezine.json says ${issue.pages}`);
+  issue.pages = issue.pages || counted;
+  issue.spreads = spreads;
+  issue.dir = "/" + rel;
+  issue.og = files.includes("og.jpg") ? `${rel}/og.jpg` : `${rel}/00.webp`;
+  issue.pdfSize = issue.pdf && files.includes(issue.pdf) ? formatSize(fs.statSync(path.join(dir, issue.pdf)).size) : "—";
+  if (issue.pdfSize === "—") warnings.push(`ezine ${issue.number}: no ${issue.pdf || "pdf"} in public/${rel}/`);
+  issue.contents = issue.contents || [];
+  issue.version = viewerVersion;
+  return true;
+});
+
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.cpSync(PUBLIC, DIST, { recursive: true });
 fs.cpSync(path.join(ROOT, "src/styles"), path.join(DIST, "styles"), { recursive: true });
@@ -160,7 +206,9 @@ for (const [groupKey, group] of Object.entries(catalog.taxonomy)) {
   write(`/${groupKey}/`, listPage({ catalog, groupKey }));
   for (const categoryKey of Object.keys(group.categories)) write(`/${groupKey}/${categoryKey}/`, listPage({ catalog, groupKey, categoryKey }));
 }
-for (const key of ["about", "ezine"]) write(`/${key}/`, simplePage(key, catalog));
+write("/about/", simplePage("about", catalog));
+write("/ezine/", ezineIndexPage(issues, catalog));
+for (const issue of issues) write(`/ezine/${issue.number}/`, issuePage(issue, catalog));
 write("/spotted/", spottedPage(catalog));
 write("/404.html", notFoundPage(catalog));
 
@@ -178,6 +226,7 @@ for (const [g, group] of Object.entries(catalog.taxonomy)) {
 const lastmod = (p) => p.updated || p.uploaded;
 const urls = [
   ...routes.map((r) => ({ loc: r })),
+  ...issues.map((i) => ({ loc: `/ezine/${i.number}/`, lastmod: i.published })),
   ...catalog.products.map((p) => ({ loc: `/products/${p.id}/`, lastmod: lastmod(p) })),
 ];
 fs.writeFileSync(path.join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
@@ -193,7 +242,7 @@ if (warnings.length) console.log("\nheads up:\n  " + warnings.join("\n  "));
 
 // Optional local preview server.
 if (process.argv.includes("--serve")) {
-  const types = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".xml": "application/xml", ".txt": "text/plain", ".woff": "font/woff", ".woff2": "font/woff2", ".zip": "application/zip" };
+  const types = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".xml": "application/xml", ".txt": "text/plain", ".woff": "font/woff", ".woff2": "font/woff2", ".zip": "application/zip", ".pdf": "application/pdf" };
   http
     .createServer((req, res) => {
       let rel = decodeURIComponent(req.url.split("?")[0]);

@@ -1,0 +1,21 @@
+{
+  "issues": [
+    {
+      "number": "01",
+      "month": "October 2026",
+      "published": "2026-10-27",
+      "pages": 44,
+      "pdf": "Waxtape-N01.pdf",
+      "description": "Waxtape Nº 01, October 2026. 44 pages: the lookbook, the story behind the print, The Hangout skatepark, a deck of Love & Soul and custom orders.",
+      "contents": [
+        { "title": "Welcome to Waxtape.", "dek": "Hi. Properly this time", "page": 6 },
+        { "title": "Lookbook", "dek": "The most hated", "page": 8 },
+        { "title": "Teeth under the print", "dek": "Story behind it.", "page": 22 },
+        { "title": "Share your fits", "dek": "Show yourself aAAA!!", "page": 24 },
+        { "title": "The Hangout Skatepark", "dek": "It's always golden hour", "page": 28 },
+        { "title": "A deck of Love & Soul", "dek": "Until grinds do us part", "page": 36 },
+        { "title": "Waxtape. Customs", "dek": "Wear out your ideas", "page": 42 }
+      ]
+    }
+  ]
+}

@@ -7,7 +7,7 @@ import { footer } from "./footer.mjs";
 
 // The page shell: <head>, the tiled wall, the header, the content and the footer.
 // `current` is the nav key to mark ("home", "apparel", …).
-export function layout({ title, description, current, body, site, path, image, schema = [] }) {
+export function layout({ title, description, current, body, site, path, image, imageMeta, ogType, schema = [] }) {
   const brand = site.brand || site.name;
   const fullTitle = title ? `${title} · ${brand}` : site.homeTitle || `${brand} ${site.tagline}`;
   const base = (site.url || "").replace(/\/$/, "");
@@ -26,13 +26,14 @@ export function layout({ title, description, current, body, site, path, image, s
     `<meta property="og:site_name" content="${esc(brand)}">`,
     `<meta name="application-name" content="${esc(brand)}">`,
     `<meta name="apple-mobile-web-app-title" content="${esc(brand)}">`,
-    `<meta property="og:type" content="${path && path.startsWith("/products/") ? "product" : "website"}">`,
+    `<meta property="og:type" content="${ogType || (path && path.startsWith("/products/") ? "product" : "website")}">`,
     `<meta property="og:title" content="${esc(fullTitle)}">`,
     `<meta property="og:description" content="${esc(desc)}">`,
     path != null && base ? `<meta property="og:url" content="${esc(base + path)}">` : "",
     img && base ? `<meta property="og:image" content="${esc(base + "/" + img)}">` : "",
     img && base ? `<meta name="twitter:image" content="${esc(base + "/" + img)}">` : "",
-    img && img === site.ogImage && img.startsWith("img/og.") ? `<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta property="og:image:alt" content="${esc(brand)}: Waxtape skate items for ReSkate">` : "",
+    imageMeta ? `<meta property="og:image:width" content="${imageMeta.w}">\n<meta property="og:image:height" content="${imageMeta.h}">\n<meta property="og:image:alt" content="${esc(imageMeta.alt)}">` : "",
+    !imageMeta && img && img === site.ogImage && img.startsWith("img/og.") ? `<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta property="og:image:alt" content="${esc(brand)}: Waxtape skate items for ReSkate">` : "",
     `<meta name="twitter:card" content="summary_large_image">`,
     ...schema.map((s) => `<script type="application/ld+json">${JSON.stringify(s).replace(/</g, "\\u003c")}</script>`),
   ].filter(Boolean).join("\n");

@@ -231,7 +231,7 @@ function contactBand(catalog) {
 </script>`;
 }
 
-// About (with the install guide at #install) and ezine. Each body is plain HTML so the copy is easy to edit.
+// About (with the install guide at #install); the ezine has its own module (ezine.mjs). Each body is plain HTML so the copy is easy to edit.
 const PATH = String.raw`\Reskategame\ReSkate-1.0.3\Mods`;
 const PAGES = {
   about: {
@@ -267,15 +267,6 @@ const PAGES = {
     setTimeout(() => (btn.textContent = "COPY"), 1600);
   }));
 </script>`,
-  },
-  ezine: {
-    title: "ezine",
-    description: "The Waxtape ezine: a monthly online issue. Coming soon.",
-    html: `<div class="prose">
-  <p class="label">COMING SOON</p>
-  <p class="prose__lead">The Waxtape ezine is on its way: a monthly online issue with news from the game, new drops and the stories behind them.</p>
-  <p><a class="go" href="/items/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>SEE THE ITEMS</a></p>
-</div>`,
   },
 };
 
