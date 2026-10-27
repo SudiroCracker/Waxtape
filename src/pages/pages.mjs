@@ -2,8 +2,8 @@ import { spottedEntry, spottedGallery } from "../components/spotted.mjs";
 import { esc, each } from "../components/html.mjs";
 import { layout } from "../components/layout.mjs";
 import { productGrid, productCard, soonCard } from "../components/product-card.mjs";
-import { featurePanel } from "../components/feature-panel.mjs";
 import { banner } from "../components/banner.mjs";
+import { sectionTiles } from "../components/sections.mjs";
 import { productPage } from "../components/product-page.mjs";
 
 // Search box for list pages: a plain field, no icon. Filters the cards on the page by name, type,
@@ -72,10 +72,11 @@ const searchScript = `<script>
 
 const byNewest = (a, b) => (b.uploaded || "").localeCompare(a.uploaded || "") || a.name.localeCompare(b.name);
 
-// Home: FRESH OFF THE TRUCKS grid on the left, THE RAW feature on the right.
+// Home: banner, then FRESH OFF THE TRUCKS across the whole sheet (4 columns, 3 rows), then the
+// section tiles (apparel · board · ezine) as wide as the page.
 // Every mod is in the page; a small script shuffles them on each load and shows the first
 // HOME_MAX, so returning visitors see a different wall each time. Without JS: the newest HOME_MAX.
-const HOME_MAX = 16; // 4 rows of 4
+const HOME_MAX = 12; // 3 rows of 4
 const shuffleScript = `<script>
   (() => {
     const grid = document.querySelector(".home__new .grid");
@@ -86,48 +87,23 @@ const shuffleScript = `<script>
   })();
 </script>`;
 
-// THE RAW: one of the `featured.pool` (2) most recent mods, picked at random on every load,
-// with one of its 01–04 shots. Ties on the upload date go to whoever is higher in catalog.json.
-function featuredPool(products, n) {
-  return products
-    .map((p, i) => ({ p, i }))
-    .sort((a, b) => (b.p.uploaded || "").localeCompare(a.p.uploaded || "") || a.i - b.i)
-    .slice(0, n)
-    .map((x) => x.p);
-}
-const featureScript = `<script>
-  (() => {
-    const panels = [...document.querySelectorAll("[data-feature]")];
-    const pick = panels[Math.floor(Math.random() * panels.length)];
-    panels.forEach((el) => (el.hidden = el !== pick));
-    const img = pick.querySelector("[data-images]");
-    const shots = img.dataset.images.split(" ");
-    img.src = shots[Math.floor(Math.random() * shots.length)];
-  })();
-</script>`;
-
 export function homePage(catalog) {
-  const { site, featured, products } = catalog;
+  const { site, products } = catalog;
   const all = [...products].sort(byNewest);
-  const pool = featuredPool(products, featured.pool || 2);
-  const panels = pool
-    .map((p, i) => featurePanel({ product: p, title: featured.title, images: p.galleryFound.length ? p.galleryFound : [p.thumb], text: null, sticker: featured.stickerFound, hidden: i > 0 }))
-    .join("\n");
   const shown = Math.min(all.length, HOME_MAX);
   const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p) : productCard(p).replace('<article class="card"', '<article class="card" hidden')));
   for (let i = shown % 4; i && i < 4; i++) cards.push(soonCard());
   const body = `${banner(catalog.banners)}
 <div class="sheet noise">
   <h1 class="sr-only">Waxtape Store: Waxtape skate clothing and board items for ReSkate</h1>
-  <div class="home">
-    <section class="home__new" aria-labelledby="new-title">
-      <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
-      <div class="grid">${cards.join("")}</div>
-      ${all.length >= HOME_MAX ? `<a class="dl home__all" href="/items/"><span>more</span></a>` : ""}
-    </section>
-    <div class="home__feature">${panels}${featureScript}${site.showSpotted ? spottedEntry(catalog) : ""}</div>
-  </div>
+  <section class="home__new" aria-labelledby="new-title">
+    <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
+    <div class="grid">${cards.join("")}</div>
+    ${all.length > HOME_MAX ? `<a class="dl home__all" href="/items/"><span>more</span></a>` : ""}
+  </section>
+  ${site.showSpotted ? spottedEntry(catalog) : ""}
 </div>
+${sectionTiles(catalog.sections)}
 ${shuffleScript}`;
   return layout({ current: "home", body, site, path: "/" });
 }

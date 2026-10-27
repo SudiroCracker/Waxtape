@@ -237,6 +237,27 @@ issues = issues.filter((issue) => {
   return true;
 });
 
+
+// ---------- Home section tiles (apparel · board · ezine) ----------
+// Picture per section: public/img/sections/<key>.webp (1200×1500, 4:5). Missing → a stand-in.
+{
+  const newestShot = (group) => {
+    const p = [...catalog.products].filter((x) => x.group === group).sort((a, b) => (b.uploaded || "").localeCompare(a.uploaded || ""))[0];
+    return p ? "/" + (p.galleryFound[0] || p.thumb) : null;
+  };
+  const latest = issues[0];
+  const count = (g) => catalog.products.filter((p) => p.group === g).length;
+  catalog.sections = [
+    { key: "apparel", name: "apparel", href: "/apparel/", meta: `${count("apparel")} items`, fallback: newestShot("apparel"), locked: catalog.site.locked.includes("apparel") },
+    { key: "board", name: "board", href: "/board/", meta: count("board") ? `${count("board")} items` : "soon", fallback: newestShot("board"), locked: catalog.site.locked.includes("board") },
+    { key: "ezine", name: "ezine", href: "/ezine/", meta: latest ? `Nº ${latest.number} out now` : "soon", fallback: latest ? `${latest.dir}/00@2x.webp` : null, locked: false },
+  ].map((s) => {
+    const own = ["webp", "jpg", "png"].map((x) => `img/sections/${s.key}.${x}`).find((f) => exists(f));
+    if (!own) warnings.push(`home tiles: no public/img/sections/${s.key}.webp yet (using a stand-in picture)`);
+    return { ...s, img: own ? "/" + own : s.fallback };
+  }).filter((s) => s.img);
+}
+
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.cpSync(PUBLIC, DIST, { recursive: true });
 fs.cpSync(path.join(ROOT, "src/styles"), path.join(DIST, "styles"), { recursive: true });
