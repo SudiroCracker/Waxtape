@@ -628,24 +628,22 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 
 /* ---------- Hamburger menu (screens under 1000 px) ---------- */
 .menu { display: none; grid-column: 3; justify-self: end; position: static; }
-.menu__toggle { display: grid; align-content: center; gap: 6px; width: 48px; height: 44px; padding: 0 8px; list-style: none; cursor: pointer; }
+.menu__toggle { display: grid; place-items: center; width: 48px; height: 44px; list-style: none; cursor: pointer; color: var(--ink); }
 .menu__toggle::-webkit-details-marker { display: none; }
-.menu__toggle span { display: block; height: 4px; background: var(--ink); transition: transform 120ms steps(2), opacity 60ms; }
-.menu[open] .menu__toggle span:nth-child(1) { transform: translateY(10px) rotate(45deg); }
-.menu[open] .menu__toggle span:nth-child(2) { opacity: 0; }
-.menu[open] .menu__toggle span:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
-@media (hover: hover) { .menu__toggle:hover span { background: var(--announce); } }
+.menu__icon { display: block; width: 34px; height: 34px; transition: transform 90ms steps(2); }
+.menu[open] .menu__toggle { color: var(--announce); }
+@media (hover: hover) { .menu__toggle:hover { color: var(--announce); } .menu__toggle:hover .menu__icon { animation: ink-jitter 375ms step-end infinite; } }
 /* The panel drops under the header, as wide as the page, ink slab with cream sections. */
 .menu__panel { position: absolute; left: 0; right: 0; top: calc(100% + 10px); padding: 22px 20px 26px; background: var(--ink); box-shadow: var(--shadow-hit); }
-.menu__links { list-style: none; margin: 0; padding: 0; display: grid; gap: 30px; }
+.menu__links { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
 .menu__links .nav__link { font-size: 44px; color: var(--bg); padding: 0 6px 6px; }
 .menu__links .nav__link:hover, .menu__links .nav__link:focus-visible { color: var(--bg); }
-.menu__links .nav__link::after { left: 0; right: auto; width: 4.2em; filter: invert(1); }
+.menu__links .nav__link::after { display: none; } /* kept simple: no flourish in the menu */
 .menu__links .nav__link--locked { color: var(--ink-soft); }
-.wall--dark .menu__toggle span { background: var(--bg-cool); }
+.wall--dark .menu__toggle { color: var(--bg-cool); }
+.wall--dark .menu[open] .menu__toggle { color: var(--announce); }
 .wall--dark .menu__panel { background: var(--bg-cool); }
 .wall--dark .menu__links .nav__link { color: var(--ink); }
-.wall--dark .menu__links .nav__link::after { filter: none; mix-blend-mode: normal; }
 @media (max-width: 1000px) {
   .site-header { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; padding-top: 18px; }
   .site-header__logo { width: auto; padding: 0; }
