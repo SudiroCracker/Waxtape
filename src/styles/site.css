@@ -24,11 +24,15 @@ a { color: inherit; }
 
 /* noise map on cream surfaces */
 .noise {
-  /* Waxtape noise map: #DED9C9 blots on #ECE6D8 (public/img/camo.svg, tiles seamlessly). */
-  --noise-img: url("/img/camo.svg");
-  background-color: var(--bg);
+  /* Waxtape paper: scanned sheet (public/img/paper.webp, 1400 wide, tiles top to bottom) with the
+     grey brush edge (paper-edge.webp) anchored at the foot of the sheet. */
+  --paper: #d3d0c4;
+  --noise-img: url("/img/paper-edge.webp"), url("/img/paper.webp");
+  background-color: var(--paper);
   background-image: var(--noise-img);
-  background-size: 540px 540px;
+  background-repeat: no-repeat, repeat-y;
+  background-position: center bottom, center top;
+  background-size: 100% auto, max(100%, 1000px) auto;
 }
 
 /* ---------- Header ---------- */
@@ -68,7 +72,7 @@ a { color: inherit; }
 /* The sheet grows with the screen (1634 of 1728 in the Figma) up to a 2560 px screen. */
 .sheet { position: relative; isolation: isolate; max-width: min(2466px, calc(100% - 2 * clamp(12px, 2.7vw, 47px))); margin: 58px auto 0; padding: 22px 22px 48px; }
 .sheet.noise { background: none; }
-.sheet.noise::before { content: ""; position: absolute; inset: 0; z-index: -1; background-color: var(--bg); background-image: var(--noise-img); background-size: 540px 540px; filter: url(#rough-edge); }
+.sheet.noise::before { content: ""; position: absolute; inset: 0; z-index: -1; background-color: var(--paper); background-image: var(--noise-img); background-repeat: no-repeat, repeat-y; background-position: center bottom, center top; background-size: 100% auto, max(100%, 1000px) auto; filter: url(#rough-edge); }
 .sheet--narrow { padding: 40px clamp(22px, 4vw, 64px) 64px; }
 
 /* ---------- Home layout ---------- */
@@ -451,8 +455,6 @@ a { color: inherit; }
 .wall--dark .site-footer .is-locked { color: var(--ink-soft); }
 
 /* ---------- Ezine page (Figma "MacBook Pro 16 - 1") ---------- */
-.noise--cool { --noise-img: url("/img/camo-cool.svg"); }
-.sheet--ezine.noise::before { background-color: var(--bg-cool); }
 .sheet--ezine { padding: 59px 22px 72px; color: #000; }
 
 /* Cover 576 wide on the left, info 620 on the right, 155 between (1351 in all). */
