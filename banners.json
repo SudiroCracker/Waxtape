@@ -2,6 +2,12 @@
   "interval": 6,
   "slides": [
     {
+      "title": "OCTOBER .26\nOUT NOW",
+      "image": "ezine-01.webp",
+      "href": "/ezine/",
+      "alt": "Waxtape Nº 01 magazine cover over a skater flipping down a stair rail"
+    },
+    {
       "title": "SHARE\nWITH US",
       "image": "share-ur-fits.webp",
       "href": "/about/#contact",
