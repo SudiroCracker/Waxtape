@@ -225,7 +225,7 @@ function contactBand(catalog) {
       const d = Object.fromEntries(new FormData(f));
       if (!d.name.trim() || !d.message.trim()) { status.textContent = "Add your name and a message first."; (d.name.trim() ? f.message : f.name).focus(); return; }
       const subject = "[waxtape] " + d.topic + " · " + d.name.trim();
-      const body = d.message.trim() + "\n\n— " + d.name.trim() + (d.email ? " (" + d.email.trim() + ")" : "");
+      const body = d.message.trim() + "\\n\\n— " + d.name.trim() + (d.email ? " (" + d.email.trim() + ")" : "");
       location.href = "mailto:" + f.dataset.to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
       status.textContent = "Your mail app should open with the message ready. Nothing happened? Copy the address below.";
     });
