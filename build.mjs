@@ -27,6 +27,8 @@ const exists = (rel) => fs.existsSync(path.join(PUBLIC, rel));
 const warnings = [];
 const errors = [];
 const IMG = /\.(jpe?g|png|webp)$/i;
+// Cloudflare Pages refuses the whole deploy if a single file is bigger than this.
+const MAX_FILE = 25 * 1024 * 1024;
 
 const formatSize = (bytes) => (bytes >= 1024 * 1024 ? (bytes / 1024 / 1024).toFixed(1) + " MB" : Math.max(1, Math.round(bytes / 1024)) + " KB");
 
@@ -48,13 +50,26 @@ for (const p of catalog.products) {
   p.galleryFound = listed.length ? listed : found;
   if (!p.galleryFound.length) warnings.push(`${p.id}: no 01–04 images yet`);
 
+  // "soldOut": true → sold out on waxtape.store: the button ("thunderstore") opens the mod's
+  // Thunderstore page instead of downloading a .zip. Mods over Cloudflare Pages' 25 MiB file limit
+  // go sold out automatically (the zip is left off the site).
+  p.soldOut = p.soldOut === true;
   if (!p.download) {
     const zip = files.find((f) => f.toLowerCase().endsWith(".zip"));
     p.download = `${folder}/${zip || p.id + ".zip"}`;
   }
   p.zipReady = exists(p.download);
-  if (p.zipReady) p.size = formatSize(fs.statSync(path.join(PUBLIC, p.download)).size);
-  else warnings.push(`${p.id}: no .zip in public/${folder}/ (download shows "soon")`);
+  if (p.zipReady) {
+    const bytes = fs.statSync(path.join(PUBLIC, p.download)).size;
+    p.size = formatSize(bytes);
+    if (bytes > MAX_FILE && !p.soldOut) warnings.push(`${p.id}: ${p.download.split("/").pop()} is ${p.size}, over the 25 MiB limit: shown as sold out (Thunderstore only) and the zip is left off the site`);
+    if (bytes > MAX_FILE) p.soldOut = true;
+  }
+  if (p.soldOut) {
+    p.zipReady = false;
+    if (p.thunderstore === false) errors.push(`${p.id}: sold out means Thunderstore only, but "thunderstore" is false`);
+    if (!exists(p.download) && typeof p.thunderstore !== "string") errors.push(`${p.id}: sold out, so add "thunderstore": "<package name>" (there is no zip to take the name from)`);
+  } else if (!p.zipReady) warnings.push(`${p.id}: no .zip in public/${folder}/ (download shows "soon")`);
   p.size = p.size || "—";
 
   for (const key of ["name", "group", "category", "type", "description", "uploaded"]) if (!p[key]) errors.push(`${p.id}: "${key}" is empty`);
@@ -199,6 +214,15 @@ issues = issues.filter((issue) => {
 fs.rmSync(DIST, { recursive: true, force: true });
 fs.cpSync(PUBLIC, DIST, { recursive: true });
 fs.cpSync(path.join(ROOT, "src/styles"), path.join(DIST, "styles"), { recursive: true });
+// Safety net: leave out any file over the limit so one big zip can't block the whole site.
+for (const rel of fs.readdirSync(DIST, { recursive: true })) {
+  const file = path.join(DIST, String(rel));
+  const st = fs.statSync(file);
+  if (st.isFile() && st.size > MAX_FILE) {
+    fs.rmSync(file);
+    warnings.push(`left off the site (over 25 MiB): ${rel} (${formatSize(st.size)})`);
+  }
+}
 
 write("/", homePage(catalog));
 write("/items/", allPage(catalog));

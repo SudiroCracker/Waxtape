@@ -34,14 +34,14 @@ export function productPage(p, taxonomy, related = [], site = {}) {
     <ul class="tagline" aria-label="Category">${each(path, (x) => `<li><a href="${x.href}">${esc(x.label)}</a></li>`)}</ul>
   </section>
   <section class="info" aria-labelledby="product-name">
-    <div class="info__title"><h1 id="product-name">${esc(p.name)}</h1>${collab}</div>
+    <div class="info__title"><h1 id="product-name">${esc(p.name)}</h1>${collab}${p.soldOut ? `<span class="info__sold">sold out</span>` : ""}</div>
     <div class="info__block"><h2 class="label">INFO</h2><p>${esc(p.description)}</p>${p.requestedBy ? `<p class="info__req">-requested by <b>@${esc(p.requestedBy)}</b>-</p>` : ""}</div>
     ${variantPicker(p)}
     ${downloadBar(p)}
-    <p class="info__help">Need help? <a href="/about/#install">Install guide here!!</a></p>
+    <p class="info__help">${p.soldOut ? "Sold out here, still free on Thunderstore. " : ""}Need help? <a href="/about/#install">Install guide here!!</a></p>
     <dl class="info__facts">
       <div><dt>VERSION</dt><dd data-v="version">${esc(p.version)}</dd></div>
-      <div><dt>FILE</dt><dd data-v="file">${esc(p.download.split("/").pop())} · ${esc(p.size)}</dd></div>
+      <div><dt>FILE</dt><dd data-v="file">${p.soldOut ? `on Thunderstore${p.size !== "—" ? " · " + esc(p.size) : ""}` : `${esc(p.download.split("/").pop())} · ${esc(p.size)}`}</dd></div>
       <div><dt>UPDATED</dt><dd data-v="updated">${esc(p.updated)}</dd></div>
       <div><dt>BY</dt><dd>${esc(p.author)}${p.collab ? ` × ${esc(p.collab)}` : ""}</dd></div>
       ${site.game ? `<div><dt>WORKS WITH</dt><dd>${esc(site.game)}</dd></div>` : ""}

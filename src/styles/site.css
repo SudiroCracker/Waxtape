@@ -575,3 +575,7 @@ a { color: inherit; }
   .ez-zoom__count { order: -1; flex-basis: 100%; }
 }
 body:has(.wall--dark) { background: var(--wall-dark); }
+
+/* ---------- Sold out (Thunderstore only) ---------- */
+.info__sold { align-self: center; padding: 4px 10px 6px; background: var(--announce); color: var(--white); font-family: var(--font-display); font-size: 30px; line-height: 1; letter-spacing: var(--track); white-space: nowrap; transform: rotate(-3deg); }
+.card__sold { white-space: nowrap; }
