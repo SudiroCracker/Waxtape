@@ -622,7 +622,7 @@ body:has(.wall--dark) { background: var(--wall-dark); }
   /* Phones: a bit taller so the title has room; "focus" in banners.json keeps the subject in view. */
   .hero { margin-top: 28px; aspect-ratio: 4 / 3; }
   .hero ~ .sheet { margin-top: 24px; }
-  .hero__title { left: 16px; bottom: 16px; }
+  .hero__title { left: 16px; bottom: 16px; font-size: min(8vw, 44px); }
   .hero__dots { right: 12px; bottom: auto; top: 12px; }
   .hero__dot { width: 32px; }
 }
