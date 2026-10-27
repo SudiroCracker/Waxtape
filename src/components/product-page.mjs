@@ -2,7 +2,7 @@ import { esc, each } from "./html.mjs";
 import { downloadBar } from "./download.mjs";
 import { productCard } from "./product-card.mjs";
 
-// Product page: gallery (thumbs as tall as the main image) + category line, and the info column.
+// Product page: gallery (4:5 thumbs stacked beside the main image) + category line, and the info column.
 export function productPage(p, taxonomy, related = [], site = {}) {
   const group = taxonomy[p.group];
   const category = group?.categories[p.category];
