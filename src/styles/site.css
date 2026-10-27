@@ -70,7 +70,7 @@ a { color: inherit; }
   font-family: var(--font-display); font-size: 32px; line-height: 1.15; letter-spacing: var(--track); text-transform: lowercase;
   text-decoration: none; transition: transform 90ms steps(2), box-shadow 90ms steps(2);
 }
-.pill:hover, .pill:focus-visible { box-shadow: var(--shadow-hit); transform: translate(-2px, -2px) rotate(-2deg); }
+.pill:hover, .pill:focus-visible { transform: translate(-2px, -2px) rotate(-2deg); }
 .pill:active { transform: translate(2px, 2px); box-shadow: none; }
 .pill[aria-current="page"] { outline: 2px solid var(--ink); outline-offset: 3px; }
 
@@ -158,13 +158,14 @@ a { color: inherit; }
   font-family: var(--font-display); font-size: 40px; line-height: 1; letter-spacing: var(--track); text-transform: lowercase;
   transition: transform 90ms steps(2), box-shadow 90ms steps(2);
 }
-.dl::before { content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%; background: var(--announce); transform: skewX(-20deg); opacity: 0; }
+/* Hover: a soft light glint sweeps across (diffuse, light colour); the bar lifts a little, no shadow. */
+.dl::before { content: ""; position: absolute; top: -20%; bottom: -20%; left: -50%; width: 45%; background: linear-gradient(90deg, transparent, rgba(236, 230, 216, .38) 50%, transparent); filter: blur(6px); transform: skewX(-20deg); opacity: 0; pointer-events: none; }
 .dl span { position: relative; padding-bottom: 4px; }
-.dl:hover, .dl:focus-visible { box-shadow: var(--shadow-hit); transform: translate(-2px, -2px); }
-.dl:hover::before, .dl:focus-visible::before { animation: sweep 420ms cubic-bezier(.2, .9, .1, 1) 1; }
+.dl:hover, .dl:focus-visible { transform: translate(-2px, -2px); }
+.dl:hover::before, .dl:focus-visible::before { animation: sweep 650ms cubic-bezier(.3, .7, .2, 1) 1; }
 .dl:active { transform: translate(2px, 2px); box-shadow: none; background: var(--announce); }
 .dl[aria-disabled="true"] { background: var(--panel); color: var(--ink-soft); pointer-events: none; }
-@keyframes sweep { 0% { left: -40%; opacity: 1; } 100% { left: 120%; opacity: 1; } }
+@keyframes sweep { 0% { left: -50%; opacity: 1; } 100% { left: 115%; opacity: 1; } }
 
 /* ---------- Product page ---------- */
 .product { display: grid; grid-template-columns: minmax(0, 867fr) minmax(0, 620fr); gap: 40px clamp(32px, 3.6vw, 62px); align-items: start; padding-top: 8px; }
@@ -301,11 +302,8 @@ a { color: inherit; }
 .path__copy { flex: none; border: 0; border-left: 1px solid var(--ink-soft); background: var(--ink); color: var(--white); padding: 0 16px; font: 900 13px/1 var(--font-sans); letter-spacing: .04em; cursor: pointer; }
 .path__copy:hover { background: var(--white); color: var(--ink); }
 
-/* ---------- Feature call: >>>DOWNLOAD NOW in an ink pill ---------- */
-.feature__foot .go { background: var(--ink); color: var(--white); padding: 8px 14px 9px; transition: transform 90ms steps(2), box-shadow 90ms steps(2); }
-.feature__foot .go:hover, .feature__foot .go:focus-visible { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--bg); }
-.feature__foot .go:hover b, .feature__foot .go:focus-visible b { color: var(--white); }
-.feature__foot .go:active { transform: translate(1px, 1px); box-shadow: none; }
+/* ---------- Feature call (THE RAW "details"): the same ink bar as the other buttons, sized to its word ---------- */
+.feature__foot .dl { width: auto; height: 46px; padding: 0 26px; font-size: 34px; }
 
 /* ---------- Locked sections (no mods yet): struck through, not clickable ---------- */
 .nav__link--locked { cursor: not-allowed; color: var(--ink-soft); opacity: .55; text-decoration: line-through; text-decoration-thickness: 3px; }
@@ -537,12 +535,12 @@ a { color: inherit; }
 .ez-arrow { position: absolute; top: 50%; z-index: 2; width: 52px; height: 84px; margin-top: -42px; border: 0; background: var(--bg-cool); color: var(--ink); font: 400 60px/1 var(--font-sans); cursor: pointer; transition: transform 90ms steps(2), box-shadow 90ms steps(2); }
 .ez-arrow--prev { left: 0; }
 .ez-arrow--next { right: 0; }
-.ez-arrow:hover, .ez-arrow:focus-visible { box-shadow: var(--shadow-hit); transform: translate(-2px, -2px); }
+.ez-arrow:hover, .ez-arrow:focus-visible { transform: translate(-2px, -2px); }
 .ez-arrow:disabled { opacity: 0; pointer-events: none; }
 
 .ez-bar { display: none; justify-content: center; gap: 10px; }
 .ez-btn { min-width: 44px; height: 40px; padding: 0 14px 3px; border: 0; background: var(--bg-cool); color: var(--ink); font-family: var(--font-display); font-size: 26px; line-height: 1; letter-spacing: var(--track); text-transform: lowercase; cursor: pointer; transition: transform 90ms steps(2), box-shadow 90ms steps(2); }
-.ez-btn:hover, .ez-btn:focus-visible { box-shadow: var(--shadow-hit); transform: translate(-2px, -2px); }
+.ez-btn:hover, .ez-btn:focus-visible { transform: translate(-2px, -2px); }
 .ez-btn:active { transform: translate(2px, 2px); box-shadow: none; background: var(--announce); color: var(--white); }
 .ez-btn:disabled { background: var(--ink-soft); color: var(--panel); pointer-events: none; }
 .ez-btn--close { background: var(--announce); color: var(--white); }

@@ -31,7 +31,7 @@ export function spottedEntry(catalog) {
   <a class="spot-entry__grid" href="/spotted/" tabindex="-1" aria-hidden="true">${tiles.join("")}</a>
   <h2 class="label" id="spot-entry-title">SPOTTED</h2>
   <div class="feature__text"><p>Waxtape in the wild. Shots from skaters wearing the pieces in ReSkate.</p>${shots.length ? "" : `<p class="spot-entry__note">No shots yet. Yours could be the first.</p>`}</div>
-  <div class="feature__foot"><a class="go" href="/spotted/"><b>&gt;</b><b>&gt;</b><b>&gt;</b>SPOTTED</a></div>
+  <div class="feature__foot"><a class="dl" href="/spotted/"><span>spotted</span></a></div>
 </section>`;
 }
 
