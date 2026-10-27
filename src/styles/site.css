@@ -13,6 +13,9 @@ body {
 img { max-width: 100%; display: block; }
 a { color: inherit; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+/* One column for the whole page: header, banner, sheet and footer share these edges
+   (1634 of 1728 in the Figma, growing with the screen up to a 2560 px screen). */
+:root { --page-w: min(2466px, calc(100% - 2 * clamp(12px, 2.7vw, 47px))); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- Wall: the tiled wall photo behind everything (already blurred in the file) ---------- */
@@ -36,7 +39,8 @@ a { color: inherit; }
 }
 
 /* ---------- Header ---------- */
-.site-header { display: flex; align-items: flex-end; gap: clamp(24px, 7.6vw, 135px); padding: 30px 19px 0; max-width: 2560px; margin: 0 auto; }
+/* Logo on the page edge; nav at 350 px on the 1728 frame (gap 105 = 6.08vw). */
+.site-header { display: flex; align-items: flex-end; gap: clamp(24px, 6.08vw, 160px); padding: 30px 0 0; max-width: var(--page-w); margin: 0 auto; }
 .site-header__logo { flex: none; width: 196px; display: block; padding-bottom: 6px; }
 .site-header__logo img { width: 100%; height: auto; }
 .nav { flex: 1; min-width: 0; max-width: 1061px; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
@@ -70,7 +74,7 @@ a { color: inherit; }
 
 /* ---------- Sheet: the big cream page ---------- */
 /* The sheet grows with the screen (1634 of 1728 in the Figma) up to a 2560 px screen. */
-.sheet { position: relative; isolation: isolate; max-width: min(2466px, calc(100% - 2 * clamp(12px, 2.7vw, 47px))); margin: 58px auto 0; padding: 22px 22px 48px; }
+.sheet { position: relative; isolation: isolate; max-width: var(--page-w); margin: 58px auto 0; padding: 22px 22px 48px; }
 .sheet.noise { background: none; }
 .sheet.noise::before { content: ""; position: absolute; inset: 0; z-index: -1; background-color: var(--paper); background-image: var(--noise-img); background-repeat: no-repeat, repeat-y; background-position: center bottom, center top; background-size: 100% auto, max(100%, 1000px) auto; filter: url(#rough-edge); }
 .sheet--narrow { padding: 40px clamp(22px, 4vw, 64px) 64px; }
@@ -213,7 +217,7 @@ a { color: inherit; }
 
 /* ---------- Footer ---------- */
 .site-footer { color: var(--ink); }
-.site-footer__in { max-width: 2466px; margin: 0 auto; padding: 56px 24px 24px; display: grid; gap: 40px; }
+.site-footer__in { max-width: var(--page-w); margin: 0 auto; padding: 56px 0 24px; display: grid; gap: 40px; }
 .site-footer__top { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 32px; align-items: stretch; }
 @media (max-width: 760px) { .site-footer__top { grid-template-columns: 1fr 1fr; } .site-footer__brand { grid-column: 1 / -1; order: 9; } }
 .site-footer__brand { display: flex; align-items: flex-end; }
@@ -238,7 +242,7 @@ a { color: inherit; }
 
 /* ---------- Small screens ---------- */
 @media (max-width: 900px) {
-  .site-header { flex-wrap: wrap; align-items: center; padding: 20px 16px 0; gap: 16px; }
+  .site-header { flex-wrap: wrap; align-items: center; padding: 20px 0 0; gap: 16px; }
   .site-header__logo { width: 150px; }
   .nav { flex-basis: 100%; flex-wrap: nowrap; align-items: center; gap: 12px; }
   .nav__links { flex-wrap: nowrap; justify-content: flex-start; gap: 22px; overflow-x: auto; scrollbar-width: none; padding: 4px 14px 30px; margin: 0 -14px -18px; }
@@ -587,7 +591,7 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 /* ---------- Home banner (Figma "MacBook Pro 16 - 12") ----------
    Same width as the sheet, 1920×900, straight edges. Title in Besley Black, bottom left
    (90 px on the 1728 frame, scales with the banner). The sheet starts 54 px below. */
-.hero { position: relative; isolation: isolate; max-width: min(2466px, calc(100% - 2 * clamp(12px, 2.7vw, 47px))); margin: 43px auto 0; aspect-ratio: 1920 / 900; background: var(--ink); overflow: hidden; }
+.hero { position: relative; isolation: isolate; max-width: var(--page-w); margin: 43px auto 0; aspect-ratio: 1920 / 900; background: var(--ink); overflow: hidden; }
 .hero ~ .sheet { margin-top: 54px; }
 .hero__track { display: flex; height: 100%; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
 .hero__track::-webkit-scrollbar { display: none; }
