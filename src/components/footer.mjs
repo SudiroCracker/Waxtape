@@ -1,12 +1,12 @@
 // Footer floating on the wall photo, in ink: three link columns with the logo at the bottom left, then the legal line.
-export function footer(locked = [], showSpotted = false) {
+export function footer(locked = [], showSpotted = false, { dark = false } = {}) {
   const shop = (key, label) => (locked.includes(key) ? `<li><span class="is-locked" aria-disabled="true">${label}<span class="sr-only"> (coming soon)</span></span></li>` : `<li><a href="/${key}/">${label}</a></li>`);
   const year = new Date().getFullYear();
   return `<footer class="site-footer">
   <div class="site-footer__in">
     <div class="site-footer__top">
       <div class="site-footer__brand">
-        <img src="/logos/waxtapelogo_Positivo-ink.svg" alt="Waxtape Store" width="220" height="55">
+        <img src="/logos/waxtapelogo_Positivo-${dark ? "bg" : "ink"}.svg" alt="Waxtape Store" width="220" height="55">
       </div>
       <div><h2>shop</h2><ul>
         ${shop("apparel", "apparel")}

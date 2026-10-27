@@ -191,6 +191,7 @@ issues = issues.filter((issue) => {
   issue.pdfSize = issue.pdf && files.includes(issue.pdf) ? formatSize(fs.statSync(path.join(dir, issue.pdf)).size) : "—";
   if (issue.pdfSize === "—") warnings.push(`ezine ${issue.number}: no ${issue.pdf || "pdf"} in public/${rel}/`);
   issue.contents = issue.contents || [];
+  for (const id of issue.items || []) if (!catalog.products.some((p) => p.id === id)) warnings.push(`ezine ${issue.number}: item "${id}" is not on the site (left out of "Cosmetics in this volume")`);
   issue.version = viewerVersion;
   return true;
 });
@@ -208,7 +209,7 @@ for (const [groupKey, group] of Object.entries(catalog.taxonomy)) {
 }
 write("/about/", simplePage("about", catalog));
 write("/ezine/", ezineIndexPage(issues, catalog));
-for (const issue of issues) write(`/ezine/${issue.number}/`, issuePage(issue, catalog));
+for (const issue of issues) write(`/ezine/${issue.number}/`, issuePage(issue, catalog, issues));
 write("/spotted/", spottedPage(catalog));
 write("/404.html", notFoundPage(catalog));
 

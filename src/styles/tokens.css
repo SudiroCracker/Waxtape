@@ -10,6 +10,9 @@
   --bg: #ece6d8;        /* basic solid background */
   --noise: #e2d9cf;     /* noise map, 25% */
   --panel: #c4baa5;     /* solid over background */
+  --bg-cool: #ddded0;   /* ezine sheet */
+  --ink-mute: #575757;  /* ezine small print */
+  --wall-dark: #272624; /* ezine wall */
   --announce: #d92e2e;  /* important news stickers */
   --white: #ffffff;     /* image background */
   --ink: #212122;       /* texts */

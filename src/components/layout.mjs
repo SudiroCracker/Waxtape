@@ -7,7 +7,9 @@ import { footer } from "./footer.mjs";
 
 // The page shell: <head>, the tiled wall, the header, the content and the footer.
 // `current` is the nav key to mark ("home", "apparel", …).
-export function layout({ title, description, current, body, site, path, image, imageMeta, ogType, schema = [] }) {
+// theme: "dark" puts the page on the dark halftone wall with cream nav and footer (the ezine).
+export function layout({ title, description, current, body, site, path, image, imageMeta, ogType, theme, schema = [] }) {
+  const dark = theme === "dark";
   const brand = site.brand || site.name;
   const fullTitle = title ? `${title} · ${brand}` : site.homeTitle || `${brand} ${site.tagline}`;
   const base = (site.url || "").replace(/\/$/, "");
@@ -51,7 +53,7 @@ ${share}
 <link rel="icon" href="/img/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#212122">
+<meta name="theme-color" content="${dark ? "#272624" : "#212122"}">
 <link rel="preload" href="/fonts/Drowner-Free.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/fonts/Besley.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/styles/tokens.css?v=${VERSION}">
@@ -97,12 +99,12 @@ ${share}
     <feComposite in="ragged" in2="holes" operator="in"/>
   </filter>
 </svg>
-<div class="wall">
-${header(current, site.locked)}
+<div class="wall${dark ? " wall--dark" : ""}">
+${header(current, site.locked, { dark })}
 <main id="main">
 ${body}
 </main>
-${footer(site.locked, site.showSpotted)}
+${footer(site.locked, site.showSpotted, { dark })}
 </div>
 </body>
 </html>

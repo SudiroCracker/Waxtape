@@ -1,9 +1,11 @@
 // Waxtape ezine viewer. No dependencies.
+// "view", the cover or a contents line opens the magazine in a near-full-screen overlay.
 // - Desktop / landscape: one spread at a time. Phones in portrait: one page at a time
 //   (each spread is cut in half on the fly, the files stay the same).
-// - Swipe or scroll the track, arrow buttons, ← → keys, thumbnails, contents links.
-// - #p=12 opens on page 12 and the address follows the page you're on, so it can be shared.
-// - Click (or the zoom button) opens the big image: pinch / wheel to zoom, drag to move,
+// - Swipe or scroll the track, arrow buttons, ← → keys, thumbnails.
+// - #p=12 opens the overlay on page 12; the address follows the page so it can be shared.
+//   The phone's back button closes the overlay.
+// - Click a page (or "zoom +") for the big image: pinch / wheel to zoom, drag to move,
 //   double-tap to switch between fit and 2.5×.
 (() => {
   const root = document.querySelector("[data-ez]");
@@ -16,17 +18,13 @@
   const count = root.querySelector(".ez-count");
   const thumbs = [...root.querySelectorAll(".ez-thumb")];
   const strip = root.querySelector(".ez-thumbs");
-  root.classList.add("ez--js");
-  root.querySelector(".ez-bar").hidden = false;
-  root.querySelectorAll(".ez-arrow").forEach((b) => (b.hidden = false));
-
   const phone = matchMedia("(max-width: 760px) and (orientation: portrait)");
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const src = (i, big) => `${D.base}/${pad(i)}${big ? "@2x" : ""}.webp`;
+  const pageFromHash = () => { const m = location.hash.match(/^#p=(\d+)/); return m ? Math.min(D.total, Math.max(1, +m[1])) : 0; };
 
   // A unit is what the viewer shows at once: a whole spread, or half of one.
-  let units = [];
-  let index = 0;
-  let mode = "";
+  let units = [], index = 0, mode = "", pushed = false, opener = null;
   function buildUnits() {
     mode = phone.matches ? "page" : "spread";
     units = [];
@@ -40,27 +38,23 @@
   const unitOfPage = (p) => Math.max(0, units.findIndex((u) => u.pages.includes(p)));
   const label = (u) => `${u.pages.map(pad).join("–")} / ${D.total}`;
 
-  function render() {
-    const page = units[index] ? units[index].pages[0] : startPage();
+  function render(page) {
     buildUnits();
     root.dataset.mode = mode;
-    stage.style.setProperty("--ar", mode === "page" ? units[1]?.ar || units[0].ar : D.spreads[1]?.w / D.spreads[1]?.h || 18 / 11);
+    const spread = D.spreads[1] || D.spreads[0];
+    root.style.setProperty("--ar", mode === "page" ? spread.w / 2 / spread.h : spread.w / spread.h);
+    const at = unitOfPage(page);
     track.innerHTML = units.map((u, i) => {
       const s = D.spreads[u.spread];
-      const near = Math.abs(i - unitOfPage(page)) < 3;
       const srcset = `${src(u.spread)} ${s.w}w, ${src(u.spread, true)} ${s.w2}w`;
       // Half pages get a 200%-wide image: sizes doubles so the browser picks the sharper file.
-      const sizes = u.half ? "200vw" : "(max-width: 760px) 100vw, 1500px";
-      return `<div class="ez-slide${u.half ? " ez-slide--half" : ""}" role="group" aria-roledescription="slide" aria-label="Page${u.pages.length > 1 ? "s" : ""} ${u.pages.join("–")} of ${D.total}">
-        <div class="ez-page${u.half ? " ez-page--" + u.half : ""}"${u.half ? ` style="aspect-ratio:${u.ar}"` : ""}><img src="${src(u.spread)}" srcset="${srcset}" sizes="${sizes}" width="${s.w}" height="${s.h}" alt="Waxtape ezine, page${u.pages.length > 1 ? "s" : ""} ${u.pages.join("–")}" ${near ? "" : 'loading="lazy"'} decoding="async" draggable="false"></div>
+      const sizes = u.half ? "200vw" : "(max-width: 760px) 100vw, 1600px";
+      const pages = `page${u.pages.length > 1 ? "s" : ""} ${u.pages.join("–")}`;
+      return `<div class="ez-slide" role="group" aria-roledescription="slide" aria-label="${pages[0].toUpperCase() + pages.slice(1)} of ${D.total}">
+        <div class="ez-page${u.half ? " ez-page--" + u.half : ""}"><img src="${src(u.spread)}" srcset="${srcset}" sizes="${sizes}" width="${s.w}" height="${s.h}" alt="Waxtape ezine, ${pages}" ${Math.abs(i - at) < 3 ? "" : 'loading="lazy"'} decoding="async" draggable="false"></div>
       </div>`;
     }).join("");
-    go(unitOfPage(page), false);
-  }
-
-  function startPage() {
-    const m = location.hash.match(/^#p=(\d+)/);
-    return m ? Math.min(D.total, Math.max(1, +m[1])) : 1;
+    go(at, false);
   }
 
   let scrolling = 0;
@@ -70,10 +64,10 @@
     track.scrollTo({ left: index * track.clientWidth, behavior: smooth && !reduced() ? "smooth" : "auto" });
     update();
   }
-  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function update() {
     const u = units[index];
+    if (!u) return;
     count.textContent = label(u);
     root.querySelectorAll('[data-step="-1"]').forEach((b) => (b.disabled = index === 0));
     root.querySelectorAll('[data-step="1"]').forEach((b) => (b.disabled = index === units.length - 1));
@@ -82,13 +76,43 @@
       t.toggleAttribute("aria-current", on);
       if (on) {
         const li = t.parentElement;
-        const left = li.offsetLeft - (strip.clientWidth - li.offsetWidth) / 2;
-        strip.scrollTo({ left, behavior: reduced() ? "auto" : "smooth" });
+        strip.scrollTo({ left: li.offsetLeft - (strip.clientWidth - li.offsetWidth) / 2, behavior: reduced() ? "auto" : "smooth" });
       }
     });
-    const hash = u.pages[0] === 1 ? " " : `#p=${u.pages[0]}`;
-    if ((location.hash || " ") !== hash) history.replaceState(null, "", hash === " " ? location.pathname + location.search : hash);
+    const hash = `#p=${u.pages[0]}`;
+    if (!root.hidden && location.hash !== hash) history.replaceState(history.state, "", hash);
   }
+
+  // ---------- Open / close ----------
+  function open(page = 1, push = true) {
+    if (!root.hidden) return go(unitOfPage(page));
+    opener = document.activeElement;
+    root.hidden = false;
+    document.documentElement.classList.add("ez-lock");
+    if (push) { history.pushState({ ez: 1 }, "", `#p=${page}`); pushed = true; }
+    render(page);
+    stage.focus({ preventScroll: true, focusVisible: false });
+  }
+  function close(fromHistory = false) {
+    if (root.hidden) return;
+    root.hidden = true;
+    document.documentElement.classList.remove("ez-lock");
+    if (!fromHistory) {
+      if (pushed) { pushed = false; history.back(); }
+      else history.replaceState(null, "", location.pathname + location.search);
+    } else pushed = false;
+    if (opener && opener.focus) opener.focus({ preventScroll: true });
+  }
+  addEventListener("hashchange", () => {
+    const p = pageFromHash();
+    if (p) open(p, false);
+    else close(true);
+  });
+  addEventListener("popstate", () => { if (!pageFromHash()) close(true); });
+
+  // "view", the cover and contents lines live on the page, outside the overlay.
+  document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); open(1); }));
+  document.querySelectorAll(".issue__contents a[data-page]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); open(+a.dataset.page); }));
 
   // The track scrolls natively (swipe, trackpad, scroll-snap); follow it.
   let raf = 0;
@@ -102,38 +126,37 @@
   }, { passive: true });
 
   root.addEventListener("click", (e) => {
+    if (e.target.closest("[data-close]")) return close();
     const step = e.target.closest("[data-step]");
     if (step) return go(index + +step.dataset.step);
     const t = e.target.closest(".ez-thumb");
     if (t) return go(unitOfPage(+t.dataset.page));
     if (e.target.closest("[data-zoom]") || e.target.closest(".ez-page")) openZoom();
   });
-  stage.addEventListener("keydown", (e) => {
+  root.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { e.preventDefault(); return close(); }
+    if (e.target.closest(".ez-thumbs, .ez-overlay__head")) return;
     if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); go(index + 1); }
     if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); go(index - 1); }
     if (e.key === "Home") { e.preventDefault(); go(0); }
     if (e.key === "End") { e.preventDefault(); go(units.length - 1); }
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openZoom(); }
+    if ((e.key === "Enter" || e.key === " ") && e.target === stage) { e.preventDefault(); openZoom(); }
+    if (e.key === "Tab") trap(e, root);
   });
-
-  // Contents links (#p=…) jump inside the viewer and bring it into view.
-  document.querySelectorAll("a[data-page]").forEach((a) => a.addEventListener("click", (e) => {
-    e.preventDefault();
-    go(unitOfPage(+a.dataset.page), false);
-    stage.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "center" });
-    stage.focus({ preventScroll: true });
-  }));
-  addEventListener("hashchange", () => go(unitOfPage(startPage()), false));
+  function trap(e, box) {
+    const f = [...box.querySelectorAll("a[href], button:not(:disabled), [tabindex='0']")].filter((el) => el.offsetParent !== null);
+    const i = f.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+  }
 
   // Keep the current page when the phone rotates or the window crosses the breakpoint.
-  phone.addEventListener("change", render);
+  phone.addEventListener("change", () => { if (!root.hidden) render(units[index].pages[0]); });
   let rw = 0;
-  addEventListener("resize", () => { clearTimeout(rw); rw = setTimeout(() => go(index, false), 120); });
+  addEventListener("resize", () => { clearTimeout(rw); rw = setTimeout(() => { if (!root.hidden) go(index, false); }, 120); });
 
-  index = -1;
-  units = [];
-  render();
-  if (location.hash) stage.scrollIntoView({ block: "center" });
+  // Shared link with #p=… → open straight away.
+  if (pageFromHash()) open(pageFromHash(), false);
 
   // ---------- Zoom ----------
   const zoom = document.querySelector(".ez-zoom");
@@ -141,7 +164,7 @@
   const box = zoom.querySelector(".ez-zoom__box");
   const zimg = box.querySelector("img");
   const zcount = zoom.querySelector(".ez-zoom__count");
-  let s = 1, x = 0, y = 0, bw = 0, bh = 0, lastFocus = null;
+  let s = 1, x = 0, y = 0, bw = 0, bh = 0;
   const MAX = 5;
 
   function fit() {
@@ -153,8 +176,7 @@
     box.style.height = bh + "px";
   }
   function clamp() {
-    const vw = view.clientWidth, vh = view.clientHeight;
-    const mx = Math.max(0, (bw * s - vw) / 2), my = Math.max(0, (bh * s - vh) / 2);
+    const mx = Math.max(0, (bw * s - view.clientWidth) / 2), my = Math.max(0, (bh * s - view.clientHeight) / 2);
     x = Math.max(-mx, Math.min(mx, x));
     y = Math.max(-my, Math.min(my, y));
   }
@@ -164,7 +186,7 @@
     box.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
     zoom.classList.toggle("is-zoomed", s > 1.01);
   }
-  // Zoom to `ns` keeping the point (px, py) — relative to the view centre — under the finger.
+  // Zoom to `ns` keeping the point (px, py), relative to the view centre, under the finger.
   function zoomAt(ns, px, py, anim) {
     ns = Math.max(1, Math.min(MAX, ns));
     x = px - (px - x) * (ns / s);
@@ -188,17 +210,14 @@
     apply(false);
   }
   function openZoom() {
-    lastFocus = document.activeElement;
     zoom.hidden = false;
-    document.documentElement.classList.add("ez-lock");
     load();
     zoom.querySelector("[data-zclose]").focus({ preventScroll: true });
   }
   function closeZoom() {
     zoom.hidden = true;
-    document.documentElement.classList.remove("ez-lock");
     go(index, false);
-    (lastFocus || stage).focus({ preventScroll: true });
+    stage.focus({ preventScroll: true, focusVisible: false });
   }
   function zstep(d) {
     if (index + d < 0 || index + d >= units.length) return;
@@ -215,18 +234,13 @@
     if (sc) return zoomAt(+sc.dataset.zscale > 0 ? s * 1.6 : s / 1.6, 0, 0, true);
   });
   zoom.addEventListener("keydown", (e) => {
+    e.stopPropagation();
     if (e.key === "Escape") { e.preventDefault(); closeZoom(); }
     else if (e.key === "ArrowRight" && s <= 1.01) zstep(1);
     else if (e.key === "ArrowLeft" && s <= 1.01) zstep(-1);
     else if (e.key === "+" || e.key === "=") zoomAt(s * 1.6, 0, 0, true);
     else if (e.key === "-") zoomAt(s / 1.6, 0, 0, true);
-    else if (e.key === "Tab") {
-      // Keep focus inside the dialog.
-      const f = [...zoom.querySelectorAll("button:not(:disabled)")];
-      const i = f.indexOf(document.activeElement);
-      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
-      else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
-    }
+    else if (e.key === "Tab") trap(e, zoom);
   });
   addEventListener("resize", () => { if (!zoom.hidden) { fit(); apply(false); } });
 
@@ -240,13 +254,6 @@
   // Pointers: one finger/mouse pans (or swipes to the next page when not zoomed), two pinch.
   const ptrs = new Map();
   let start = null, lastTap = 0, moved = false;
-  view.addEventListener("pointerdown", (e) => {
-    if (e.target.closest("button")) return;
-    view.setPointerCapture(e.pointerId);
-    ptrs.set(e.pointerId, [e.clientX, e.clientY]);
-    moved = false;
-    start = snapshot();
-  });
   function snapshot() {
     const p = [...ptrs.values()];
     if (p.length >= 2) {
@@ -256,6 +263,12 @@
     }
     return { two: false, px: p[0][0], py: p[0][1], s, x, y };
   }
+  view.addEventListener("pointerdown", (e) => {
+    view.setPointerCapture(e.pointerId);
+    ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+    moved = false;
+    start = snapshot();
+  });
   view.addEventListener("pointermove", (e) => {
     if (!ptrs.has(e.pointerId)) return;
     ptrs.set(e.pointerId, [e.clientX, e.clientY]);
@@ -285,7 +298,7 @@
     if (ptrs.size) { start = snapshot(); return; }
     if (!was.two && was.s <= 1.01) {
       const dx = e.clientX - was.px;
-      if (moved && Math.abs(dx) > 60) { zstep(dx < 0 ? 1 : -1); return; }
+      if (moved && Math.abs(dx) > 60) return zstep(dx < 0 ? 1 : -1);
       apply(true);
     }
     // Double tap / double click: fit ↔ 2.5× at that point.
