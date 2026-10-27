@@ -1,0 +1,18 @@
+{
+  "interval": 6,
+  "slides": [
+    {
+      "title": "SHARE\nWITH US",
+      "image": "share-ur-fits.webp",
+      "href": "/about/#contact",
+      "alt": "A skater kickflips over a stair rail in front of a wall painted with Share ur fits"
+    },
+    {
+      "title": "ALTAR\nPIECE",
+      "image": "altar-flip.webp",
+      "href": "/products/altar-piece/",
+      "tone": "dark",
+      "alt": "A skater in the Altar Piece tee pops a flip trick in a tiled underpass"
+    }
+  ]
+}

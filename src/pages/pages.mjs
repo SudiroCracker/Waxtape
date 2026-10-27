@@ -3,6 +3,7 @@ import { esc, each } from "../components/html.mjs";
 import { layout } from "../components/layout.mjs";
 import { productGrid, productCard, soonCard } from "../components/product-card.mjs";
 import { featurePanel } from "../components/feature-panel.mjs";
+import { banner } from "../components/banner.mjs";
 import { productPage } from "../components/product-page.mjs";
 
 // Search box for list pages: a plain field, no icon. Filters the cards on the page by name, type,
@@ -115,7 +116,8 @@ export function homePage(catalog) {
   const shown = Math.min(all.length, HOME_MAX);
   const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p) : productCard(p).replace('<article class="card"', '<article class="card" hidden')));
   for (let i = shown % 4; i && i < 4; i++) cards.push(soonCard());
-  const body = `<div class="sheet noise">
+  const body = `${banner(catalog.banners)}
+<div class="sheet noise">
   <h1 class="sr-only">Waxtape Store: Waxtape skate clothing and board items for ReSkate</h1>
   <div class="home">
     <section class="home__new" aria-labelledby="new-title">

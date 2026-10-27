@@ -166,6 +166,32 @@ if (TS && !process.argv.includes("--offline")) {
 }
 
 
+
+// ---------- Home banner ----------
+// banners.json: { "interval": seconds, "slides": [{ title, image, video?, href, alt, focus? }] }; files in public/banners/.
+catalog.banners = { interval: 6, slides: [] };
+if (fs.existsSync(path.join(ROOT, "banners.json"))) {
+  let b;
+  try { b = JSON.parse(fs.readFileSync(path.join(ROOT, "banners.json"), "utf8")); }
+  catch (err) { console.error("\nbanners.json has a mistake, so the site was not built:\n  " + err.message + "\n"); process.exit(1); }
+  catalog.banners.interval = Number(b.interval) || 6;
+  for (const [i, s] of (b.slides || []).entries()) {
+    const n = `banner ${i + 1}${s.title ? ` ("${s.title.replace(/\n/g, " ")}")` : ""}`;
+    if (!s.title || !s.href || !s.image) { warnings.push(`${n}: needs "title", "image" and "href" (left out)`); continue; }
+    if (!exists(`banners/${s.image}`)) { warnings.push(`${n}: no public/banners/${s.image} (left out)`); continue; }
+    if (s.video && !exists(`banners/${s.video}`)) warnings.push(`${n}: no public/banners/${s.video} (shows the image)`);
+    const product = s.href.match(/^\/products\/([^/]+)\/?/);
+    if (product && !catalog.products.some((p) => p.id === product[1])) warnings.push(`${n}: links to "${product[1]}", which is not on the site`);
+    const small = s.image.replace(/(\.\w+)$/, "-960$1");
+    catalog.banners.slides.push({
+      ...s,
+      src: `/banners/${s.image}`,
+      small: exists(`banners/${small}`) ? `/banners/${small}` : null,
+      videoSrc: s.video && exists(`banners/${s.video}`) ? `/banners/${s.video}` : null,
+    });
+  }
+}
+
 // ---------- ezine ----------
 // Issues live in ezine.json (newest first) and their files in public/ezine/<number>/.
 // Width and height are read from each WebP so cover, spreads and back cover size themselves.
@@ -267,7 +293,7 @@ if (warnings.length) console.log("\nheads up:\n  " + warnings.join("\n  "));
 
 // Optional local preview server.
 if (process.argv.includes("--serve")) {
-  const types = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".xml": "application/xml", ".txt": "text/plain", ".woff": "font/woff", ".woff2": "font/woff2", ".zip": "application/zip", ".pdf": "application/pdf" };
+  const types = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".xml": "application/xml", ".txt": "text/plain", ".woff": "font/woff", ".woff2": "font/woff2", ".zip": "application/zip", ".pdf": "application/pdf", ".mp4": "video/mp4", ".webm": "video/webm" };
   http
     .createServer((req, res) => {
       let rel = decodeURIComponent(req.url.split("?")[0]);
