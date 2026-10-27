@@ -452,16 +452,20 @@ a { color: inherit; }
 /* ---------- Ezine page (Figma "MacBook Pro 16 - 1") ---------- */
 .noise--cool { --noise-img: url("/img/camo-cool.svg"); }
 .sheet--ezine.noise::before { background-color: var(--bg-cool); }
-.sheet--ezine { padding: 59px 22px 72px; color: #000; }
+/* Wider than the rest of the site: the sheet keeps growing with the screen (Figma proportions,
+   1634 of 1728) up to a 2560 px screen, and header/footer line up with it. */
+.sheet--ezine { max-width: min(2466px, calc(100% - 2 * clamp(12px, 2.7vw, 47px))); padding: 59px 22px 72px; color: #000; }
+.wall--dark .site-header { max-width: 2560px; }
+.wall--dark .site-footer__in { max-width: 2466px; }
 
 /* Cover 576 wide on the left, info 620 on the right, 155 between (1351 in all). */
-.issue { display: grid; grid-template-columns: minmax(0, 576fr) minmax(0, 620fr); gap: 40px clamp(32px, 9vw, 155px); max-width: 1351px; margin: 0 auto; align-items: start; }
+.issue { display: grid; grid-template-columns: minmax(0, 576fr) minmax(0, 620fr); gap: 40px clamp(32px, 9vw, 230px); max-width: 85%; margin: 0 auto; align-items: start; }
 .issue__cover { display: block; background: var(--white); transition: transform 110ms cubic-bezier(.2, .9, .1, 1), box-shadow 110ms cubic-bezier(.2, .9, .1, 1); }
 .issue__cover img { width: 100%; height: auto; }
 .issue__cover:hover, .issue__cover:focus-visible { transform: translate(-4px, -4px); box-shadow: var(--shadow-card); }
 .issue__cover:active { transform: translate(2px, 2px); box-shadow: none; }
 .issue__info { min-width: 0; padding-top: 11px; }
-.issue__date { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(56px, 5vw, 86px); line-height: 1; letter-spacing: var(--track); white-space: nowrap; }
+.issue__date { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(56px, 5vw, 128px); line-height: 1; letter-spacing: var(--track); white-space: nowrap; }
 .issue__name { margin: 46px 0 0 9px; font: 900 24px/1.2 var(--font-sans); letter-spacing: var(--track); }
 .issue__intro { margin: 22px 0 0 9px; max-width: 313px; font-size: 18px; line-height: 1.2; letter-spacing: var(--track); }
 .issue__view { margin-top: 27px; }
@@ -477,7 +481,7 @@ a { color: inherit; }
 .issue__contents a:hover, .issue__contents a:focus-visible { color: var(--bg-cool); }
 .issue__contents a:hover::before, .issue__contents a:focus-visible::before { transform: skewX(-12deg) scaleX(1); }
 
-.issue__items, .issue__others { max-width: 1351px; margin: 167px auto 0; }
+.issue__items, .issue__others { max-width: 85%; margin: 167px auto 0; }
 .issue__items-title { margin: 0 0 28px -7px; font: 900 24px/1.2 var(--font-sans); letter-spacing: var(--track); }
 /* Cards in the hand-inked frame, as in the Figma grid. */
 .issue__items .grid { gap: 24px 20px; }
@@ -492,7 +496,8 @@ a { color: inherit; }
 
 @media (max-width: 900px) {
   .sheet--ezine { padding: 28px 16px 48px; }
-  .issue { grid-template-columns: minmax(0, 1fr); }
+  .issue { grid-template-columns: minmax(0, 1fr); max-width: none; }
+  .issue__items, .issue__others { max-width: none; }
   .issue__cover { max-width: 440px; }
   .issue__info { padding-top: 0; }
   .issue__name { margin-top: 18px; }
