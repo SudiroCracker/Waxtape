@@ -240,6 +240,7 @@ issues = issues.filter((issue) => {
 
 // ---------- Home section tiles (apparel · board · ezine) ----------
 // Picture per section: public/img/sections/<key>.webp (1200×1500, 4:5). Missing → a stand-in.
+// Shown only with "showSections": true in catalog.json (site), while the design is being worked on.
 {
   const newestShot = (group) => {
     const p = [...catalog.products].filter((x) => x.group === group).sort((a, b) => (b.uploaded || "").localeCompare(a.uploaded || ""))[0];
@@ -253,7 +254,7 @@ issues = issues.filter((issue) => {
     { key: "ezine", name: "ezine", href: "/ezine/", meta: latest ? `Nº ${latest.number} out now` : "soon", fallback: latest ? `${latest.dir}/00@2x.webp` : null, locked: false },
   ].map((s) => {
     const own = ["webp", "jpg", "png"].map((x) => `img/sections/${s.key}.${x}`).find((f) => exists(f));
-    if (!own) warnings.push(`home tiles: no public/img/sections/${s.key}.webp yet (using a stand-in picture)`);
+    if (!own && catalog.site.showSections) warnings.push(`home tiles: no public/img/sections/${s.key}.webp yet (using a stand-in picture)`);
     return { ...s, img: own ? "/" + own : s.fallback };
   }).filter((s) => s.img);
 }

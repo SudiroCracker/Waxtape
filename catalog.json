@@ -11,6 +11,7 @@
     "homeDescription": "Waxtape Store (waxtape.store) is the home of Waxtape skate: free skate clothing and board items for ReSkate (game mods). Tees, shorts, socks and decks, ready to download.",
     "sameAs": ["https://thunderstore.io/c/reskate/p/Sudiro/"],
     "showSpotted": false,
+    "showSections": false,
     "email": "waxtape.store@gmail.com"
   },
   "featured": {

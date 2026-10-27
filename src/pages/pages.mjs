@@ -103,7 +103,7 @@ export function homePage(catalog) {
   </section>
   ${site.showSpotted ? spottedEntry(catalog) : ""}
 </div>
-${sectionTiles(catalog.sections)}
+${site.showSections ? sectionTiles(catalog.sections) : ""}
 ${shuffleScript}`;
   return layout({ current: "home", body, site, path: "/" });
 }
