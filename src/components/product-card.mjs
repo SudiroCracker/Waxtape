@@ -35,7 +35,7 @@ export function productGrid(products, { columns = 4, fill = true } = {}) {
   return `<div class="grid">${cards.join("")}</div>`;
 }
 
-// On hover (mouse) a card shows its in-game shots: 01 straight away, then 02–04 every 1.6 s,
+// On hover (mouse) a card shows its in-game shots: 01 straight away, then 02–04 every 1.1 s,
 // stepped like the rest of the site; back to the product shot on leave. Files load on first hover.
 export const cardHoverScript = `<script>
 (() => {
@@ -53,7 +53,7 @@ export const cardHoverScript = `<script>
     link.addEventListener("pointerenter", (e) => {
       if (e.pointerType !== "mouse") return;
       i = 0; show(0);
-      if (shots.length > 1 && !still) timer = setInterval(() => { i = (i + 1) % shots.length; show(i); }, 1600);
+      if (shots.length > 1 && !still) timer = setInterval(() => { i = (i + 1) % shots.length; show(i); }, 1100);
     });
     link.addEventListener("pointerleave", () => { clearInterval(timer); img.classList.remove("is-on"); });
   });
