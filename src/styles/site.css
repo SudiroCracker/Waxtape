@@ -590,8 +590,8 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 .hero__track::-webkit-scrollbar { display: none; }
 .hero__slide { position: relative; flex: 0 0 100%; display: block; scroll-snap-align: start; scroll-snap-stop: always; color: var(--white); text-decoration: none; overflow: hidden; }
 .hero__media { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; user-select: none; -webkit-user-drag: none; transition: transform 700ms cubic-bezier(.2, .9, .1, 1); }
-/* Hover: the picture pushes in to ×1.1, the title trembles very slightly (hero-nerves). */
-.hero__slide:hover .hero__media, .hero__slide:focus-visible .hero__media { transform: scale(1.1); }
+/* Hover: the picture pushes in to ×1.05, the title trembles very slightly (hero-nerves). */
+.hero__slide:hover .hero__media, .hero__slide:focus-visible .hero__media { transform: scale(1.05); }
 .hero__title { position: absolute; left: 2.9%; bottom: 4%; z-index: 1; max-width: 90%; font: 900 clamp(29px, 4.43vw, 109px)/1.15 var(--font-sans); letter-spacing: 0; text-transform: uppercase; color: var(--white); transform-origin: 0 100%; }
 .hero__slide:hover .hero__title, .hero__slide:focus-visible .hero__title { animation: hero-nerves 420ms step-end infinite; }
 /* A much smaller jitter than the nav's: on a 90 px title the far end moves about 1 px. */
