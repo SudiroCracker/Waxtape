@@ -69,6 +69,22 @@
   "spotted": [],
   "products": [
     {
+      "id": "emotion-zip-up",
+      "name": "Emotion Zip-Up",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "jacket",
+      "tags": ["grey", "zip-up", "washed", "cherub", "rhinestone"],
+      "description": "Washed grey zip-up hoodie with a blindfolded cherub in the clouds across the front and a chrome script Emotion logo that shines like real rhinestones when the light hits it.",
+      "uploaded": "2026-10-28",
+      "updated": "2026-10-28",
+      "version": "1.0.0",
+      "requestedBy": "e8wz",
+      "soldOut": true,
+      "thunderstore": "Wt_EmotionZipUp"
+    },
+    {
       "id": "waffle-longsleeve",
       "name": "Waffle Longsleeve",
       "collab": null,
