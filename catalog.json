@@ -69,6 +69,20 @@
   "spotted": [],
   "products": [
     {
+      "id": "base-olive-hoodie",
+      "name": "Base Olive Hoodie",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "sweatshirt",
+      "tags": ["green", "hoodie", "oversized", "blank", "hood-up"],
+      "description": "Oversized olive hoodie with nothing printed on it: dropped shoulders, ribbed cuffs and hem, hood up for the whole session. The blank one that goes with everything.",
+      "uploaded": "2026-10-28",
+      "updated": "2026-10-28",
+      "version": "1.0.0",
+      "thunderstore": false
+    },
+    {
       "id": "yummy-hoodie",
       "name": "Yummy Hoodie",
       "collab": null,
