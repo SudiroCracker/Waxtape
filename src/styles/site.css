@@ -44,11 +44,10 @@ a { color: inherit; }
 .site-header { position: sticky; top: 0; z-index: 30; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; gap: 24px; padding: 30px calc((100% - var(--page-w)) / 2) 24px; margin: 0;
  }
 /* Fixed bar: behind it, the same wall texture fixed to the screen like the page background, so the
-   content slides away under it as if the bar were cut out of the wall; the last 14 px fade out.
+   content slides away under it as if the bar were cut out of the wall, with a clean straight edge.
    On its own layer so the mask doesn't clip the hamburger panel that drops below the bar. */
 .site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: #ccc9c3 url("/img/wall-light.webp") center top / cover no-repeat fixed;
-  -webkit-mask-image: linear-gradient(#000 calc(100% - 14px), transparent); mask-image: linear-gradient(#000 calc(100% - 14px), transparent); }
+  background: #ccc9c3 url("/img/wall-light.webp") center top / cover no-repeat fixed; }
 .wall--dark .site-header::before { background: var(--wall-dark) url("/img/wall-dark.webp") center top / cover no-repeat fixed; }
 /* Anchored links (#contact, #install…) land below the bar. */
 html { scroll-padding-top: 124px; }
