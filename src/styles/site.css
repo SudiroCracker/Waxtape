@@ -25,18 +25,6 @@ a { color: inherit; }
   background: #ccc9c3 url("/img/wall-light.webp") center top / cover no-repeat;
 }
 
-/* noise map on cream surfaces */
-.noise {
-  /* Waxtape paper: scanned sheet (public/img/paper.webp, 1400 wide, tiles top to bottom) with the
-     grey brush edge (paper-edge.webp) anchored at the foot of the sheet. */
-  --paper: #d3d0c4;
-  --noise-img: url("/img/paper-edge.webp"), url("/img/paper.webp");
-  background-color: var(--paper);
-  background-image: var(--noise-img);
-  background-repeat: no-repeat, repeat-y;
-  background-position: center bottom, center top;
-  background-size: 100% auto, max(100%, 1000px) auto;
-}
 
 /* ---------- Header ---------- */
 /* Logo on the page edge (left column), sections centred on the page (middle column),
@@ -87,9 +75,12 @@ html { scroll-padding-top: 124px; }
 /* ---------- Sheet: the big cream page ---------- */
 /* The sheet grows with the screen (1634 of 1728 in the Figma) up to a 2560 px screen. */
 .sheet { position: relative; isolation: isolate; max-width: var(--page-w); margin: 34px auto 0; padding: 22px 22px 48px; }
-.sheet.noise { background: none; }
-.sheet.noise::before { content: ""; position: absolute; inset: 0; z-index: -1; background-color: var(--paper); background-image: var(--noise-img); background-repeat: no-repeat, repeat-y; background-position: center bottom, center top; background-size: 100% auto, max(100%, 1000px) auto; filter: url(#rough-edge); }
-.sheet--narrow { padding: 40px clamp(22px, 4vw, 64px) 64px; }
+/* The sheet has no background of its own: content sits straight on the dotted wall, on the page edges.
+   Only the ezine keeps a sheet: torn edge, filled with the light dotted wall (fixed, same dot size
+   as the rest of the site) over its dark wall. */
+.sheet:not(.sheet--ezine) { padding-left: 0; padding-right: 0; }
+.sheet--ezine::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #ccc9c3 url("/img/wall-light.webp") center top / cover no-repeat fixed; filter: url(#rough-edge); }
+.sheet--narrow { padding: 40px 0 64px; }
 
 /* ---------- Home layout ---------- */
 .home__new { padding-top: 0; }
@@ -256,6 +247,7 @@ html { scroll-padding-top: 124px; }
 @media (max-width: 900px) {
   .pill { flex: none; font-size: 24px; margin-bottom: 8px; }
   .sheet { margin-top: 16px; padding: 18px 16px 40px; }
+  .sheet:not(.sheet--ezine) { padding-left: 0; padding-right: 0; }
   .feature__sticker { left: -12px; }
   .feature__sticker--gif { top: -44px; width: 88%; }
 }
