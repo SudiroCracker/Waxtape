@@ -72,11 +72,11 @@ const searchScript = `<script>
 
 const byNewest = (a, b) => (b.uploaded || "").localeCompare(a.uploaded || "") || a.name.localeCompare(b.name);
 
-// Home: banner, then FRESH OFF THE TRUCKS across the whole sheet (4 columns, 3 rows), then the
+// Home: banner, then FRESH OFF THE TRUCKS across the whole sheet (5 columns, 3 rows), then the
 // section tiles (apparel · board · ezine) as wide as the page.
 // Every mod is in the page; a small script shuffles them on each load and shows the first
 // HOME_MAX, so returning visitors see a different wall each time. Without JS: the newest HOME_MAX.
-const HOME_MAX = 12; // 3 rows of 4
+const HOME_MAX = 15; // 3 rows of 5
 const shuffleScript = `<script>
   (() => {
     const grid = document.querySelector(".home__new .grid");
@@ -92,7 +92,7 @@ export function homePage(catalog) {
   const all = [...products].sort(byNewest);
   const shown = Math.min(all.length, HOME_MAX);
   const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p) : productCard(p).replace('<article class="card"', '<article class="card" hidden')));
-  for (let i = shown % 4; i && i < 4; i++) cards.push(soonCard());
+  for (let i = shown % 5; i && i < 5; i++) cards.push(soonCard());
   const body = `${banner(catalog.banners)}
 <div class="sheet noise">
   <h1 class="sr-only">Waxtape Store: Waxtape skate clothing and board items for ReSkate</h1>
