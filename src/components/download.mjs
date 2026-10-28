@@ -7,8 +7,8 @@ const fileName = (p) => esc(p.download.split("/").pop());
 
 // The full-width ink bar on the product page.
 export function downloadBar(p) {
-  // Sold out here: the button is named "thunderstore" and opens the mod's page there.
-  if (p.soldOut && p.tsUrl) return `<a class="dl dl--ts" href="${esc(p.tsUrl)}" rel="noopener"><span>thunderstore</span><span class="sr-only">: get ${esc(p.name)} on Thunderstore</span></a>`;
+  // Sold out here, or Thunderstore only: the button is named "thunderstore" and opens the mod's page there.
+  if (p.tsOnly && p.tsUrl) return `<a class="dl dl--ts" href="${esc(p.tsUrl)}" rel="noopener"><span>thunderstore</span><span class="sr-only">: get ${esc(p.name)} on Thunderstore</span></a>`;
   if (!p.zipReady) return `<a class="dl" aria-disabled="true"><span>soon</span></a>`;
   return `<a class="dl" href="${href(p)}" download="${fileName(p)}" data-id="${esc(p.id)}"><span>download</span><span class="sr-only"> ${esc(p.name)}, .zip, ${esc(p.size)}</span></a>`;
 }

@@ -53,7 +53,10 @@ for (const p of catalog.products) {
   // "soldOut": true → sold out on waxtape.store: the button ("thunderstore") opens the mod's
   // Thunderstore page instead of downloading a .zip. Mods over Cloudflare Pages' 25 MiB file limit
   // go sold out automatically (the zip is left off the site).
+  // "thunderstoreOnly": true → same "thunderstore" button and no zip on the site, but without the
+  // "sold out" label (an item that simply lives on Thunderstore, e.g. a custom).
   p.soldOut = p.soldOut === true;
+  p.thunderstoreOnly = p.thunderstoreOnly === true && !p.soldOut;
   if (!p.download) {
     const zip = files.find((f) => f.toLowerCase().endsWith(".zip"));
     p.download = `${folder}/${zip || p.id + ".zip"}`;
@@ -65,10 +68,13 @@ for (const p of catalog.products) {
     if (bytes > MAX_FILE && !p.soldOut) warnings.push(`${p.id}: ${p.download.split("/").pop()} is ${p.size}, over the 25 MiB limit: shown as sold out (Thunderstore only) and the zip is left off the site`);
     if (bytes > MAX_FILE) p.soldOut = true;
   }
-  if (p.soldOut) {
+  if (p.soldOut) p.thunderstoreOnly = false;
+  p.tsOnly = p.soldOut || p.thunderstoreOnly;
+  if (p.tsOnly) {
     p.zipReady = false;
-    if (p.thunderstore === false) errors.push(`${p.id}: sold out means Thunderstore only, but "thunderstore" is false`);
-    if (!exists(p.download) && typeof p.thunderstore !== "string") errors.push(`${p.id}: sold out, so add "thunderstore": "<package name>" (there is no zip to take the name from)`);
+    const why = p.soldOut ? "sold out" : "thunderstoreOnly";
+    if (p.thunderstore === false) errors.push(`${p.id}: ${why} means Thunderstore only, but "thunderstore" is false`);
+    if (!exists(p.download) && typeof p.thunderstore !== "string") errors.push(`${p.id}: ${why}, so add "thunderstore": "<package name>" (there is no zip to take the name from)`);
   } else if (!p.zipReady) warnings.push(`${p.id}: no .zip in public/${folder}/ (download shows "soon")`);
   p.size = p.size || "—";
 
