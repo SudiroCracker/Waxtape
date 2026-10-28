@@ -50,11 +50,10 @@ for (const p of catalog.products) {
   p.galleryFound = listed.length ? listed : found;
   if (!p.galleryFound.length) warnings.push(`${p.id}: no 01–04 images yet`);
 
-  // "soldOut": true → sold out on waxtape.store: the button ("thunderstore") opens the mod's
-  // Thunderstore page instead of downloading a .zip. Mods over Cloudflare Pages' 25 MiB file limit
-  // go sold out automatically (the zip is left off the site).
-  // "thunderstoreOnly": true → same "thunderstore" button and no zip on the site, but without the
-  // "sold out" label (an item that simply lives on Thunderstore, e.g. a custom).
+  // "thunderstoreOnly": true → the item is downloaded from Thunderstore, not from this site: the
+  // button ("thunderstore") opens the mod's Thunderstore page and no .zip is served. Mods over
+  // Cloudflare Pages' 25 MiB file limit become Thunderstore only automatically (zip left off the site).
+  // "soldOut": true → the same, plus a red "sold out" label (only when Sudiro asks for it).
   p.soldOut = p.soldOut === true;
   p.thunderstoreOnly = p.thunderstoreOnly === true && !p.soldOut;
   if (!p.download) {
@@ -65,8 +64,8 @@ for (const p of catalog.products) {
   if (p.zipReady) {
     const bytes = fs.statSync(path.join(PUBLIC, p.download)).size;
     p.size = formatSize(bytes);
-    if (bytes > MAX_FILE && !p.soldOut) warnings.push(`${p.id}: ${p.download.split("/").pop()} is ${p.size}, over the 25 MiB limit: shown as sold out (Thunderstore only) and the zip is left off the site`);
-    if (bytes > MAX_FILE) p.soldOut = true;
+    if (bytes > MAX_FILE && !p.soldOut && !p.thunderstoreOnly) warnings.push(`${p.id}: ${p.download.split("/").pop()} is ${p.size}, over the 25 MiB limit: shown as Thunderstore only and the zip is left off the site`);
+    if (bytes > MAX_FILE && !p.soldOut) p.thunderstoreOnly = true;
   }
   if (p.soldOut) p.thunderstoreOnly = false;
   p.tsOnly = p.soldOut || p.thunderstoreOnly;
