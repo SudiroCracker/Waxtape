@@ -70,7 +70,6 @@
   "products": [
     {
       "id": "waffle-longsleeve",
-      "hidden": true,
       "name": "Waffle Longsleeve",
       "collab": null,
       "group": "apparel",
@@ -95,7 +94,8 @@
       "description": "Oversized olive hoodie with nothing printed on it: dropped shoulders, ribbed cuffs and hem, hood up for the whole session. The blank one that goes with everything.",
       "uploaded": "2026-10-28",
       "updated": "2026-10-28",
-      "version": "1.0.0",
+      "version": "1.0.1",
+      "requestedBy": "philsteezy",
       "thunderstore": false
     },
     {
