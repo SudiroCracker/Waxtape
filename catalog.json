@@ -69,6 +69,22 @@
   "spotted": [],
   "products": [
     {
+      "id": "waffle-longsleeve",
+      "hidden": true,
+      "name": "Waffle Longsleeve",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": ["black", "waffle-knit", "longsleeve", "photo-print", "quote"],
+      "description": "Black waffle-knit longsleeve with a crumbling photo collage on the chest, a white signature scrawl and a red reminder: whoever is trying to bring you down is already below you.",
+      "uploaded": "2026-10-28",
+      "updated": "2026-10-28",
+      "version": "1.0.0",
+      "requestedBy": "e8wz",
+      "thunderstore": false
+    },
+    {
       "id": "base-olive-hoodie",
       "name": "Base Olive Hoodie",
       "collab": null,
