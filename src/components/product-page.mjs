@@ -56,7 +56,49 @@ export function productPage(p, taxonomy, related = [], site = {}) {
     </section>` : ""}
   </section>
 </div>
+${p.zipReady ? `<div class="dlpop" role="dialog" aria-modal="true" aria-labelledby="dlpop-title" hidden>
+  <div class="dlpop__box">
+    <button class="ez-btn dlpop__close" type="button" data-dlpop-close aria-label="Close">close</button>
+    <p class="label dlpop__title" id="dlpop-title">DOWNLOAD STARTING</p>
+    <p class="dlpop__lead">Your .zip will start downloading in a moment.</p>
+    <p class="dlpop__alt" data-dlpop-ts>Not starting? Get it on <a data-dlpop-ts-link href="${esc(p.tsUrl || "")}" rel="noopener">Thunderstore</a> or through the ReSkate launcher.</p>
+    <p class="dlpop__alt" data-dlpop-direct hidden>Not starting? Use the <a data-dlpop-direct-link href="/${esc(p.download)}" download>direct link</a>.</p>
+    <p class="dlpop__help">Need help installing it? <a href="/about/#install">Install guide</a></p>
+  </div>
+</div>` : ""}
 <script>
+  // Download popup: the download button opens it, the .zip starts on its own a moment later.
+  // If it doesn't, the popup points to Thunderstore / the ReSkate launcher (or the direct link
+  // for items that are only on this site).
+  (() => {
+    const pop = document.querySelector(".dlpop");
+    if (!pop) return;
+    document.body.append(pop); // out of the sheet's layer, so it sits above the header too
+    let opener = null, timer = 0;
+    const close = () => { clearTimeout(timer); pop.hidden = true; document.documentElement.classList.remove("dlpop-lock"); opener?.focus({ preventScroll: true }); };
+    document.querySelectorAll("a.dl[download]").forEach((a) => a.addEventListener("click", (e) => {
+      e.preventDefault();
+      opener = a;
+      // Thunderstore link of the version picked right now (variants change it).
+      const ts = document.querySelector('[data-v="ts"]:not([hidden]) a');
+      pop.querySelector("[data-dlpop-ts]").hidden = !ts;
+      if (ts) pop.querySelector("[data-dlpop-ts-link]").href = ts.href;
+      pop.querySelector("[data-dlpop-direct]").hidden = !!ts;
+      const direct = pop.querySelector("[data-dlpop-direct-link]");
+      direct.href = a.href; direct.download = a.download;
+      pop.hidden = false;
+      document.documentElement.classList.add("dlpop-lock");
+      pop.querySelector("[data-dlpop-close]").focus({ preventScroll: true });
+      timer = setTimeout(() => {
+        const go = document.createElement("a");
+        go.href = a.href; go.download = a.download; go.style.display = "none";
+        document.body.append(go); go.click(); go.remove();
+      }, 1100);
+    }));
+    pop.addEventListener("click", (e) => { if (e.target === pop || e.target.closest("[data-dlpop-close]")) close(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pop.hidden) close(); });
+  })();
+
   // Downloads = Thunderstore (refreshed hourly) + downloads from this site. See functions/api/.
   document.querySelectorAll("[data-downloads]").forEach(async (el) => {
     // Products with variants add up the count of every version.
