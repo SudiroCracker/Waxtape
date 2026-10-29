@@ -20,9 +20,20 @@ a { color: inherit; }
 
 /* ---------- Wall: the tiled wall photo behind everything (already blurred in the file) ---------- */
 .wall { position: relative; isolation: isolate; min-height: 100vh; overflow-x: clip; }
+/* No background-attachment: fixed anywhere (iOS ignores it and blows the texture up over the whole
+   element). Instead every surface that shows the wall draws it at the same explicit size, anchored
+   to the top of the screen: the cover size of the viewport. Landscape screens use the 4:3 file;
+   portrait screens (phones) use wall-light-tall (the wall over its own mirror, so it also tiles
+   top to bottom without a seam) and show the whole width, zoomed out. */
+:root { --wall-img: url("/img/wall-light.webp"); --wall-w: max(100vw, 133.34vh); }
+@media (max-aspect-ratio: 1/1) { :root { --wall-img: url("/img/wall-light-tall.webp"); --wall-w: max(100vw, 66.67vh, 560px); } }
+@supports (height: 100lvh) {
+  :root { --wall-w: max(100vw, 133.34lvh); }
+  @media (max-aspect-ratio: 1/1) { :root { --wall-w: max(100vw, 66.67lvh, 560px); } }
+}
 .wall::before {
-  content: ""; position: fixed; inset: 0; z-index: -1;
-  background: #ccc9c3 url("/img/wall-light.webp") center top / cover no-repeat;
+  content: ""; position: fixed; inset: 0 0 auto; height: 100vh; height: 100lvh; z-index: -1;
+  background: #ccc9c3 var(--wall-img) center top / var(--wall-w) auto no-repeat;
 }
 
 
@@ -35,8 +46,8 @@ a { color: inherit; }
    content slides away under it as if the bar were cut out of the wall, with a clean straight edge.
    On its own layer so the mask doesn't clip the hamburger panel that drops below the bar. */
 .site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: #ccc9c3 url("/img/wall-light.webp") center top / cover no-repeat fixed; }
-.wall--dark .site-header::before { background: var(--wall-dark) url("/img/wall-dark.webp") center top / cover no-repeat fixed; }
+  background: #ccc9c3 var(--wall-img) center top / var(--wall-w) auto no-repeat; }
+.wall--dark .site-header::before { background: var(--wall-dark) url("/img/wall-dark.webp") center top / var(--wall-dark-w) auto no-repeat; }
 /* Anchored links (#contact, #install…) land below the bar. */
 html { scroll-padding-top: 124px; }
 .site-header__logo { grid-column: 1; justify-self: start; width: 196px; display: block; padding-bottom: 6px; }
@@ -76,10 +87,10 @@ html { scroll-padding-top: 124px; }
 /* The sheet grows with the screen (1634 of 1728 in the Figma) up to a 2560 px screen. */
 .sheet { position: relative; isolation: isolate; max-width: var(--page-w); margin: 34px auto 0; padding: 22px 22px 48px; }
 /* The sheet has no background of its own: content sits straight on the dotted wall, on the page edges.
-   Only the ezine keeps a sheet: torn edge, filled with the light dotted wall (fixed, same dot size
-   as the rest of the site) over its dark wall. */
+   Only the ezine keeps a sheet: torn edge, filled with the light dotted wall (same dot size as the
+   rest of the site, tiling down the sheet) over its dark wall. */
 .sheet:not(.sheet--ezine) { padding-left: 0; padding-right: 0; }
-.sheet--ezine::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #ccc9c3 url("/img/wall-light.webp") center top / cover no-repeat fixed; filter: url(#rough-edge); }
+.sheet--ezine::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #ccc9c3 url("/img/wall-light-tall.webp") center top / var(--wall-w) auto repeat-y; filter: url(#rough-edge); }
 .sheet--narrow { padding: 40px 0 64px; }
 
 /* ---------- Home layout ---------- */
@@ -438,7 +449,10 @@ html { scroll-padding-top: 124px; }
 
 /* ---------- Dark wall (ezine): halftone texture, cream nav and footer ---------- */
 .wall--dark { color-scheme: dark; }
-.wall--dark::before { background: var(--wall-dark) url("/img/wall-dark.webp") center top / cover no-repeat; }
+/* The dark wall is 3:4: its cover size of the viewport. */
+:root { --wall-dark-w: max(100vw, 75vh); }
+@supports (height: 100lvh) { :root { --wall-dark-w: max(100vw, 75lvh); } }
+.wall--dark::before { background: var(--wall-dark) url("/img/wall-dark.webp") center top / var(--wall-dark-w) auto no-repeat; }
 .wall--dark .nav__link { color: var(--bg-cool); }
 .wall--dark .nav__link:hover, .wall--dark .nav__link:focus-visible { color: var(--bg-cool); }
 /* The ink highlight under the current section, lifted to light on the dark wall (Figma: plus-lighter). */
