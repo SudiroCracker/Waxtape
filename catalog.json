@@ -65,6 +65,21 @@
   "spotted": [],
   "products": [
     {
+      "id": "chito-hoodie",
+      "name": "Chito Hoodie",
+      "collab": "Chito International",
+      "group": "apparel",
+      "category": "tops",
+      "type": "sweatshirt",
+      "tags": ["black", "hoodie", "boxy", "back-print", "spray-paint"],
+      "description": "Waxtape × Chito International. Boxy black hoodie with a big grey cartoon face sprayed across the back, fuzzy edges like it was tagged straight onto the cotton.",
+      "uploaded": "2026-10-30",
+      "updated": "2026-10-30",
+      "version": "1.0.0",
+      "requestedBy": "yungwav_",
+      "thunderstore": false
+    },
+    {
       "id": "emotion-zip-up",
       "name": "Emotion Zip-Up",
       "collab": null,
