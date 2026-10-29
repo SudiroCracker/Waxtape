@@ -91,7 +91,8 @@ export function homePage(catalog) {
   const { site, products } = catalog;
   const all = [...products].sort(byNewest);
   const shown = Math.min(all.length, HOME_MAX);
-  const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p) : productCard(p).replace('<article class="card"', '<article class="card" hidden')));
+  const home = { sizes: "(max-width: 760px) 48vw, 20vw" }; // 5 columns
+  const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p, home) : productCard(p, home).replace('<article class="card"', '<article class="card" hidden')));
   for (let i = shown % 5; i && i < 5; i++) cards.push(soonCard());
   const body = `${banner(catalog.banners)}
 <div class="sheet noise">

@@ -137,7 +137,7 @@ html { scroll-padding-top: 100px; }
 .card__link:active .card__media { transform: translate(2px, 2px); box-shadow: none; }
 .card__link:focus-visible { outline: none; }
 .card__link:focus-visible .card__media { outline: 3px solid var(--focus); outline-offset: 3px; }
-.card[hidden], .feature[hidden] { display: none; }
+.card[hidden] { display: none; }
 
 .card--soon { pointer-events: none; }
 .card--soon .card__media { background: transparent; border: 2px dashed var(--panel); display: grid; place-items: center; }
@@ -145,18 +145,6 @@ html { scroll-padding-top: 100px; }
 .card--soon .card__name { color: var(--ink-soft); font-weight: 400; }
 
 /* ---------- Feature panel (THE RAW) ---------- */
-.feature { position: relative; isolation: isolate; background: none; padding: 55px 23px 15px 24px; display: grid; gap: 15px; margin-top: 7px; }
-.feature::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--panel); filter: url(#rough-edge-strong); }
-.feature__sticker { position: absolute; top: -22px; left: -41px; z-index: 3; width: min(397px, 70%); height: auto; transform: rotate(-7.43deg); transform-origin: 0 50%; pointer-events: none; }
-/* The animated logo (Figma "gif0000"): 471×265, hanging over the panel's top-left, soft drop shadow. */
-/* The GIF is already tilted, so no rotation here. Its own ratio (1120×360). */
-.feature__sticker--gif { top: -78px; left: -54px; width: 80%; transform: none; filter: drop-shadow(16px 18px 7.6px rgba(0, 0, 0, .25)); }
-.feature__sticker--gif img { width: 100%; height: auto; }
-.feature__media { position: relative; display: block; aspect-ratio: 1; background: var(--white); }
-.feature__media img { width: 100%; height: 100%; object-fit: cover; }
-/* Ornate frame over the image: 609/568 of it, offset 22/23 px like the Figma (frame.png has a clear centre). */
-.feature__frame { position: absolute; z-index: 2; left: -3.87%; top: -4.05%; width: 107.2%; height: 107.2%; background: url("/img/ornaments/frame.png") center / 100% 100% no-repeat; pointer-events: none; transition: transform 140ms steps(2); }
-.feature__media:hover .feature__frame, .feature__media:focus-visible .feature__frame { animation: ink-jitter 375ms step-end infinite; }
 .feature__text { display: grid; gap: 1.15em; padding-left: 4px; max-width: 564px; }
 .feature__text p { margin: 0; font-size: 18px; line-height: 1.15; }
 .feature__foot { display: flex; justify-content: flex-end; padding-top: 18px; }
@@ -269,8 +257,6 @@ html { scroll-padding-top: 100px; }
   .pill { flex: none; font-size: 24px; margin-bottom: 8px; }
   .sheet { margin-top: 16px; padding: 18px 16px 40px; }
   .sheet:not(.sheet--ezine) { padding-left: 0; padding-right: 0; }
-  .feature__sticker { left: -12px; }
-  .feature__sticker--gif { top: -44px; width: 88%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -14,10 +14,6 @@
     "showSections": false,
     "email": "waxtape.store@gmail.com"
   },
-  "featured": {
-    "title": "THE RAW",
-    "pool": 2
-  },
   "taxonomy": {
     "apparel": {
       "label": "Apparel",

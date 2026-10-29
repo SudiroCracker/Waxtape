@@ -13,7 +13,7 @@
   --bg-cool: #ddded0;   /* ezine sheet */
   --ink-mute: #575757;  /* ezine small print */
   --wall-dark: #272624; /* ezine wall */
-  --announce: #d92e2e;  /* important news stickers */
+  --announce: #a21d1d;  /* important news stickers (darkened from #d92e2e for contrast: 4.7:1 on the wall) */
   --white: #ffffff;     /* image background */
   --ink: #212122;       /* texts */
   --ink-soft: #454545;  /* help and small print */
@@ -31,7 +31,7 @@
   --space-4: 48px;
 
   /* shadow (hard, no blur) */
-  --shadow-hit: 4px 4px 0 #d92e2e;
+  --shadow-hit: 4px 4px 0 #a21d1d;
   --shadow-card: 6px 6px 0 #212122;
 
   color-scheme: light;

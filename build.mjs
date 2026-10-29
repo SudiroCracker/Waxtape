@@ -48,6 +48,12 @@ for (const p of catalog.products) {
   const listed = (p.gallery || []).map((f) => `${path.posix.dirname(p.thumb)}/${f}`).filter(exists);
   const found = files.filter((f) => IMG.test(f) && /^0?[1-9]\./.test(f)).sort().map((f) => `${folder}/${f}`);
   p.galleryFound = listed.length ? listed : found;
+  // Smaller copies made by tools/thumbs.py (product-400/-600.webp, 0N-600.webp). Cards use them when
+  // they exist and fall back to the full 800×1000 picture otherwise.
+  const sized = (rel, w) => rel.replace(/\.(webp|jpe?g|png)$/i, `-${w}.webp`);
+  p.thumbSet = [400, 600].map((w) => [sized(p.thumb, w), w]).filter(([f]) => exists(f));
+  p.shotsSmall = p.galleryFound.map((f) => (exists(sized(f, 600)) ? sized(f, 600) : f));
+  if (exists(p.thumb) && !p.thumbSet.length) warnings.push(`${p.id}: no small card pictures yet (run: python3 tools/thumbs.py)`);
   if (!p.galleryFound.length) warnings.push(`${p.id}: no 01–04 images yet`);
 
   // "thunderstoreOnly": true → the item is downloaded from Thunderstore, not from this site: the
@@ -111,9 +117,6 @@ if (errors.length) {
   console.error("\nThe site was not built. Fix these in catalog.json:\n  " + errors.join("\n  ") + "\n");
   process.exit(1);
 }
-// The animated logo over THE RAW: drop public/img/sticker.gif (or .webp/.png) and it replaces the red logo.
-// sticker.webp (animated, lighter) is served first when both exist; sticker.gif is the fallback.
-catalog.featured.stickerFound = ["webp", "gif", "png"].map((x) => `img/sticker.${x}`).filter((f) => exists(f));
 
 // Write a page at a route ("/apparel/tops/" → dist/apparel/tops/index.html).
 function write(route, html) {

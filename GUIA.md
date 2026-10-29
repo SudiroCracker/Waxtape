@@ -29,6 +29,7 @@ Prepara estos archivos:
 - Las fotos 01–04 son opcionales: si faltan, la ficha enseña solo la miniatura.
 - Si no hay .zip, el botón dice "soon".
 - **Peso máximo por archivo: 25 MB.** Es el límite de Cloudflare y de la subida web de GitHub. Las fotos deberían pesar menos de 400 KB: exporta en JPG con calidad 75–80.
+- Las tarjetas usan copias pequeñas de las fotos (`product-400.webp`, `product-600.webp`, `01-600.webp`…). Las crea `python3 tools/thumbs.py`; si faltan, la web usa la foto original y el build lo avisa en "heads up". No hace falta subirlas a mano.
 
 ## 2. Sube la carpeta a GitHub
 

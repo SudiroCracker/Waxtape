@@ -1,0 +1,26 @@
+# Browser cache for files that don't change often. HTML pages are left alone (Cloudflare's default:
+# always checked), so edits show up straight away.
+#
+# Pictures, the PDF and icons: kept 1 day, then refreshed in the background (up to 7 days).
+# A photo replaced under the same name shows up for returning visitors within a day.
+/*.webp
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/*.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/*.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/*.ico
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/*.pdf
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Fonts never change. Styles and the ezine viewer carry ?v=<build> in their URL, so a new build is a
+# new URL: they can be kept for a year.
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/styles/*
+  Cache-Control: public, max-age=31536000, immutable
+/ezine/viewer.js
+  Cache-Control: public, max-age=31536000, immutable

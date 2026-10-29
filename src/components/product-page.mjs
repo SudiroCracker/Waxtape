@@ -52,7 +52,7 @@ export function productPage(p, taxonomy, related = [], site = {}) {
     ${related.length ? `<section class="related" aria-labelledby="related-title">
       <img class="ornament ornament--rule" src="/img/ornaments/decor2.png" alt="" width="1004" height="150" loading="lazy">
       <h2 class="label" id="related-title">MORE LIKE THIS</h2>
-      <div class="grid grid--related">${related.map(productCard).join("")}</div>
+      <div class="grid grid--related">${related.map((r) => productCard(r, { sizes: "(max-width: 760px) 48vw, 9vw" })).join("")}</div>
     </section>` : ""}
   </section>
 </div>
