@@ -668,7 +668,7 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 @media (max-width: 1000px) {
   .site-header { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; padding-top: calc(18px + env(safe-area-inset-top, 0px)); padding-bottom: 12px;
     /* Phones: the bar slides away while scrolling down and comes back on the way up (header.mjs). */
-    transition: transform 240ms cubic-bezier(.2, .9, .1, 1); }
+    transition: transform 350ms ease; }
   .site-header.is-away { transform: translateY(-100%); }
   html { scroll-padding-top: 84px; }
   .site-header__logo { width: auto; padding: 0; }

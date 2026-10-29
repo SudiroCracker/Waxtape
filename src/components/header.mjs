@@ -50,21 +50,25 @@ export function header(current, locked = [], { dark = false } = {}) {
   menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
   matchMedia("(min-width: 1001px)").addEventListener("change", (m) => { if (m.matches) close(); });
 })();
-// Phones (the hamburger layout): the bar slides away while scrolling down and comes back as soon as
-// you scroll up, from anywhere on the page. Desktop keeps it fixed.
+// Phones (the hamburger layout): the bar slides away while scrolling down and comes back once you
+// have scrolled up at least 50 px in one go (anywhere on the page). Desktop keeps it fixed.
 (() => {
   const bar = document.querySelector(".site-header");
   const menu = document.querySelector(".menu");
   const phone = matchMedia("(max-width: 1000px)");
   if (!bar) return;
-  let last = Math.max(0, scrollY), ticking = false;
+  const SHOW_AFTER = 50, HIDE_AFTER = 8;
+  let last = Math.max(0, scrollY), turn = last, dir = 0, ticking = false;
   const update = () => {
     ticking = false;
     const y = Math.max(0, scrollY), d = y - last;
-    if (!phone.matches || (menu && menu.open) || y <= bar.offsetHeight) bar.classList.remove("is-away");
-    else if (d > 6) bar.classList.add("is-away");
-    else if (d < -6) bar.classList.remove("is-away");
-    if (Math.abs(d) > 6 || y <= bar.offsetHeight) last = y;
+    last = y;
+    if (!phone.matches || (menu && menu.open) || y <= bar.offsetHeight) { bar.classList.remove("is-away"); dir = 0; turn = y; return; }
+    if (!d) return;
+    const now = d > 0 ? 1 : -1;
+    if (now !== dir) { dir = now; turn = y - d; }   // where this run of scrolling started
+    if (dir > 0 && y - turn >= HIDE_AFTER) bar.classList.add("is-away");
+    if (dir < 0 && turn - y >= SHOW_AFTER) bar.classList.remove("is-away");
   };
   addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   phone.addEventListener("change", update);
