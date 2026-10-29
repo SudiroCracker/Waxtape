@@ -667,9 +667,14 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 .wall--dark .menu__links .nav__link { color: var(--ink); }
 @media (max-width: 1000px) {
   .site-header { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; padding-top: calc(18px + env(safe-area-inset-top, 0px)); padding-bottom: 12px;
-    /* Phones: the bar slides away while scrolling down and comes back on the way up (header.mjs). */
+    /* Phones: the bar slides away while scrolling down and comes back on the way up (header.mjs).
+       position: fixed, not sticky: Safari won't animate a transform on a sticky element (it just
+       jumps between the start and the end). Its height is reserved on .wall so nothing moves. */
+    position: fixed; top: 0; left: 0; right: 0;
+    transform: translate3d(0, 0, 0); will-change: transform; -webkit-backface-visibility: hidden; backface-visibility: hidden;
     transition: transform 350ms ease; }
-  .site-header.is-away { transform: translateY(-100%); }
+  .site-header.is-away { transform: translate3d(0, -100%, 0); }
+  .wall { padding-top: calc(74px + env(safe-area-inset-top, 0px)); }
   html { scroll-padding-top: 84px; }
   .site-header__logo { width: auto; padding: 0; }
   .site-header__full { display: none; }
