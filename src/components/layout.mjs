@@ -44,7 +44,7 @@ export function layout({ title, description, current, body, site, path, image, i
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(desc)}">
 ${share}
@@ -54,7 +54,7 @@ ${share}
 <link rel="icon" href="/img/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="${dark ? "#272624" : "#212122"}">
+<meta name="theme-color" content="${dark ? "#272624" : "#ccc9c3"}">
 <link rel="preload" href="/fonts/Drowner-Free.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/fonts/Besley.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/styles/tokens.css?v=${VERSION}">

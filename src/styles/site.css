@@ -3,10 +3,13 @@
    the item, the text flips colour and kicks a red copy; blocks slam into hard shadows. Fast, stepped. */
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+/* The canvas (what shows in the overscroll bounce and behind the phone's status and tool bars)
+   is the wall colour, not cream. */
+html { -webkit-text-size-adjust: 100%; background: #ccc9c3; }
+html:has(.wall--dark) { background: #272624; }
 body {
   margin: 0; min-height: 100vh;
-  background: var(--bg); color: var(--ink);
+  background: transparent; color: var(--ink);
   font: 400 18px/1.2 var(--font-sans); letter-spacing: var(--track);
   -webkit-font-smoothing: antialiased;
 }
@@ -35,12 +38,19 @@ a { color: inherit; }
   content: ""; position: fixed; inset: 0 0 auto; height: 100vh; height: 100lvh; z-index: -1;
   background: #ccc9c3 var(--wall-img) center top / var(--wall-w) auto no-repeat;
 }
+/* Phones with a notch (viewport-fit=cover): the strip behind the clock always shows the wall,
+   so content scrolling up disappears under it, like under the header. 0 px tall elsewhere. */
+.wall::after {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; pointer-events: none;
+  background: #ccc9c3 var(--wall-img) center top / var(--wall-w) auto no-repeat;
+}
+.wall--dark::after { background: var(--wall-dark) url("/img/wall-dark.webp") center top / var(--wall-dark-w) auto no-repeat; }
 
 
 /* ---------- Header ---------- */
 /* Logo on the page edge (left column), sections centred on the page (middle column),
    the hamburger in the right column on small screens. 1fr | auto | 1fr keeps the nav truly centred. */
-.site-header { position: sticky; top: 0; z-index: 30; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; gap: 24px; padding: 30px calc((100% - var(--page-w)) / 2) 24px; margin: 0;
+.site-header { position: sticky; top: 0; z-index: 30; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; gap: 24px; padding: calc(30px + env(safe-area-inset-top, 0px)) calc((100% - var(--page-w)) / 2) 24px; margin: 0;
  }
 /* Fixed bar: behind it, the same wall texture fixed to the screen like the page background, so the
    content slides away under it as if the bar were cut out of the wall, with a clean straight edge.
@@ -231,7 +241,7 @@ html { scroll-padding-top: 124px; }
 
 /* ---------- Footer ---------- */
 .site-footer { color: var(--ink); }
-.site-footer__in { max-width: var(--page-w); margin: 0 auto; padding: 56px 0 24px; display: grid; gap: 40px; }
+.site-footer__in { max-width: var(--page-w); margin: 0 auto; padding: 56px 0 calc(24px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 40px; }
 .site-footer__top { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 32px; align-items: stretch; }
 @media (max-width: 760px) { .site-footer__top { grid-template-columns: 1fr 1fr; } .site-footer__brand { grid-column: 1 / -1; order: 9; } }
 .site-footer__brand { display: flex; align-items: flex-end; }
@@ -518,7 +528,7 @@ html { scroll-padding-top: 124px; }
 
 /* ---------- Ezine overlay: the magazine almost full screen ---------- */
 .ez-lock, .ez-lock body { overflow: hidden; }
-.ez-overlay { --ar: 1.636; position: fixed; inset: 0; z-index: 40; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 12px; padding: 14px clamp(12px, 3vw, 48px) 10px; background: rgba(22, 21, 20, .94) url("/img/wall-dark.webp") center / cover; background-blend-mode: multiply; color: var(--bg-cool); }
+.ez-overlay { --ar: 1.636; position: fixed; inset: 0; z-index: 40; display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 12px; padding: calc(14px + env(safe-area-inset-top, 0px)) clamp(12px, 3vw, 48px) calc(10px + env(safe-area-inset-bottom, 0px)); background: rgba(22, 21, 20, .94) url("/img/wall-dark.webp") center / cover; background-blend-mode: multiply; color: var(--bg-cool); }
 .ez-overlay[hidden] { display: none; }
 .ez-overlay__head { display: flex; align-items: center; gap: 12px 20px; }
 .ez-overlay__title { margin: 0; font-family: var(--font-display); font-size: 34px; line-height: 1; letter-spacing: var(--track); }
@@ -564,7 +574,7 @@ html { scroll-padding-top: 124px; }
 .ez-thumb:focus-visible { outline: none; }
 
 /* Zoom: on top of the overlay. */
-.ez-zoom { position: fixed; inset: 0; z-index: 50; display: grid; grid-template-rows: minmax(0, 1fr) auto auto; background: #141415; color: var(--white); }
+.ez-zoom { position: fixed; inset: 0; z-index: 50; display: grid; grid-template-rows: minmax(0, 1fr) auto auto; padding-top: env(safe-area-inset-top, 0px); background: #141415; color: var(--white); }
 .ez-zoom[hidden] { display: none; }
 .ez-zoom__view { position: relative; overflow: hidden; display: grid; place-items: center; touch-action: none; cursor: zoom-in; }
 .ez-zoom.is-zoomed .ez-zoom__view { cursor: grab; }
@@ -573,10 +583,10 @@ html { scroll-padding-top: 124px; }
 .ez-zoom__box > img { width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; pointer-events: none; }
 .ez-zoom__box.ez-page--l > img, .ez-zoom__box.ez-page--r > img { width: 200%; }
 .ez-zoom__bar { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 12px 12px 4px; }
-.ez-zoom__hint { margin: 0; padding: 4px 12px 14px; text-align: center; font-size: 13px; color: var(--panel); }
+.ez-zoom__hint { margin: 0; padding: 4px 12px calc(14px + env(safe-area-inset-bottom, 0px)); text-align: center; font-size: 13px; color: var(--panel); }
 
 @media (max-width: 760px) {
-  .ez-overlay { padding: 10px 10px 8px; gap: 10px; }
+  .ez-overlay { padding: calc(10px + env(safe-area-inset-top, 0px)) 10px calc(8px + env(safe-area-inset-bottom, 0px)); gap: 10px; }
   .ez-overlay__title span, .ez-overlay__pdf { display: none; }
   .ez-overlay__title { font-size: 28px; }
   .ez-arrow { display: none; }
@@ -656,7 +666,10 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 .wall--dark .menu__panel { background: var(--bg-cool); }
 .wall--dark .menu__links .nav__link { color: var(--ink); }
 @media (max-width: 1000px) {
-  .site-header { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; padding-top: 18px; padding-bottom: 12px; }
+  .site-header { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; padding-top: calc(18px + env(safe-area-inset-top, 0px)); padding-bottom: 12px;
+    /* Phones: the bar slides away while scrolling down and comes back on the way up (header.mjs). */
+    transition: transform 240ms cubic-bezier(.2, .9, .1, 1); }
+  .site-header.is-away { transform: translateY(-100%); }
   html { scroll-padding-top: 84px; }
   .site-header__logo { width: auto; padding: 0; }
   .site-header__full { display: none; }

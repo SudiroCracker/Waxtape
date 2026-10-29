@@ -11,6 +11,7 @@ export const NAV = [
   { key: "about", label: "about", href: "/about/" },
 ];
 
+// On phones the header hides while scrolling down and returns on scroll up (script below).
 // Sections listed in `locked` (no mods yet) show struck through and can't be clicked.
 const links = (current, locked) =>
   NAV.map((item) =>
@@ -48,6 +49,26 @@ export function header(current, locked = [], { dark = false } = {}) {
   document.addEventListener("click", (e) => { if (menu.open && !menu.contains(e.target)) close(); });
   menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", close));
   matchMedia("(min-width: 1001px)").addEventListener("change", (m) => { if (m.matches) close(); });
+})();
+// Phones (the hamburger layout): the bar slides away while scrolling down and comes back as soon as
+// you scroll up, from anywhere on the page. Desktop keeps it fixed.
+(() => {
+  const bar = document.querySelector(".site-header");
+  const menu = document.querySelector(".menu");
+  const phone = matchMedia("(max-width: 1000px)");
+  if (!bar) return;
+  let last = Math.max(0, scrollY), ticking = false;
+  const update = () => {
+    ticking = false;
+    const y = Math.max(0, scrollY), d = y - last;
+    if (!phone.matches || (menu && menu.open) || y <= bar.offsetHeight) bar.classList.remove("is-away");
+    else if (d > 6) bar.classList.add("is-away");
+    else if (d < -6) bar.classList.remove("is-away");
+    if (Math.abs(d) > 6 || y <= bar.offsetHeight) last = y;
+  };
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  phone.addEventListener("change", update);
+  bar.addEventListener("focusin", () => bar.classList.remove("is-away"));
 })();
 </script>`;
 }
