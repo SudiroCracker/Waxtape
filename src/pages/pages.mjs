@@ -3,6 +3,7 @@ import { esc, each } from "../components/html.mjs";
 import { layout } from "../components/layout.mjs";
 import { productGrid, productCard, soonCard } from "../components/product-card.mjs";
 import { banner } from "../components/banner.mjs";
+import { hero } from "../components/hero.mjs";
 import { sectionTiles } from "../components/sections.mjs";
 import { productPage } from "../components/product-page.mjs";
 
@@ -62,6 +63,9 @@ const searchScript = `<script>
     apply();
   }));
   if (sort) sort.addEventListener("change", order);
+  // /items/?sort=new|az|colour opens with that order (the home's "more" links to ?sort=new).
+  const want = new URLSearchParams(location.search).get("sort");
+  if (sort && want && [...sort.options].some((o) => o.value === want)) { sort.value = want; order(); }
   q.addEventListener("input", apply);
   function fromHash() { const t = decodeURIComponent(location.hash.slice(1)); if (t) { q.value = t; apply(); } }
   window.addEventListener("hashchange", fromHash);
@@ -72,38 +76,45 @@ const searchScript = `<script>
 
 const byNewest = (a, b) => (b.uploaded || "").localeCompare(a.uploaded || "") || a.name.localeCompare(b.name);
 
-// Home: banner, then FRESH OFF THE TRUCKS across the whole sheet (5 columns, 3 rows), then the
-// section tiles (apparel · board · ezine) as wide as the page.
-// Every mod is in the page; a small script shuffles them on each load and shows the first
-// HOME_MAX, so returning visitors see a different wall each time. Without JS: the newest HOME_MAX.
-const HOME_MAX = 15; // 3 rows of 5
+// Home (Figma "Waxtae" › MacBook Pro 16" - 12): hero video, FRESH OFF THE TRUCKS (the 5 newest, in
+// order) with "more" → /items/ sorted by newest, the banner, then RANDOM_ROWS rows of random pieces
+// (shuffled on every visit; without JS: the next newest).
+const NEWEST = 5;
+const RANDOM_ROWS = 2;
 const shuffleScript = `<script>
   (() => {
-    const grid = document.querySelector(".home__new .grid");
+    const grid = document.querySelector(".home__more .grid");
+    if (!grid) return;
     const cards = [...grid.querySelectorAll(".card[data-search]")];
     for (let i = cards.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [cards[i], cards[j]] = [cards[j], cards[i]]; }
-    const soon = grid.querySelector(".card--soon");
-    cards.forEach((c, i) => { c.hidden = i >= ${HOME_MAX}; grid.insertBefore(c, soon); });
+    cards.forEach((c, i) => { c.hidden = i >= ${NEWEST * RANDOM_ROWS}; grid.append(c); });
   })();
 </script>`;
 
 export function homePage(catalog) {
   const { site, products } = catalog;
   const all = [...products].sort(byNewest);
-  const shown = Math.min(all.length, HOME_MAX);
-  const home = { sizes: "(max-width: 760px) 48vw, 20vw" }; // 5 columns
-  const cards = all.map((p, i) => (i < HOME_MAX ? productCard(p, home) : productCard(p, home).replace('<article class="card"', '<article class="card" hidden')));
-  for (let i = shown % 5; i && i < 5; i++) cards.push(soonCard());
-  const body = `${banner(catalog.banners)}
+  const five = { sizes: "(max-width: 760px) 48vw, 20vw" }; // 5 columns
+  const newest = all.slice(0, NEWEST).map((p) => productCard(p, five));
+  const rest = all.slice(NEWEST);
+  const shown = NEWEST * RANDOM_ROWS;
+  const random = rest.map((p, i) => (i < shown ? productCard(p, five) : productCard(p, five).replace('<article class="card"', '<article class="card" hidden')));
+  const body = `${hero(catalog.hero)}
 <div class="sheet noise">
   <h1 class="sr-only">Waxtape Store: Waxtape skate clothing and board items for ReSkate</h1>
   <section class="home__new" aria-labelledby="new-title">
     <h2 class="label" id="new-title">FRESH OFF THE TRUCKS</h2>
-    <div class="grid">${cards.join("")}</div>
-    ${all.length > HOME_MAX ? `<a class="dl home__all" href="/items/"><span>more</span></a>` : ""}
+    <div class="grid">${newest.join("")}</div>
+    <a class="dl home__all" href="/items/?sort=new"><span>more</span></a>
+  </section>
+</div>
+${banner(catalog.banners)}
+${rest.length ? `<div class="sheet noise home__more-sheet">
+  <section class="home__more" aria-label="More pieces">
+    <div class="grid">${random.join("")}</div>
   </section>
   ${site.showSpotted ? spottedEntry(catalog) : ""}
-</div>
+</div>` : ""}
 ${site.showSections ? sectionTiles(catalog.sections) : ""}
 ${shuffleScript}`;
   return layout({ current: "home", body, site, path: "/" });

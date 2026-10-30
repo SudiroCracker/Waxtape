@@ -1,0 +1,12 @@
+{
+  "title": "VOLUME .01",
+  "cta": "meet the collection",
+  "href": "/ezine/",
+  "video": {
+    "desktop": "hero-1600.mp4",
+    "tablet": "hero-1024.mp4",
+    "portrait": "hero-portrait.mp4",
+    "poster": "hero-poster.webp",
+    "posterPortrait": "hero-poster-portrait.webp"
+  }
+}

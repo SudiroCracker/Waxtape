@@ -200,6 +200,20 @@ if (fs.existsSync(path.join(ROOT, "banners.json"))) {
   }
 }
 
+
+// ---------- Home hero video (hero.json, files in public/video/) ----------
+catalog.hero = null;
+if (fs.existsSync(path.join(ROOT, "hero.json"))) {
+  try { catalog.hero = JSON.parse(fs.readFileSync(path.join(ROOT, "hero.json"), "utf8")); }
+  catch (err) { console.error("\nhero.json has a mistake, so the site was not built:\n  " + err.message + "\n"); process.exit(1); }
+  const v = catalog.hero.video || {};
+  for (const k of ["desktop", "tablet", "portrait", "poster", "posterPortrait"]) if (v[k] && !exists(`video/${v[k]}`)) warnings.push(`hero: no public/video/${v[k]}`);
+  if (!v.desktop || !exists(`video/${v.desktop}`)) { warnings.push("hero: no desktop video, hero left out"); catalog.hero = null; }
+}
+// The hero title font: Druk Text Wide Super, licensed web version dropped in public/fonts/ as
+// DrukTextWide-Super.woff2 (or .woff). Until then the title uses Inter Display Black (OFL).
+catalog.site.drukFont = ["woff2", "woff"].map((x) => `fonts/DrukTextWide-Super.${x}`).find((f) => exists(f)) || null;
+
 // ---------- ezine ----------
 // Issues live in ezine.json (newest first) and their files in public/ezine/<number>/.
 // Width and height are read from each WebP so cover, spreads and back cover size themselves.
