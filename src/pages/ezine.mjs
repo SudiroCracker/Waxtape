@@ -27,7 +27,7 @@ export function pagesOf(issue) {
   });
 }
 
-// "October 2026" → "october . 26" (the Drowner headline).
+// "October 2026" → "october . 26" (the Drowner headline), unless the issue sets "headline" in ezine.json.
 const headline = (month) => {
   const [m, y] = String(month).split(" ");
   return `${m.toLowerCase()} . ${String(y || "").slice(-2)}`;
@@ -57,7 +57,7 @@ function issueBody(issue, catalog, issues) {
       <img src="${base}/00@2x.webp" srcset="${base}/00.webp ${cover.w}w, ${base}/00@2x.webp ${cover.w2}w" sizes="(max-width: 900px) 100vw, 576px" width="${cover.w}" height="${cover.h}" alt="Waxtape Nº ${esc(issue.number)} cover" fetchpriority="high">
     </a>
     <div class="issue__info">
-      <h1 class="issue__date">${esc(headline(issue.month))}</h1>
+      <h1 class="issue__date">${esc(issue.headline || headline(issue.month))}</h1>
       <p class="issue__name">WAXTAPE. MAGAZINE Nº.${esc(String(+issue.number))}</p>
       ${issue.intro ? `<p class="issue__intro">${esc(issue.intro)}</p>` : ""}
       <a class="dl issue__view" href="${pdf}" data-open><span>view</span></a>
