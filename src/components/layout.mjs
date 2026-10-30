@@ -59,7 +59,6 @@ ${share}
 <link rel="preload" href="/fonts/Besley.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/styles/tokens.css?v=${VERSION}">
 <link rel="stylesheet" href="/styles/site.css?v=${VERSION}">
-${site.drukFont ? `<style>@font-face { font-family: "Druk Text Wide"; src: url("/${site.drukFont}") format("${site.drukFont.endsWith("woff2") ? "woff2" : "woff"}"); font-weight: 900; font-display: swap; }</style>` : ""}
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">

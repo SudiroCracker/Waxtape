@@ -716,14 +716,14 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 
 
 /* ---------- Home hero video (Figma "MacBook Pro 16 - 12") ----------
-   Full bleed, 1920×900 (810 px tall on the 1728 frame). Title in Druk Text Wide Super, centred,
+   Full bleed, 1920×900 (810 px tall on the 1728 frame). Title in Clash Display Bold (Druk in the Figma), centred,
    #d0d0c6, 108 px on the 1728 frame; "meet the collection" button 75 px from the bottom.
    Phones held upright: 80% of the screen tall, the portrait cut of the video. */
 .herovid { position: relative; isolation: isolate; width: 100%; aspect-ratio: 1920 / 900; margin: 0; overflow: hidden; background: var(--ink); }
 .herovid__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .herovid__video::-webkit-media-controls, .herovid__video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
 .herovid__text { position: absolute; inset: 0; z-index: 1; display: grid; grid-template-rows: 1fr auto 1fr; justify-items: center; padding: 0 16px 9.3%; pointer-events: none; }
-.herovid__title { grid-row: 2; margin: 0; font-family: var(--font-wide); font-weight: 900; font-size: clamp(36px, 6.25vw, 160px); line-height: 1; letter-spacing: 0; color: #d0d0c6; text-align: center; white-space: nowrap; }
+.herovid__title { grid-row: 2; margin: 0; font-family: var(--font-wide); font-weight: 700; font-size: clamp(48px, 9.1vw, 230px); line-height: 1; letter-spacing: 0; color: #d0d0c6; text-align: center; white-space: nowrap; }
 .herovid__cta { grid-row: 3; align-self: end; pointer-events: auto; padding: 10px 17px 11px; background: #d0d0c6; color: #000; font: 400 clamp(17px, 1.22vw, 28px)/1.2 var(--font-sans); letter-spacing: var(--track); text-decoration: none; transition: transform 90ms steps(2); }
 .herovid__cta:hover, .herovid__cta:focus-visible { transform: translate(-2px, -2px); }
 .herovid__cta:active { transform: translate(1px, 1px); }
@@ -732,6 +732,6 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 @media (max-aspect-ratio: 4/5) {
   .herovid { aspect-ratio: auto; height: 80vh; height: 80svh; }
   .herovid__text { padding-bottom: 12%; }
-  .herovid__title { font-size: clamp(26px, 9.4vw, 64px); }
+  .herovid__title { font-size: clamp(34px, 13.6vw, 92px); }
 }
 @media (max-width: 760px) { .herovid ~ .sheet { margin-top: 24px; } .home__more-sheet { margin-top: 28px; } }

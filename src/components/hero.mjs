@@ -1,5 +1,5 @@
 // Home hero (Figma "Waxtae" › MacBook Pro 16" - 12): a full-bleed video that plays on its own in a
-// loop, with no controls; a big title in Druk Text Wide Super and a "meet the collection" button.
+// loop, with no controls; a big title in Clash Display Bold and a "meet the collection" button.
 // Everything is set in hero.json; the videos live in public/video/:
 //   desktop  1600×750 (wide screens)   tablet 1024×480   portrait 540×900 (phones held upright)
 // The script below loads only the file that fits the screen. Phones show it 80% of the screen tall.

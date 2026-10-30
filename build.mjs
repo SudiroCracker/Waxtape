@@ -210,9 +210,6 @@ if (fs.existsSync(path.join(ROOT, "hero.json"))) {
   for (const k of ["desktop", "tablet", "portrait", "poster", "posterPortrait"]) if (v[k] && !exists(`video/${v[k]}`)) warnings.push(`hero: no public/video/${v[k]}`);
   if (!v.desktop || !exists(`video/${v.desktop}`)) { warnings.push("hero: no desktop video, hero left out"); catalog.hero = null; }
 }
-// The hero title font: Druk Text Wide Super, licensed web version dropped in public/fonts/ as
-// DrukTextWide-Super.woff2 (or .woff). Until then the title uses Inter Display Black (OFL).
-catalog.site.drukFont = ["woff2", "woff"].map((x) => `fonts/DrukTextWide-Super.${x}`).find((f) => exists(f)) || null;
 
 // ---------- ezine ----------
 // Issues live in ezine.json (newest first) and their files in public/ezine/<number>/.

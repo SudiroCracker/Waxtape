@@ -3,8 +3,9 @@
 /* Besley (Google Fonts, SIL OFL), self-hosted: one variable file covers 400–900. */
 @font-face { font-family: Besley; src: url("/fonts/Besley.woff") format("woff"); font-weight: 400 900; font-style: normal; font-display: swap; }
 @font-face { font-family: Besley; src: url("/fonts/Besley-Italic.woff") format("woff"); font-weight: 400 900; font-style: italic; font-display: swap; }
-/* Stand-in for Druk Text Wide Super (hero title) until the licensed web font is in public/fonts/. */
-@font-face { font-family: "Inter Display Black"; src: url("/fonts/InterDisplay-Black.woff") format("woff"); font-weight: 900; font-display: swap; }
+/* Clash Display Bold (Indian Type Foundry, ITF Free Font License: free for commercial use and
+   self-hosting; files used as shipped, not subset or converted). Hero title. */
+@font-face { font-family: "Clash Display"; src: url("/fonts/ClashDisplay-Bold.woff2") format("woff2"), url("/fonts/ClashDisplay-Bold.woff") format("woff"); font-weight: 700; font-display: swap; }
 @font-face { font-family: Drowner; src: url("/fonts/Drowner-Free.woff") format("woff"); font-weight: 400; font-display: swap; }
 
 :root {
@@ -23,7 +24,7 @@
 
   /* type */
   --font-display: Drowner, "Arial Black", Impact, sans-serif;
-  --font-wide: "Druk Text Wide", "Inter Display Black", "Arial Black", sans-serif;
+  --font-wide: "Clash Display", "Arial Black", sans-serif;
   --font-sans: Besley, Georgia, "Times New Roman", serif; /* name kept so every rule picks it up */
   --track: -0.06em;     /* every text in the guide: -6% */
 
