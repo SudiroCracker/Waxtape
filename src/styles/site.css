@@ -673,6 +673,8 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 /* ---------- Home: grid across the whole sheet; section tiles under it ---------- */
 .home__new .grid, .home__more .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 28px 22px; }
 @media (max-width: 760px) { .home__new .grid, .home__more .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 14px; } }
+/* Two columns: FRESH OFF THE TRUCKS shows the 4 newest (two full rows) instead of 5. */
+@media (max-width: 760px) { .home__new .grid > .card:nth-child(n + 5) { display: none; } }
 /* Tiles: as wide as the page (like the banner), three 4:5 pictures, name in Drowner bottom left. */
 .tiles { max-width: var(--page-w); margin: 54px auto 0; }
 .tiles__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
