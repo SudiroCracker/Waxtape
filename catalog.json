@@ -156,7 +156,6 @@
     },
     {
       "id": "empyre-patch-shorts",
-      "hidden": true,
       "name": "Empyre Patch Shorts",
       "collab": null,
       "group": "apparel",
@@ -167,8 +166,7 @@
       "uploaded": "2026-10-26",
       "updated": "2026-10-26",
       "version": "1.0.0",
-      "requestedBy": "e8wz",
-      "thunderstore": false
+      "requestedBy": "e8wz"
     },
     {
       "id": "cdpd",
