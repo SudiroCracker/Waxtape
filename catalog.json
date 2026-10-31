@@ -65,6 +65,23 @@
   "spotted": [],
   "products": [
     {
+      "id": "ketamin-reglan",
+      "name": "Ketamin Reglan",
+      "collab": null,
+      "group": "apparel",
+      "category": "tops",
+      "type": "tshirt",
+      "tags": ["cream", "longsleeve", "raglan", "figure-print", "katakana"],
+      "description": "Raglan-sleeve cut of the Ketamin long sleeve: the same faded figure print and katakana lettering, relaxed through the shoulders.",
+      "uploaded": "2026-10-31",
+      "updated": "2026-10-31",
+      "version": "1.0.1",
+      "requestedBy": "e8wz",
+      "variant": "Raglan",
+      "variants": [{ "id": "regular", "name": "Regular", "version": "1.0.1", "uploaded": "2026-10-31" }],
+      "hidden": true
+    },
+    {
       "id": "chito-hoodie",
       "name": "Chito Hoodie",
       "collab": "Chito International",
