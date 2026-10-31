@@ -8,10 +8,11 @@ import { esc } from "./html.mjs";
 export function hero(h) {
   if (!h?.video) return "";
   const v = h.video;
+  const u = (k, fallback) => { const key = v[k] ? k : fallback; return `/video/${esc(v[key])}${h.v?.[key] ? `?v=${h.v[key]}` : ""}`; };
   return `<section class="herovid" aria-label="${esc(h.title || "Waxtape")}">
   <video class="herovid__video" muted loop playsinline autoplay preload="metadata" disablepictureinpicture disableremoteplayback aria-hidden="true" tabindex="-1"
-    poster="/video/${esc(v.poster)}" data-desktop="/video/${esc(v.desktop)}" data-tablet="/video/${esc(v.tablet || v.desktop)}"
-    data-portrait="/video/${esc(v.portrait || v.tablet || v.desktop)}" data-poster="/video/${esc(v.poster)}" data-poster-portrait="/video/${esc(v.posterPortrait || v.poster)}"></video>
+    poster="${u("poster")}" data-desktop="${u("desktop")}" data-tablet="${u("tablet", "desktop")}"
+    data-portrait="${u("portrait", v.tablet ? "tablet" : "desktop")}" data-poster="${u("poster")}" data-poster-portrait="${u("posterPortrait", "poster")}"></video>
   <div class="herovid__text">
     ${h.title ? `<h2 class="herovid__title">${esc(h.title)}</h2>` : ""}
     ${h.cta && h.href ? `<a class="herovid__cta" href="${esc(h.href)}">${esc(h.cta)}</a>` : ""}

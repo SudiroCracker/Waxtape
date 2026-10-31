@@ -209,6 +209,12 @@ if (fs.existsSync(path.join(ROOT, "hero.json"))) {
   const v = catalog.hero.video || {};
   for (const k of ["desktop", "tablet", "portrait", "poster", "posterPortrait"]) if (v[k] && !exists(`video/${v[k]}`)) warnings.push(`hero: no public/video/${v[k]}`);
   if (!v.desktop || !exists(`video/${v.desktop}`)) { warnings.push("hero: no desktop video, hero left out"); catalog.hero = null; }
+  // ?v=<content hash> on each file, so a replaced video shows at once despite the 1-day browser cache.
+  if (catalog.hero) {
+    const { createHash } = await import("node:crypto");
+    catalog.hero.v = Object.fromEntries(Object.entries(v).filter(([, f]) => exists(`video/${f}`)).map(([k, f]) =>
+      [k, createHash("md5").update(fs.readFileSync(path.join(PUBLIC, "video", f))).digest("hex").slice(0, 8)]));
+  }
 }
 
 // ---------- ezine ----------
