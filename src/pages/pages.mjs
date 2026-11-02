@@ -64,7 +64,12 @@ const searchScript = `<script>
   }));
   if (sort) sort.addEventListener("change", order);
   // /items/?sort=new|az|colour opens with that order (the home's "more" links to ?sort=new).
-  const want = new URLSearchParams(location.search).get("sort");
+  const params = new URLSearchParams(location.search);
+  const want = params.get("sort");
+  // /items/?filter=customs (or any category key) opens with that tab on (the home's Customs panel).
+  const pre = params.get("filter");
+  const preBtn = pre && [...document.querySelectorAll("[data-filter]")].find((b) => b.dataset.value === pre && !b.disabled);
+  if (preBtn) preBtn.click();
   if (sort && want && [...sort.options].some((o) => o.value === want)) { sort.value = want; order(); }
   q.addEventListener("input", apply);
   function fromHash() { const t = decodeURIComponent(location.hash.slice(1)); if (t) { q.value = t; apply(); } }
@@ -115,7 +120,7 @@ ${rest.length ? `<div class="sheet noise home__more-sheet">
   </section>
   ${site.showSpotted ? spottedEntry(catalog) : ""}
 </div>` : ""}
-${site.showSections ? sectionTiles(catalog.sections) : ""}
+${site.showSections !== false ? sectionTiles(catalog.sections) : ""}
 ${shuffleScript}`;
   return layout({ current: "home", body, site, path: "/" });
 }

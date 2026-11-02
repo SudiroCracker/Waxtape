@@ -264,24 +264,19 @@ issues = issues.filter((issue) => {
 });
 
 
-// ---------- Home section tiles (apparel · board · ezine) ----------
-// Picture per section: public/img/sections/<key>.webp (1200×1500, 4:5). Missing → a stand-in.
-// Shown only with "showSections": true in catalog.json (site), while the design is being worked on.
+// ---------- Home section panels (apparel · board · customs), right before the footer ----------
+// Picture per section: public/img/sections/<key>.webp (800×1000, 4:5); customs also has its logo
+// (customs-logo.webp). A panel without its picture is left out. Off with "showSections": false.
 {
-  const newestShot = (group) => {
-    const p = [...catalog.products].filter((x) => x.group === group).sort((a, b) => (b.uploaded || "").localeCompare(a.uploaded || ""))[0];
-    return p ? "/" + (p.galleryFound[0] || p.thumb) : null;
-  };
-  const latest = issues[0];
-  const count = (g) => catalog.products.filter((p) => p.group === g).length;
+  const own = (key) => ["webp", "jpg", "png"].map((x) => `img/sections/${key}.${x}`).find((f) => exists(f));
   catalog.sections = [
-    { key: "apparel", name: "apparel", href: "/apparel/", meta: `${count("apparel")} items`, fallback: newestShot("apparel"), locked: catalog.site.locked.includes("apparel") },
-    { key: "board", name: "board", href: "/board/", meta: count("board") ? `${count("board")} items` : "soon", fallback: newestShot("board"), locked: catalog.site.locked.includes("board") },
-    { key: "ezine", name: "ezine", href: "/ezine/", meta: latest ? `Nº ${latest.number} out now` : "soon", fallback: latest ? `${latest.dir}/00@2x.webp` : null, locked: false },
+    { key: "apparel", name: "apparel", href: "/apparel/", locked: catalog.site.locked.includes("apparel") },
+    { key: "board", name: "board", href: "/board/", locked: catalog.site.locked.includes("board") },
+    { key: "customs", name: "customs", href: "/items/?filter=customs", logo: exists("img/sections/customs-logo.webp") ? "/img/sections/customs-logo.webp" : null, locked: false },
   ].map((s) => {
-    const own = ["webp", "jpg", "png"].map((x) => `img/sections/${s.key}.${x}`).find((f) => exists(f));
-    if (!own && catalog.site.showSections) warnings.push(`home tiles: no public/img/sections/${s.key}.webp yet (using a stand-in picture)`);
-    return { ...s, img: own ? "/" + own : s.fallback };
+    const img = own(s.key);
+    if (!img && catalog.site.showSections !== false) warnings.push(`home panels: no public/img/sections/${s.key}.webp (panel left out)`);
+    return { ...s, img: img ? "/" + img : null };
   }).filter((s) => s.img);
 }
 
