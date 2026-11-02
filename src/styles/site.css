@@ -733,8 +733,12 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 .herovid__cta:active { transform: translate(1px, 1px); }
 .herovid ~ .sheet { margin-top: 44px; }
 .home__more-sheet { margin-top: 54px; }
+/* News carousel on the home: its label sits on the page edge above the banner, like FRESH OFF THE TRUCKS. */
+.news { max-width: var(--page-w); margin: 24px auto 0; }
+.news__title { margin: 0 0 27px; }
+.news .hero { max-width: none; margin-top: 0; }
 @media (max-aspect-ratio: 4/5) {
   .herovid { aspect-ratio: auto; height: 80vh; height: 80svh; }
   .herovid__title { font-size: clamp(28px, 8.7vw, 60px); }
 }
-@media (max-width: 760px) { .herovid ~ .sheet { margin-top: 24px; } .home__more-sheet { margin-top: 28px; } }
+@media (max-width: 760px) { .herovid ~ .sheet { margin-top: 24px; } .home__more-sheet { margin-top: 28px; } .news { margin-top: 12px; } .news__title { margin-bottom: 18px; } }

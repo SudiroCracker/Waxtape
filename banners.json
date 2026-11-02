@@ -1,6 +1,13 @@
 {
+  "title": "WORD ON THE STREET",
   "interval": 6,
   "slides": [
+    {
+      "title": "HAZY BUNDLE\nOUT NOW",
+      "image": "hazy-bundle.webp",
+      "href": "/items/#hazy",
+      "alt": "A skater walks under a highway overpass in the Hazy Button Up and Hazy Shorts, board in hand"
+    },
     {
       "title": "OCTOBER .26\nOUT NOW",
       "image": "ezine-01.webp",
@@ -18,12 +25,6 @@
       "image": "share-ur-fits.webp",
       "href": "/about/#contact",
       "alt": "A skater kickflips over a stair rail in front of a wall painted with Share ur fits"
-    },
-    {
-      "title": "ALTAR\nPIECE",
-      "image": "altar-flip.webp",
-      "href": "/products/altar-piece/",
-      "alt": "A skater in the Altar Piece tee pops a flip trick in a tiled underpass"
     }
   ]
 }

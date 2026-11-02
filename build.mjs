@@ -176,13 +176,14 @@ if (TS && !process.argv.includes("--offline")) {
 
 
 // ---------- Home banner ----------
-// banners.json: { "interval": seconds, "slides": [{ title, image, video?, href, alt, focus? }] }; files in public/banners/.
+// banners.json: { "title": label above the carousel, "interval": seconds, "slides": [{ title, image, video?, href, alt, focus? }] }; files in public/banners/
 catalog.banners = { interval: 6, slides: [] };
 if (fs.existsSync(path.join(ROOT, "banners.json"))) {
   let b;
   try { b = JSON.parse(fs.readFileSync(path.join(ROOT, "banners.json"), "utf8")); }
   catch (err) { console.error("\nbanners.json has a mistake, so the site was not built:\n  " + err.message + "\n"); process.exit(1); }
   catalog.banners.interval = Number(b.interval) || 6;
+  catalog.banners.title = typeof b.title === "string" ? b.title.trim() : "";
   for (const [i, s] of (b.slides || []).entries()) {
     const n = `banner ${i + 1}${s.title ? ` ("${s.title.replace(/\n/g, " ")}")` : ""}`;
     if (!s.title || !s.href || !s.image) { warnings.push(`${n}: needs "title", "image" and "href" (left out)`); continue; }

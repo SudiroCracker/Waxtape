@@ -1,5 +1,6 @@
 // Home banner (Figma "Waxtae" › MacBook Pro 16" - 12): full-width ads that advance on their own.
-// Slides live in banners.json, files in public/banners/. Each slide:
+// Slides live in banners.json, files in public/banners/. "title" at the top of banners.json is the
+// section label above the carousel (Besley Black caps, like FRESH OFF THE TRUCKS). Each slide:
 //   "title"   big Besley Black line(s), bottom left ("\n" breaks the line)
 //   "image"   1920×900 .webp (a "<name>-960.webp" next to it is used on phones)
 //   "video"   optional .mp4/.webm, plays muted in a loop; "image" is its poster
@@ -28,10 +29,14 @@ export function banner(banners) {
   const dots = many
     ? `<div class="hero__dots" role="group" aria-label="Choose a banner">${each(slides, (s, i) => `<button class="hero__dot" type="button" data-go="${i}" aria-label="Show ${esc(s.title.replace(/\n/g, " "))}"${i ? "" : ' aria-current="true"'}><span></span></button>`)}</div>`
     : "";
-  return `<section class="hero" aria-roledescription="carousel" aria-label="Featured" style="--hero-t:${Number(banners.interval) || 6}s"${many ? " data-hero" : ""}>
+  const carousel = `<section class="hero" aria-roledescription="carousel" aria-label="${esc(banners.title || "Featured")}" style="--hero-t:${Number(banners.interval) || 6}s"${many ? " data-hero" : ""}>
   <div class="hero__track">${items}</div>
   ${dots}
-</section>${many ? heroScript : ""}`;
+</section>`;
+  const body = banners.title
+    ? `<div class="news"><h2 class="label news__title">${esc(banners.title)}</h2>${carousel}</div>`
+    : carousel;
+  return `${body}${many ? heroScript : ""}`;
 }
 
 // Advances every `interval` seconds; swipe or scroll the track by hand any time.
