@@ -182,8 +182,9 @@ ${searchScript}`;
   return layout({ title: "items", current: "", body, site: catalog.site, path: "/items/" });
 }
 
-// Contact band on About: a vertical strip on the right with a small form. Sending opens the
-// visitor's mail app with everything filled in, addressed to site.email (no server, no spam).
+// Contact band on About: a dark panel on the right with a small form. Messages go through FormSubmit
+// (formsubmit.co, AJAX) to site.email; the visitor's email is the reply-to. If that fails (offline,
+// service down, not activated yet) the form falls back to the visitor's mail app, filled in.
 function contactBand(catalog) {
   const email = catalog.site.email;
   if (!email) return "";
@@ -197,16 +198,17 @@ function contactBand(catalog) {
       <option>Custom request</option><option>Install help</option><option>Bug report</option><option>Collab</option><option>Something else</option>
     </select></span></label>
     <label class="field"><span class="field__label">Message</span><textarea class="field__input field__area" name="message" rows="6" required></textarea></label>
+    <input class="contact__trap" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
     <button class="dl contact__send" type="submit"><span>send</span></button>
     <p class="contact__status small" aria-live="polite"></p>
   </form>
   <div class="dlpop" role="alertdialog" aria-modal="true" aria-labelledby="sent-title" aria-describedby="sent-lead" data-sent hidden>
     <div class="dlpop__box">
       <button class="dlpop__close" type="button" data-sent-close aria-label="Close">close</button>
-      <p class="dlpop__title" id="sent-title">MESSAGE READY</p>
-      <p class="dlpop__lead" id="sent-lead">Your mail app just opened with everything filled in. Hit send there and it lands in our inbox.</p>
-      <p class="dlpop__alt">Thanks for reaching out. We read every message and reply on Discord or by email.</p>
-      <p class="dlpop__help">Mail app didn't open? Write to <a href="mailto:${esc(email)}">${esc(email)}</a></p>
+      <p class="dlpop__title" id="sent-title" data-sent-title>MESSAGE SENT</p>
+      <p class="dlpop__lead" id="sent-lead" data-sent-lead>Got it. Your message is in our inbox.</p>
+      <p class="dlpop__alt" data-sent-alt>Thanks for reaching out. We read every message and reply on Discord or by email.</p>
+      <p class="dlpop__help">Anything else? Write to <a href="mailto:${esc(email)}">${esc(email)}</a></p>
     </div>
   </div>
   <p class="contact__or small">Or write straight to</p>
@@ -222,26 +224,51 @@ function contactBand(catalog) {
     });
     const f = document.getElementById("contact-form"); if (!f) return;
     const status = f.querySelector(".contact__status");
-    f.addEventListener("submit", (e) => {
+    const pop = document.querySelector("[data-sent]");
+    const btn = f.querySelector(".contact__send");
+    const label = btn.querySelector("span");
+    const close = () => { pop.hidden = true; document.documentElement.classList.remove("dlpop-lock"); btn.focus({ preventScroll: true }); };
+    if (pop) {
+      document.body.append(pop);
+      pop.addEventListener("click", (ev) => { if (ev.target === pop || ev.target.closest("[data-sent-close]")) close(); });
+      document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && !pop.hidden) close(); });
+    }
+    const alertBox = (title, lead, alt) => {
+      if (!pop) return;
+      pop.querySelector("[data-sent-title]").textContent = title;
+      pop.querySelector("[data-sent-lead]").textContent = lead;
+      pop.querySelector("[data-sent-alt]").textContent = alt;
+      pop.hidden = false; document.documentElement.classList.add("dlpop-lock");
+      pop.querySelector("[data-sent-close]").focus({ preventScroll: true });
+    };
+    f.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (btn.disabled) return;
       const d = Object.fromEntries(new FormData(f));
       if (!d.name.trim() || !d.message.trim()) { status.textContent = "Add your name and a message first."; (d.name.trim() ? f.message : f.name).focus(); return; }
+      if (d.email.trim() && !f.email.checkValidity()) { status.textContent = "That email doesn't look right."; f.email.focus(); return; }
+      if (d._honey) return; // bots fill the hidden field
       const subject = "[waxtape] " + d.topic + " · " + d.name.trim();
-      const body = d.message.trim() + "\\n\\n— " + d.name.trim() + (d.email ? " (" + d.email.trim() + ")" : "");
-      location.href = "mailto:" + f.dataset.to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
       status.textContent = "";
-      // Confirmation: the same dark alert as the download popup.
-      const pop = document.querySelector("[data-sent]");
-      if (!pop) return;
-      document.body.append(pop);
-      const btn = f.querySelector(".contact__send");
-      const close = () => { pop.hidden = true; document.documentElement.classList.remove("dlpop-lock"); btn.focus({ preventScroll: true }); };
-      if (!pop.dataset.ready) {
-        pop.dataset.ready = "1";
-        pop.addEventListener("click", (ev) => { if (ev.target === pop || ev.target.closest("[data-sent-close]")) close(); });
-        document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && !pop.hidden) close(); });
+      btn.disabled = true; label.textContent = "sending…";
+      try {
+        const r = await fetch("https://formsubmit.co/ajax/" + f.dataset.to, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ name: d.name.trim(), email: d.email.trim(), topic: d.topic, message: d.message.trim(), _subject: subject, _template: "table", _captcha: "false" }),
+        });
+        const res = await r.json().catch(() => ({}));
+        if (!r.ok || String(res.success) !== "true") throw new Error(res.message || "not sent");
+        f.reset();
+        alertBox("MESSAGE SENT", "Got it. Your message is in our inbox.", "Thanks for reaching out. We read every message and reply on Discord" + (d.email.trim() ? " or by email." : "."));
+      } catch {
+        // Fallback: the visitor's mail app, everything filled in.
+        const body = d.message.trim() + "\\n\\n— " + d.name.trim() + (d.email ? " (" + d.email.trim() + ")" : "");
+        location.href = "mailto:" + f.dataset.to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        alertBox("ALMOST THERE", "We couldn't send it from here, so your mail app opened with everything filled in.", "Hit send there and it lands in our inbox.");
+      } finally {
+        btn.disabled = false; label.textContent = "send";
       }
-      setTimeout(() => { pop.hidden = false; document.documentElement.classList.add("dlpop-lock"); pop.querySelector("[data-sent-close]").focus({ preventScroll: true }); }, 400);
     });
   })();
 </script>`;

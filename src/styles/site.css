@@ -442,6 +442,8 @@ html { scroll-padding-top: 100px; }
 .contact__send { height: 56px; font-size: 38px; cursor: pointer; border: 0; background: var(--light); color: var(--ink); }
 .contact__send::before { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6) 50%, transparent); }
 .contact__send:active { background: var(--white); color: var(--ink); }
+.contact__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.contact__send:disabled { cursor: progress; opacity: .7; }
 .contact__status:empty { display: none; }
 .contact__status { margin: -4px 0 0; }
 .contact__or { margin: 6px 0 -8px; }
