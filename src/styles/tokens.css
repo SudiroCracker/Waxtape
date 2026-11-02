@@ -20,6 +20,9 @@
   --white: #ffffff;     /* image background */
   --ink: #212122;       /* texts */
   --ink-soft: #454545;  /* help and small print */
+  --dark: #1c1c1d;      /* dark panels: contact form, alerts */
+  --light: #d0d0c6;     /* text on dark panels and photos (hero, section panels) */
+  --light-soft: #a8a89e; /* small print on dark panels (7:1 on --dark) */
   --focus: var(--announce);
 
   /* type */

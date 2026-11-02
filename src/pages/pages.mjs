@@ -200,6 +200,15 @@ function contactBand(catalog) {
     <button class="dl contact__send" type="submit"><span>send</span></button>
     <p class="contact__status small" aria-live="polite"></p>
   </form>
+  <div class="dlpop" role="alertdialog" aria-modal="true" aria-labelledby="sent-title" aria-describedby="sent-lead" data-sent hidden>
+    <div class="dlpop__box">
+      <button class="dlpop__close" type="button" data-sent-close aria-label="Close">close</button>
+      <p class="dlpop__title" id="sent-title">MESSAGE READY</p>
+      <p class="dlpop__lead" id="sent-lead">Your mail app just opened with everything filled in. Hit send there and it lands in our inbox.</p>
+      <p class="dlpop__alt">Thanks for reaching out. We read every message and reply on Discord or by email.</p>
+      <p class="dlpop__help">Mail app didn't open? Write to <a href="mailto:${esc(email)}">${esc(email)}</a></p>
+    </div>
+  </div>
   <p class="contact__or small">Or write straight to</p>
   <div class="contact__mail"><a href="mailto:${esc(email)}" id="contact-mail">${esc(email)}</a><button class="path__copy" type="button" data-copy-contact data-copy="contact-mail">COPY</button></div>
 </aside>
@@ -220,7 +229,19 @@ function contactBand(catalog) {
       const subject = "[waxtape] " + d.topic + " · " + d.name.trim();
       const body = d.message.trim() + "\\n\\n— " + d.name.trim() + (d.email ? " (" + d.email.trim() + ")" : "");
       location.href = "mailto:" + f.dataset.to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      status.textContent = "Your mail app should open with the message ready. Nothing happened? Copy the address below.";
+      status.textContent = "";
+      // Confirmation: the same dark alert as the download popup.
+      const pop = document.querySelector("[data-sent]");
+      if (!pop) return;
+      document.body.append(pop);
+      const btn = f.querySelector(".contact__send");
+      const close = () => { pop.hidden = true; document.documentElement.classList.remove("dlpop-lock"); btn.focus({ preventScroll: true }); };
+      if (!pop.dataset.ready) {
+        pop.dataset.ready = "1";
+        pop.addEventListener("click", (ev) => { if (ev.target === pop || ev.target.closest("[data-sent-close]")) close(); });
+        document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && !pop.hidden) close(); });
+      }
+      setTimeout(() => { pop.hidden = false; document.documentElement.classList.add("dlpop-lock"); pop.querySelector("[data-sent-close]").focus({ preventScroll: true }); }, 400);
     });
   })();
 </script>`;

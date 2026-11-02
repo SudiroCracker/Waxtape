@@ -417,31 +417,40 @@ html { scroll-padding-top: 100px; }
 .grid--related .card__custom { font-size: 12px; }
 
 /* ---------- About: contact band on the right ---------- */
-.with-aside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 32px clamp(32px, 5vw, 80px); align-items: start; }
+/* About: text on the left, the contact form on a dark panel on the right (up to 40% of the width). */
+.with-aside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 40%); gap: 32px clamp(32px, 5vw, 80px); align-items: start; }
 .with-aside__main { min-width: 0; }
 @media (max-width: 900px) { .with-aside { grid-template-columns: minmax(0, 1fr); } }
-.contact { position: sticky; top: 24px; isolation: isolate; display: grid; gap: 14px; padding: 26px 22px 24px; }
-.contact::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--panel); filter: url(#rough-edge-strong); }
+/* Dark panel, light type, straight edges (new system: like the banners and section panels). */
+.contact { position: sticky; top: 124px; display: grid; gap: 18px; padding: clamp(26px, 2.4vw, 40px) clamp(22px, 2.2vw, 38px); background: var(--dark); color: var(--light); }
 @media (max-width: 900px) { .contact { position: relative; top: 0; } }
-.contact .label { font-size: 24px; }
-.contact__lead { margin: 0; font-size: 16px; line-height: 1.2; }
-.contact__form { display: grid; gap: 14px; }
-.field { display: grid; gap: 4px; }
-.field__label { font: 900 12px/1 var(--font-sans); letter-spacing: .02em; text-transform: uppercase; }
-.field__input { position: relative; width: 100%; padding: 8px 10px; border: 0; border-radius: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.2 var(--font-sans); letter-spacing: var(--track); box-shadow: inset 0 -3px 0 var(--ink); -webkit-appearance: none; appearance: none; }
-.field__input:focus { outline: none; box-shadow: inset 0 -3px 0 var(--announce); }
-.field__area { resize: vertical; min-height: 120px; }
-.field__select { display: block; background: var(--bg); box-shadow: inset 0 -3px 0 var(--ink); padding: 9px 10px; }
-.field__select select { width: 100%; text-transform: none; font-weight: 400; }
-.field__select::after { right: 12px; }
-.contact__send { height: 48px; font-size: 34px; cursor: pointer; border: 0; }
+.contact .label { margin: 0; font: 700 clamp(30px, 2.4vw, 44px)/1 var(--font-wide); letter-spacing: 0; text-transform: uppercase; color: var(--light); }
+.contact__lead { margin: 0; font-size: clamp(19px, 1.25vw, 22px); line-height: 1.25; }
+.contact__form { display: grid; gap: 18px; }
+.field { display: grid; gap: 7px; }
+.field__label { font: 900 14px/1 var(--font-sans); letter-spacing: .03em; text-transform: uppercase; }
+.field__input { position: relative; width: 100%; padding: 11px 12px; border: 0; border-radius: 0; background: rgba(208, 208, 198, .07); color: var(--light); font: 400 19px/1.25 var(--font-sans); letter-spacing: var(--track); box-shadow: inset 0 -2px 0 var(--light-soft); -webkit-appearance: none; appearance: none; }
+.field__input:focus { outline: none; background: rgba(208, 208, 198, .12); box-shadow: inset 0 -3px 0 var(--light); }
+.field__area { resize: vertical; min-height: 170px; }
+.contact .field__select { display: block; background: rgba(208, 208, 198, .07); box-shadow: inset 0 -2px 0 var(--light-soft); padding: 12px 12px; }
+.contact .field__select:focus-within { box-shadow: inset 0 -3px 0 var(--light); }
+.contact .field__select select { width: 100%; color: var(--light); text-transform: none; font: 400 19px/1.2 var(--font-sans); letter-spacing: var(--track); }
+.contact .field__select select option { color: var(--ink); background: var(--white); }
+.contact .field__select::after { right: 14px; border-color: var(--light); }
+.contact :focus-visible { outline-color: var(--light); }
+/* The send button flips the ink bar: light bar, ink word. */
+.contact__send { height: 56px; font-size: 38px; cursor: pointer; border: 0; background: var(--light); color: var(--ink); }
+.contact__send::before { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6) 50%, transparent); }
+.contact__send:active { background: var(--white); color: var(--ink); }
 .contact__status:empty { display: none; }
 .contact__status { margin: -4px 0 0; }
-.contact__or { margin: 4px 0 -6px; }
-.contact__mail { display: flex; align-items: stretch; background: var(--ink); }
-.contact__mail a { flex: 1; min-width: 0; padding: 10px 12px; color: var(--white); font: 700 15px/1.2 var(--font-sans); letter-spacing: var(--track); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.contact__or { margin: 6px 0 -8px; }
+.contact__mail { display: flex; align-items: stretch; background: rgba(208, 208, 198, .1); }
+.contact__mail a { flex: 1; min-width: 0; padding: 12px 14px; color: var(--light); font: 700 17px/1.2 var(--font-sans); letter-spacing: var(--track); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .contact__mail a:hover { text-decoration: underline; }
-.contact .small { font-size: 13px; line-height: 1.25; color: var(--ink-soft); }
+.contact__mail .path__copy { background: var(--light); color: var(--ink); border-left: 0; font-size: 14px; }
+.contact__mail .path__copy:hover { background: var(--white); }
+.contact .small { font-size: 15px; line-height: 1.3; color: var(--light-soft); }
 
 /* ---------- Dark wall (ezine): halftone texture, cream nav and footer ---------- */
 .wall--dark { color-scheme: dark; }
@@ -702,15 +711,17 @@ body:has(.wall--dark) { background: var(--wall-dark); }
 .dlpop { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(33, 33, 34, .55); }
 .dlpop[hidden] { display: none; }
 .dlpop-lock, .dlpop-lock body { overflow: hidden; }
-.dlpop__box { position: relative; isolation: isolate; width: min(460px, 100%); display: grid; gap: 12px; padding: 30px 26px 24px; color: var(--ink); animation: dlpop-in 160ms cubic-bezier(.2, .9, .1, 1); }
-.dlpop__box::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--panel); filter: url(#rough-edge-strong); }
-.dlpop__close { position: absolute; top: 12px; right: 12px; height: 34px; font-size: 22px; background: var(--ink); color: var(--white); }
-.dlpop__title { font-size: 26px; padding-right: 86px; }
-.dlpop__lead { margin: 0; font-size: 20px; line-height: 1.25; }
-.dlpop__alt, .dlpop__help { margin: 0; font-size: 16px; line-height: 1.3; }
-.dlpop__help { font-size: 14px; color: var(--ink-soft); }
-.dlpop a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
-.dlpop a:hover, .dlpop a:focus-visible { background: var(--ink); color: var(--bg); text-decoration: none; }
+/* Alerts (download starting, contact message ready): the same dark panel as the contact form. */
+.dlpop__box { position: relative; width: min(500px, 100%); display: grid; gap: 14px; padding: 34px 30px 28px; background: var(--dark); color: var(--light); box-shadow: 8px 8px 0 rgba(0, 0, 0, .35); animation: dlpop-in 160ms cubic-bezier(.2, .9, .1, 1); }
+.dlpop__close { position: absolute; top: 14px; right: 14px; height: 34px; padding: 0 12px 3px; border: 0; background: var(--light); color: var(--ink); font-family: var(--font-display); font-size: 22px; line-height: 1; letter-spacing: var(--track); text-transform: lowercase; cursor: pointer; transition: transform 90ms steps(2); }
+.dlpop__close:hover, .dlpop__close:focus-visible { transform: translate(-2px, -2px); }
+.dlpop__title { margin: 0; padding-right: 90px; font: 700 30px/1 var(--font-wide); letter-spacing: 0; text-transform: uppercase; color: var(--light); }
+.dlpop__lead { margin: 0; font-size: 21px; line-height: 1.25; }
+.dlpop__alt, .dlpop__help { margin: 0; font-size: 17px; line-height: 1.3; }
+.dlpop__help { font-size: 15px; color: var(--light-soft); }
+.dlpop a { color: var(--light); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.dlpop a:hover, .dlpop a:focus-visible { background: var(--light); color: var(--ink); text-decoration: none; }
+.dlpop :focus-visible { outline-color: var(--light); }
 @keyframes dlpop-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .dlpop__box { animation: none; } }
 

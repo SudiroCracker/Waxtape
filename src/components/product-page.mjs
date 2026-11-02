@@ -58,8 +58,8 @@ export function productPage(p, taxonomy, related = [], site = {}) {
 </div>
 ${p.zipReady ? `<div class="dlpop" role="dialog" aria-modal="true" aria-labelledby="dlpop-title" hidden>
   <div class="dlpop__box">
-    <button class="ez-btn dlpop__close" type="button" data-dlpop-close aria-label="Close">close</button>
-    <p class="label dlpop__title" id="dlpop-title">DOWNLOAD STARTING</p>
+    <button class="dlpop__close" type="button" data-dlpop-close aria-label="Close">close</button>
+    <p class="dlpop__title" id="dlpop-title">DOWNLOAD STARTING</p>
     <p class="dlpop__lead">Your .zip will start downloading in a moment.</p>
     <p class="dlpop__alt" data-dlpop-ts>Not starting? Get it on <a data-dlpop-ts-link href="${esc(p.tsUrl || "")}" rel="noopener">Thunderstore</a> or through the ReSkate launcher.</p>
     <p class="dlpop__alt" data-dlpop-direct hidden>Not starting? Use the <a data-dlpop-direct-link href="/${esc(p.download)}" download>direct link</a>.</p>
