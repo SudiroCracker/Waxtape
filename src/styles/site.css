@@ -208,13 +208,14 @@ html { scroll-padding-top: 100px; }
    Padding (as % of width) places it in the frame's window: 832x1040 frame, window at 39,42.
    No aspect-ratio or absolute photo: mobile Safari collapsed those and hid the image. */
 /* Big photo in a torn frame of the ezine's dark wall (the ezine sheet, inside out): a ring of
-   wall-dark masked to a frame, then run through #ripped so both its edges tear. The hole is a bit
+   wall-dark (same dot size as the ezine page) masked to a frame, then run through #rough-edge
+   (the ezine sheet's edge) so both its edges break. The hole is a bit
    smaller than the photo's padding, so the tears bite into the picture instead of showing the page. */
-.gallery__main { --frame: clamp(18px, 2.4vw, 40px); position: relative; align-self: start; padding: var(--frame); }
-.gallery__frame { position: absolute; inset: 0; z-index: 1; pointer-events: none; filter: url(#ripped); }
+.gallery__main { --frame: clamp(12px, 1.5vw, 26px); position: relative; align-self: start; padding: var(--frame); }
+.gallery__frame { position: absolute; inset: 0; z-index: 1; pointer-events: none; filter: url(#rough-edge); }
 .gallery__frame::before {
-  content: ""; position: absolute; inset: 0; padding: calc(var(--frame) + 6px);
-  background: var(--wall-dark) url("/img/wall-dark.webp") center / cover no-repeat;
+  content: ""; position: absolute; inset: 0; padding: calc(var(--frame) + 4px);
+  background: var(--wall-dark) url("/img/wall-dark.webp") center top / var(--wall-dark-w) auto repeat;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
