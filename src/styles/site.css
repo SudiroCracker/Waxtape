@@ -207,8 +207,17 @@ html { scroll-padding-top: 100px; }
 /* The photo sits in normal flow (4:5 from the image itself) and the frame is drawn over it.
    Padding (as % of width) places it in the frame's window: 832x1040 frame, window at 39,42.
    No aspect-ratio or absolute photo: mobile Safari collapsed those and hid the image. */
-.gallery__main { position: relative; align-self: start; padding: 4.6% 4.2% 5.9%; }
-.gallery__frame { position: absolute; inset: 0; z-index: 1; background: url("/img/ornaments/frame-tall.webp") center / 100% 100% no-repeat; pointer-events: none; }
+/* Big photo in a torn frame of the ezine's dark wall (the ezine sheet, inside out): a ring of
+   wall-dark masked to a frame, then run through #ripped so both its edges tear. The hole is a bit
+   smaller than the photo's padding, so the tears bite into the picture instead of showing the page. */
+.gallery__main { --frame: clamp(18px, 2.4vw, 40px); position: relative; align-self: start; padding: var(--frame); }
+.gallery__frame { position: absolute; inset: 0; z-index: 1; pointer-events: none; filter: url(#ripped); }
+.gallery__frame::before {
+  content: ""; position: absolute; inset: 0; padding: calc(var(--frame) + 6px);
+  background: var(--wall-dark) url("/img/wall-dark.webp") center / cover no-repeat;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
 .gallery__main img { display: block; width: 100%; height: auto; background: var(--white); }
 .gallery__dots { display: none; }
 

@@ -70,6 +70,11 @@ ${share}
     <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="3" seed="4" result="t"/>
     <feDisplacementMap in="SourceGraphic" in2="t" scale="15" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
+  <!-- Torn edge for the dark frame around the big product photo: finer, sharper noise than rough-edge. -->
+  <filter id="ripped" x="-3%" y="-3%" width="106%" height="106%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="4" seed="23" result="t"/>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
   <!-- Hand-inked frame around product images: wobbly displacement + grain that breaks the line.
        Three seeds = three drawings, cycled on hover for a stop-motion wiggle. -->
   <filter id="ink-1" x="-4%" y="-4%" width="108%" height="108%">
