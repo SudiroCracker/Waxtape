@@ -30,6 +30,7 @@ export function productPage(p, taxonomy, related = [], site = {}) {
     <div class="gallery" style="--thumbs:${images.length}">
       <div class="gallery__thumbs">${thumbs}</div>
       <div class="gallery__main"><img id="main-image" src="/${esc(p.thumb)}" alt="${esc(p.name)}" width="661" height="826"><span class="gallery__frame" aria-hidden="true"></span></div>
+      ${images.length > 1 ? `<div class="gallery__dots" aria-hidden="true">${each(images, (_, i) => `<span${i === 0 ? ' class="is-on"' : ""}></span>`)}</div>` : ""}
     </div>
     <ul class="tagline" aria-label="Category">${each(path, (x) => `<li><a href="${x.href}">${esc(x.label)}</a></li>`)}</ul>
   </section>
@@ -121,8 +122,27 @@ ${p.zipReady ? `<div class="dlpop" role="dialog" aria-modal="true" aria-labelled
     const ts = document.querySelector('[data-v="ts"]');
     if (ts) { ts.hidden = !d.ts; if (d.ts) ts.querySelector("a").href = d.ts; }
     document.getElementById("main-image").src = d.src;
-    document.querySelectorAll(".thumb").forEach((b) => b.toggleAttribute("aria-current", b.dataset.src === d.src));
+    // The first thumb (and first slide on phones) is the product shot of the version picked.
+    const first = document.querySelector(".thumb");
+    if (first) { first.dataset.src = d.src; first.querySelector("img").src = d.src; }
+    document.querySelectorAll(".thumb").forEach((b, i) => b.toggleAttribute("aria-current", i === 0));
+    const track = document.querySelector(".gallery__thumbs");
+    if (track && track.scrollWidth > track.clientWidth + 4) track.scrollTo({ left: 0, behavior: "smooth" });
   }));
+  // Phones: the thumbs become a swipe gallery, one photo per screen; the dots follow it.
+  (() => {
+    const track = document.querySelector(".gallery__thumbs");
+    const dots = [...document.querySelectorAll(".gallery__dots span")];
+    if (!track || !dots.length) return;
+    let t = 0;
+    track.addEventListener("scroll", () => {
+      cancelAnimationFrame(t);
+      t = requestAnimationFrame(() => {
+        const i = Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
+        dots.forEach((d, k) => d.classList.toggle("is-on", k === i));
+      });
+    }, { passive: true });
+  })();
   // Thumbnails swap the main image.
   document.querySelectorAll(".thumb").forEach((btn) => {
     btn.addEventListener("click", () => {

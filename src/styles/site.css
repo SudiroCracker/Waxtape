@@ -192,10 +192,35 @@ html { scroll-padding-top: 100px; }
 .gallery__main { position: relative; align-self: start; padding: 4.6% 4.2% 5.9%; }
 .gallery__frame { position: absolute; inset: 0; z-index: 1; background: url("/img/ornaments/frame-tall.webp") center / 100% 100% no-repeat; pointer-events: none; }
 .gallery__main img { display: block; width: 100%; height: auto; background: var(--white); }
-@media (max-width: 640px) {
-  .gallery { grid-template-columns: minmax(0, 1fr); }
-  .gallery__thumbs { order: 2; grid-template-rows: none; grid-template-columns: repeat(var(--thumbs, 5), minmax(0, 1fr)); }
-  .thumb { aspect-ratio: 4 / 5; }
+.gallery__dots { display: none; }
+
+/* Phones: everything needed to pick a colour sits under the photo, without scrolling.
+   Order: swipe gallery (product shot + 01–04, hand-inked frame, no ornament) → variants → name →
+   download → help → INFO → facts → category path → more like this. The two columns flatten
+   (display: contents) so their pieces can be reordered. */
+@media (max-width: 760px) {
+  .product { display: flex; flex-direction: column; gap: 18px; padding-top: 0; }
+  .product > .product__media, .product > .info { display: contents; }
+  .gallery { order: 1; display: block; position: relative; }
+  .gallery__main { display: none; }
+  .gallery__thumbs { display: flex; gap: 0; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; margin: 0 -2px; padding: 4px 2px; }
+  .gallery__thumbs::-webkit-scrollbar { display: none; }
+  .thumb { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; cursor: default; }
+  .thumb::after, .thumb[aria-current="true"]::after { border-width: 4px; inset: -1px; }
+  .thumb:hover::after, .thumb:focus-visible::after { animation: none; }
+  .gallery__dots { display: flex; justify-content: center; gap: 6px; margin-top: 12px; }
+  .gallery__dots span { width: 22px; height: 4px; background: var(--ink); opacity: .25; transition: opacity 120ms steps(2), width 120ms steps(2); }
+  .gallery__dots span.is-on { width: 34px; opacity: 1; }
+  .product .variants { order: 2; margin: 0; }
+  .product .info__title { order: 3; }
+  .product .info__title h1 { font-size: 40px; }
+  .product .dl { order: 4; }
+  .product .info__help { order: 5; margin-top: -10px; }
+  .product .info__block { order: 6; max-width: none; }
+  .product .info__facts { order: 7; }
+  .product .tagline { order: 8; margin-top: 4px; }
+  .tagline a { font-size: 28px; }
+  .product .related { order: 9; }
 }
 
 /* Category path: Drowner, lowercase */
