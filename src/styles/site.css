@@ -383,14 +383,14 @@ html { scroll-padding-top: 100px; }
 /* ---------- Hand-inked frames on product images (reference: rough marker stroke) ----------
    A bordered overlay run through #ink-1..3 (layout.mjs). On hover/focus the three drawings cycle
    at ~8 fps with a pixel of jitter: stop-motion wiggle. Reduced motion keeps the still frame. */
-.card__media::after, .thumb::after {
+/* Product cards: plain photo on white, no drawn frame. The product-page thumbs keep the ink frame. */
+.thumb::after {
   content: ""; position: absolute; inset: -3px; z-index: 1; pointer-events: none;
   border: 4px solid var(--ink); filter: url(#ink-1);
 }
 .thumb::after { border-width: 3px; inset: -2px; }
 .thumb[aria-current="true"]::after { border-width: 5px; }
 .card--soon .card__media::after { display: none; }
-.card:hover .card__media::after, .card:focus-within .card__media::after,
 .thumb:hover::after, .thumb:focus-visible::after { animation: ink-wiggle 375ms step-end infinite; }
 @keyframes ink-wiggle {
   0%      { filter: url(#ink-1); transform: translate(0, 0) rotate(0deg); }
@@ -539,8 +539,6 @@ html { scroll-padding-top: 100px; }
 .issue__items-title { margin: 0 0 28px -7px; font: 900 24px/1.2 var(--font-sans); letter-spacing: var(--track); }
 /* Cards in the hand-inked frame, as in the Figma grid. */
 .issue__items .grid { gap: 24px 20px; }
-.issue__items .card__media::after { content: ""; position: absolute; inset: -3px; pointer-events: none; border: 4px solid var(--ink); filter: url(#ink-1); }
-.issue__items .card:hover .card__media::after { animation: ink-wiggle 375ms step-end infinite; }
 .issue__items .card__name { color: #000; }
 .issue__others { margin-top: 72px; }
 .issues { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 20px; }
