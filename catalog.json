@@ -28,7 +28,7 @@
         },
         "shoes": {
           "label": "Shoes",
-          "types": []
+          "types": ["sneakers"]
         },
         "accessories": {
           "label": "Accesories",
@@ -64,6 +64,26 @@
   },
   "spotted": [],
   "products": [
+    {
+      "id": "bethel",
+      "name": "Bethel",
+      "collab": null,
+      "group": "apparel",
+      "category": "shoes",
+      "type": "sneakers",
+      "tags": ["cream", "high-top", "sneaker", "suede", "gum-sole"],
+      "description": "Bethel: the first Waxtape sneaker. A padded high-top in soft suede with a perforated side panel and a chunky collar, in four colorways: cream on a gum sole, white, purple and red.",
+      "uploaded": "2026-11-07",
+      "updated": "2026-11-07",
+      "version": "1.0.0",
+      "thunderstore": false,
+      "variant": "Cream",
+      "variants": [
+        { "id": "white", "name": "White", "version": "1.0.0", "uploaded": "2026-11-07" },
+        { "id": "purple", "name": "Purple", "version": "1.0.0", "uploaded": "2026-11-07" },
+        { "id": "red", "name": "Red", "version": "1.0.0", "uploaded": "2026-11-07" }
+      ]
+    },
     {
       "id": "hazy-button-up",
       "name": "Hazy Button Up",
