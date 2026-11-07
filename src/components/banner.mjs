@@ -3,7 +3,9 @@
 // section label above the carousel (Besley Black caps, like FRESH OFF THE TRUCKS). Each slide:
 //   "title"   big Besley Black line(s), bottom left ("\n" breaks the line)
 //   "image"   1920×900 .webp (a "<name>-960.webp" next to it is used on phones)
-//   "video"   optional .mp4/.webm, plays muted in a loop; "image" is its poster
+//   "video"   optional .mp4/.webm, plays muted in a loop; "image" is its poster. A <name>-960.mp4
+//             next to it is used on phones.
+//   "duration" optional seconds this slide stays up (default: "interval"), e.g. a video's length
 //   "href"    where a click goes: "/products/<id>/", "/apparel/", "/board/", "/ezine/", "/about/#contact"…
 //   "alt"     what the picture shows, for screen readers
 //   "focus"   optional object-position for phones, e.g. "60% 50%" to keep the skater in view
@@ -20,14 +22,15 @@ export function banner(banners) {
     const pos = s.focus ? ` style="object-position:${esc(s.focus)}"` : "";
     const srcset = s.small ? ` srcset="${esc(s.small)} 960w, ${esc(s.src)} 1920w" sizes="(max-width: 760px) 100vw, min(2466px, 100vw)"` : "";
     const media = s.videoSrc
-      ? `<video class="hero__media" src="${esc(s.videoSrc)}" poster="${esc(s.src)}" muted loop playsinline preload="${i ? "none" : "metadata"}"${i ? "" : " autoplay"}${pos} aria-hidden="true"></video>`
+      ? `<video class="hero__media" poster="${esc(s.small && i ? s.small : s.src)}" muted loop playsinline preload="${i ? "none" : "metadata"}"${i ? "" : " autoplay"}${pos} aria-hidden="true">${s.videoSmall ? `<source src="${esc(s.videoSmall)}" type="video/mp4" media="(max-width: 760px)">` : ""}<source src="${esc(s.videoSrc)}" type="video/mp4"></video>`
       : `<img class="hero__media" src="${esc(s.src)}"${srcset} width="1920" height="900" alt="${esc(s.alt || "")}"${i ? ' loading="lazy"' : ' fetchpriority="high"'} decoding="async" draggable="false"${pos}>`;
-    return `<a class="hero__slide${s.tone === "dark" ? " hero__slide--dark" : ""}" href="${esc(s.href)}"${external ? ' rel="noopener"' : ""} role="group" aria-roledescription="slide" aria-label="${i + 1} of ${slides.length}: ${esc(s.title.replace(/\n/g, " "))}"${i ? ' tabindex="-1"' : ""}>
+    const dur = Number(s.duration) > 0 ? ` data-t="${Number(s.duration)}"` : "";
+    return `<a class="hero__slide${s.tone === "dark" ? " hero__slide--dark" : ""}" href="${esc(s.href)}"${dur}${external ? ' rel="noopener"' : ""} role="group" aria-roledescription="slide" aria-label="${i + 1} of ${slides.length}: ${esc(s.title.replace(/\n/g, " "))}"${i ? ' tabindex="-1"' : ""}>
       ${media}<span class="hero__title">${title}</span>
     </a>`;
   });
   const dots = many
-    ? `<div class="hero__dots" role="group" aria-label="Choose a banner">${each(slides, (s, i) => `<button class="hero__dot" type="button" data-go="${i}" aria-label="Show ${esc(s.title.replace(/\n/g, " "))}"${i ? "" : ' aria-current="true"'}><span></span></button>`)}</div>`
+    ? `<div class="hero__dots" role="group" aria-label="Choose a banner">${each(slides, (s, i) => `<button class="hero__dot" type="button" data-go="${i}"${Number(s.duration) > 0 ? ` style="--hero-t:${Number(s.duration)}s"` : ""} aria-label="Show ${esc(s.title.replace(/\n/g, " "))}"${i ? "" : ' aria-current="true"'}><span></span></button>`)}</div>`
     : "";
   const carousel = `<section class="hero" aria-roledescription="carousel" aria-label="${esc(banners.title || "Featured")}" style="--hero-t:${Number(banners.interval) || 6}s"${many ? " data-hero" : ""}>
   <div class="hero__track">${items}</div>
@@ -73,7 +76,7 @@ const heroScript = `<script>
   const schedule = () => {
     clearTimeout(timer);
     hero.classList.toggle("is-held", hold || still);
-    if (!hold && !still) timer = setTimeout(() => show(index + 1), parseFloat(getComputedStyle(hero).getPropertyValue("--hero-t")) * 1000);
+    if (!hold && !still) timer = setTimeout(() => show(index + 1), (parseFloat(slides[index].dataset.t) || parseFloat(getComputedStyle(hero).getPropertyValue("--hero-t"))) * 1000);
   };
   const pause = (on) => { hold = on; schedule(); };
   hero.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") pause(true); });

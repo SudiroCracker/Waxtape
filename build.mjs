@@ -176,7 +176,7 @@ if (TS && !process.argv.includes("--offline")) {
 
 
 // ---------- Home banner ----------
-// banners.json: { "title": label above the carousel, "interval": seconds, "slides": [{ title, image, video?, href, alt, focus? }] }; files in public/banners/
+// banners.json: { "title": label above the carousel, "interval": seconds, "slides": [{ title, image, video?, duration?, href, alt, focus? }] }; "duration" (seconds) holds that slide longer, e.g. a whole video; files in public/banners/
 catalog.banners = { interval: 6, slides: [] };
 if (fs.existsSync(path.join(ROOT, "banners.json"))) {
   let b;
@@ -197,6 +197,8 @@ if (fs.existsSync(path.join(ROOT, "banners.json"))) {
       src: `/banners/${s.image}`,
       small: exists(`banners/${small}`) ? `/banners/${small}` : null,
       videoSrc: s.video && exists(`banners/${s.video}`) ? `/banners/${s.video}` : null,
+      // <name>-960.mp4 next to the video: phones get that one.
+      videoSmall: s.video && exists(`banners/${s.video.replace(/(\.\w+)$/, "-960$1")}`) ? `/banners/${s.video.replace(/(\.\w+)$/, "-960$1")}` : null,
     });
   }
 }

@@ -3,6 +3,14 @@
   "interval": 6,
   "slides": [
     {
+      "title": "BETHEL SNEAKERS\nOUT NOW",
+      "image": "bethel.webp",
+      "video": "bethel.mp4",
+      "duration": 14.5,
+      "href": "/products/bethel/",
+      "alt": "Bethel high-tops in four colorways skating an indoor park"
+    },
+    {
       "title": "HAZY BUNDLE\nOUT NOW",
       "image": "hazy-bundle.webp",
       "href": "/products/hazy-button-up/",
