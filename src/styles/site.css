@@ -383,15 +383,11 @@ html { scroll-padding-top: 100px; }
 /* ---------- Hand-inked frames on product images (reference: rough marker stroke) ----------
    A bordered overlay run through #ink-1..3 (layout.mjs). On hover/focus the three drawings cycle
    at ~8 fps with a pixel of jitter: stop-motion wiggle. Reduced motion keeps the still frame. */
-/* Product cards: plain photo on white, no drawn frame. The product-page thumbs keep the ink frame. */
-.thumb::after {
-  content: ""; position: absolute; inset: -3px; z-index: 1; pointer-events: none;
-  border: 4px solid var(--ink); filter: url(#ink-1);
-}
-.thumb::after { border-width: 3px; inset: -2px; }
-.thumb[aria-current="true"]::after { border-width: 5px; }
-.card--soon .card__media::after { display: none; }
-.thumb:hover::after, .thumb:focus-visible::after { animation: ink-wiggle 375ms step-end infinite; }
+/* Product cards: plain photo on white, no drawn frame. */
+/* Product-page thumbs: plain, like the cards. A thin line marks each one; the picked one gets a solid ink edge. */
+.thumb::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(33, 33, 34, .25); }
+.thumb:hover::after { box-shadow: inset 0 0 0 1px var(--ink); }
+.thumb[aria-current="true"]::after { box-shadow: inset 0 0 0 2px var(--ink); }
 @keyframes ink-wiggle {
   0%      { filter: url(#ink-1); transform: translate(0, 0) rotate(0deg); }
   33.33%  { filter: url(#ink-2); transform: translate(.6px, -.6px) rotate(.25deg); }
@@ -415,12 +411,11 @@ html { scroll-padding-top: 100px; }
 .variants__row { display: flex; flex-wrap: wrap; gap: 12px; }
 .variant { position: relative; width: 64px; aspect-ratio: 4 / 5; padding: 0; border: 0; background: var(--white); cursor: pointer; }
 .variant img { width: 100%; height: 100%; object-fit: cover; }
-.variant::after { content: ""; position: absolute; inset: -2px; pointer-events: none; border: 2px solid var(--ink); filter: url(#ink-1); }
-.variant[aria-pressed="true"]::after { border-width: 4px; inset: -4px; }
-.variant:hover::after, .variant:focus-visible::after { animation: ink-wiggle 375ms step-end infinite; }
+.variant::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(33, 33, 34, .25); }
+.variant:hover::after { box-shadow: inset 0 0 0 1px var(--ink); }
+.variant[aria-pressed="true"]::after { box-shadow: inset 0 0 0 2px var(--ink); }
 .variant:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
 .variant:disabled { opacity: .4; cursor: default; }
-@media (prefers-reduced-motion: reduce) { .variant::after { animation: none !important; } }
 .info__facts [hidden] { display: none; }
 .home__all { margin-top: 32px; }
 
