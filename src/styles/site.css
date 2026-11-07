@@ -152,7 +152,7 @@ html { scroll-padding-top: 100px; }
 .card__vars { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin-top: 9px; }
 .card__var { position: relative; aspect-ratio: 1; background: var(--white); overflow: hidden; }
 .card__var img { width: 100%; height: 100%; object-fit: cover; }
-.card__var::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(33, 33, 34, .25); pointer-events: none; }
+.card__var::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px var(--ink); pointer-events: none; }
 .card__var.is-on::after { box-shadow: inset 0 0 0 2px var(--ink); }
 @media (hover: hover) { .card__var { cursor: pointer; } }
 .card.is-sw .card__alt { opacity: 0 !important; }
@@ -385,9 +385,10 @@ html { scroll-padding-top: 100px; }
    at ~8 fps with a pixel of jitter: stop-motion wiggle. Reduced motion keeps the still frame. */
 /* Product cards: plain photo on white, no drawn frame. */
 /* Product-page thumbs: plain, like the cards. A thin line marks each one; the picked one gets a solid ink edge. */
-.thumb::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(33, 33, 34, .25); }
-.thumb:hover::after { box-shadow: inset 0 0 0 1px var(--ink); }
-.thumb[aria-current="true"]::after { box-shadow: inset 0 0 0 2px var(--ink); }
+/* Plain 2px ink line around every product photo (cards, thumbs, variants); the picked thumb or
+   variant gets 4px. Drawn inside the picture so nothing shifts. */
+.card__media::after, .thumb::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; box-shadow: inset 0 0 0 2px var(--ink); }
+.thumb[aria-current="true"]::after { box-shadow: inset 0 0 0 4px var(--ink); }
 @keyframes ink-wiggle {
   0%      { filter: url(#ink-1); transform: translate(0, 0) rotate(0deg); }
   33.33%  { filter: url(#ink-2); transform: translate(.6px, -.6px) rotate(.25deg); }
@@ -411,9 +412,8 @@ html { scroll-padding-top: 100px; }
 .variants__row { display: flex; flex-wrap: wrap; gap: 12px; }
 .variant { position: relative; width: 64px; aspect-ratio: 4 / 5; padding: 0; border: 0; background: var(--white); cursor: pointer; }
 .variant img { width: 100%; height: 100%; object-fit: cover; }
-.variant::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(33, 33, 34, .25); }
-.variant:hover::after { box-shadow: inset 0 0 0 1px var(--ink); }
-.variant[aria-pressed="true"]::after { box-shadow: inset 0 0 0 2px var(--ink); }
+.variant::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 2px var(--ink); }
+.variant[aria-pressed="true"]::after { box-shadow: inset 0 0 0 4px var(--ink); }
 .variant:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
 .variant:disabled { opacity: .4; cursor: default; }
 .info__facts [hidden] { display: none; }
