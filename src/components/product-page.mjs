@@ -143,6 +143,12 @@ ${p.zipReady ? `<div class="dlpop" role="dialog" aria-modal="true" aria-labelled
       });
     }, { passive: true });
   })();
+  // ?v=<variant> (from a colour square on a card) opens the page on that version.
+  (() => {
+    const v = new URLSearchParams(location.search).get("v");
+    const btn = v && document.querySelector('.variant[data-key$="--' + CSS.escape(v) + '"]');
+    if (btn && !btn.disabled) btn.click();
+  })();
   // Thumbnails swap the main image.
   document.querySelectorAll(".thumb").forEach((btn) => {
     btn.addEventListener("click", () => {

@@ -107,7 +107,7 @@ ${body}
 </main>
 ${footer(site.locked, site.showSpotted, { dark })}
 </div>
-${body.includes("card__alt") ? cardHoverScript : ""}
+${body.includes("card__alt") || body.includes("card__sw") ? cardHoverScript : ""}
 </body>
 </html>
 `;

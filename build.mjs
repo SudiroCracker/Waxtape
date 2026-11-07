@@ -107,6 +107,24 @@ for (const p of catalog.products) {
     return { ...v, key: `${p.id}--${v.id}`, thumb, download, zipReady, size: zipReady ? formatSize(fs.statSync(path.join(PUBLIC, download)).size) : "—", version: v.version || "1.0.0", updated: v.updated || v.uploaded || p.updated };
   });
 }
+// Colour squares on the cards: products whose versions are colourways (not cuts). Colours come from
+// swatches.json (tools/swatches.py picks them from the product shots) or "color" in catalog.json.
+// Shown only when every version has a colour and they are clearly different from each other
+// (a cut variant in the same colour, like Cropped / Relaxed Fit, keeps the "+N" instead).
+{
+  const sw = fs.existsSync(path.join(ROOT, "swatches.json")) ? JSON.parse(fs.readFileSync(path.join(ROOT, "swatches.json"), "utf8")) : {};
+  const rgb = (h) => (/^#[0-9a-f]{6}$/i.test(h || "") ? [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)) : null);
+  const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+  for (const p of catalog.products) {
+    if (!p.variants.length) continue;
+    const small = (f) => { const s = f.replace(/\.(webp|jpe?g|png)$/i, "-400.webp"); return exists(s) ? s : f; };
+    const all = [{ id: "", name: p.variant || "Original", key: p.id, thumb: p.thumb, color: p.color }, ...p.variants]
+      .map((v) => ({ id: v.id, name: v.name, src: "/" + small(v.thumb), color: v.color || sw[v.key] }));
+    const cols = all.map((v) => rgb(v.color));
+    const apart = cols.every(Boolean) && cols.every((a, i) => cols.every((b, j) => i === j || dist(a, b) >= 24));
+    if (apart) p.swatches = all;
+  }
+}
 // "hidden": true keeps a product (and its files) in the catalog but off the site until it's ready.
 const hiddenIds = catalog.products.filter((p) => p.hidden).map((p) => p.id);
 catalog.products = catalog.products.filter((p) => !p.hidden);
